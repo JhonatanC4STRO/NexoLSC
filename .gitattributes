@@ -1,0 +1,15 @@
+# Store large 3D source and export files using Git LFS.
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.gltf filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
+
+# Normalize text files across operating systems.
+* text=auto
+*.md text eol=lf
+*.json text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
