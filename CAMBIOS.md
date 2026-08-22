@@ -29,6 +29,8 @@ exista una primera versión ejecutable.
   español, incluidos los ejemplos JSON relacionados.
 - La decisión del conjunto tecnológico explica el papel limitado de Drei en la
   carga del GLB y el control de las animaciones del avatar.
+- Las confirmaciones, ramas y descripciones deben usar español sencillo y mensajes
+  breves que reflejen la forma de escribir del responsable del proyecto.
 - El índice documental describe el propósito de cada archivo.
 - El documento de personas incorpora un flujo detallado de interacción.
 - El español pasa a ser el idioma obligatorio para documentación, interfaz,

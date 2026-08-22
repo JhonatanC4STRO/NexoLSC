@@ -33,33 +33,39 @@ unidad de trabajo.
 Formato:
 
 ```text
-<tipo>(<alcance>): <resumen imperativo>
+<tipo>: <acción corta>
 ```
 
-Tipos permitidos:
+Tipos principales:
 
 - `funcionalidad`: comportamiento nuevo.
 - `correccion`: corrección de un defecto.
 - `documentacion`: cambio exclusivamente documental.
 - `pruebas`: creación o modificación de pruebas.
 - `refactorizacion`: cambio estructural sin alterar comportamiento.
-- `rendimiento`: mejora de rendimiento.
-- `compilacion`: dependencias o proceso de compilación.
-- `integracion`: automatización del repositorio.
-- `mantenimiento`: tareas que no encajan en los anteriores.
-- `reversion`: reversión explícita de un cambio.
+- `mantenimiento`: configuración, dependencias o tareas internas.
 
 Ejemplos:
 
 ```text
-documentacion: crear especificacion inicial del PMV
-funcionalidad(avatar): reproducir guiones validados
-correccion(audio): recuperar permiso denegado
+documentacion: agregar estructura
+funcionalidad: reproducir animacion
+correccion: arreglar grabacion
 ```
 
-El asunto debe ser breve, en modo imperativo y describir un solo cambio. El cuerpo
-explica el motivo únicamente cuando no sea evidente, haya una ruptura de
-compatibilidad, una migración, un cambio de seguridad o una reversión.
+El mensaje debe parecer escrito de forma natural por el responsable del proyecto:
+
+- siempre en español;
+- corto, preferiblemente entre tres y siete palabras después del tipo;
+- con palabras comunes y sin explicaciones innecesarias;
+- dedicado a un solo cambio;
+- sin cuerpo adicional, salvo que exista una decisión, migración o riesgo que no
+  pueda entenderse al revisar los archivos.
+
+El alcance entre paréntesis es opcional y se evita cuando el resumen ya es claro.
+Los nombres de ramas y los títulos de solicitudes de cambio también se escriben
+en español, por ejemplo `funcionalidad/avatar`, `correccion/microfono` o
+`documentacion/arquitectura`.
 
 ## Documentación de funciones
 

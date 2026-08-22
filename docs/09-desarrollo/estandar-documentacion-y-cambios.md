@@ -191,7 +191,9 @@ Al cerrar cada iteración:
 
 Toda documentación, interfaz, mensaje, comentario y nombre controlado por el
 proyecto se escribe en español. Esto incluye variables, funciones, tipos del
-dominio, rutas propias y mensajes de confirmación en Git.
+dominio, rutas propias, ramas, títulos de solicitudes de cambio, descripciones y
+mensajes de confirmación en Git. Estos mensajes deben ser breves, naturales y
+fáciles de entender, según la guía de contribución.
 
 Solo se conservan sin traducción los nombres propios o la sintaxis impuestos por
 una herramienta o estándar, por ejemplo: Git, GitHub, Blender, TypeScript, JSON,
