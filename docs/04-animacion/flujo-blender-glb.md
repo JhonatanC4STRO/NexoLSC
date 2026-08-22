@@ -1,6 +1,5 @@
 # Flujo de trabajo Blender → GLB → aplicación
 
-**Versión:** 0.1
 **Estado:** Borrador técnico
 
 ## Flujo

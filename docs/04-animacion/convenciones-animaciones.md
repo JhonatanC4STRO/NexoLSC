@@ -1,6 +1,5 @@
 # Convenciones de animaciones
 
-**Versión:** 0.1
 **Estado:** Borrador
 
 ## Unidad de trabajo
@@ -18,6 +17,8 @@ manuales. No se debe fragmentar una seña solo para aumentar reutilización.
 - Acciones, pistas NLA y `idAnimacion` usarán el mismo nombre.
 - Nombres en mayúsculas, ASCII y guion bajo.
 - No usar `.001`, `final`, `nuevo` ni fechas como versión.
+- Las letras usan `LSC_ALFABETO_<LETRA>_V<n>`; la `Ñ` usa `ENE` para mantener
+  identificadores ASCII, por ejemplo `LSC_ALFABETO_ENE_V1`.
 
 ## Línea de tiempo
 
@@ -43,6 +44,8 @@ configuración accidental o cambie el significado. Tipos iniciales:
 - `SENA_A_SENA`
 - `SENA_A_NEUTRAL`
 - `PAUSA`
+- `LETRA_A_LETRA`
+- `PAUSA_PALABRA`
 
 Los tiempos por defecto son parámetros técnicos sujetos a validación:
 
@@ -51,6 +54,8 @@ Los tiempos por defecto son parámetros técnicos sujetos a validación:
 | Neutral a seña | 120 ms |
 | Entre señas | 100 ms |
 | Seña a neutral | 150 ms |
+| Entre letras | **POR CONFIRMAR** |
+| Entre palabras deletreadas | **POR CONFIRMAR** |
 
 ## Exportación y aceptación
 
@@ -58,7 +63,7 @@ Una animación se acepta técnicamente cuando:
 
 - se exporta con el nombre correcto;
 - reproduce sin saltos y sobre el esqueleto de animación compatible;
-- no contiene tracks de objetos ajenos;
+- no contiene pistas de objetos ajenos;
 - conserva componentes manuales y no manuales;
 - no presenta intersecciones graves;
 - tiene registro en el catálogo;

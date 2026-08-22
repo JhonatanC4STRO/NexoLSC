@@ -1,6 +1,5 @@
 # Matriz de trazabilidad
 
-**Versión:** 0.1
 **Estado:** Inicial
 
 | Necesidad | Requisito | Historia | Prueba | Métrica |
@@ -14,6 +13,8 @@
 | Evitar animaciones incompatibles | RF-011, RN-003 | HU-07 | CP-009 | MET-TEC-02 |
 | Entender el estado | RF-012, RNF-014 | HU-01 | CP-010 | MET-EU-02 |
 | Proteger audio y claves | RNF-006, RNF-007 | HU-08 | CP-011, CP-012 | MET-PRIV-01 |
+| Deletrear texto por elección | RF-014, RF-015, RN-008 | HU-09 | CP-016, CP-017 | MET-DEL-01 |
+| Evitar secuencias incompletas | RF-016, RF-017, RN-009 | HU-09 | CP-018 | MET-TEC-03 |
 
 Esta matriz debe actualizarse cuando cambie un requisito, una historia o un caso
 de prueba. No se considera completo un requisito obligatorio sin al menos una prueba.

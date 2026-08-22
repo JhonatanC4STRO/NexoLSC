@@ -1,6 +1,5 @@
 # Especificación de requisitos de software (ERS)
 
-**Versión:** 0.1
 **Estado:** Borrador
 **Referencia:** estructura ligera inspirada en ISO/IEC/IEEE 29148:2018
 
@@ -39,6 +38,10 @@ situaciones de alto riesgo.
 | RF-011 | El sistema no reproducirá una intención si falta una animación obligatoria. | Obligatoria | Prueba de error |
 | RF-012 | La interfaz indicará los estados de grabación, procesamiento y reproducción. | Obligatoria | Prueba interfaz de usuario |
 | RF-013 | Durante desarrollo, el sistema permitirá inspeccionar la intención y la versión del guion seleccionados. | Recomendada | Inspección |
+| RF-014 | Ante una frase no soportada, el sistema permitirá elegir el deletreo manual. | Obligatoria | Prueba funcional |
+| RF-015 | Antes de deletrear, el sistema mostrará el texto exacto y solicitará confirmación explícita. | Obligatoria | Prueba de interfaz |
+| RF-016 | El sistema convertirá cada letra soportada en una animación publicada y añadirá pausas entre palabras. | Obligatoria | Prueba unitaria y visual |
+| RF-017 | El sistema bloqueará el deletreo completo si encuentra una letra sin animación publicada o un carácter no soportado. | Obligatoria | Prueba de error |
 
 ## 5. Reglas de negocio
 
@@ -50,6 +53,9 @@ situaciones de alto riesgo.
 | RN-004 | La corrección escrita del usuario sustituye la transcripción original como entrada al clasificador. |
 | RN-005 | El audio se elimina después de transcribirlo salvo consentimiento explícito para pruebas. |
 | RN-006 | Los contenidos de alto riesgo se rechazan en el PMV con una advertencia clara. |
+| RN-007 | Un guion LSC validado tiene prioridad sobre el deletreo manual. |
+| RN-008 | El deletreo nunca se inicia automáticamente ni se presenta como traducción LSC. |
+| RN-009 | Los números y símbolos no se eliminan silenciosamente; se informa que no están soportados. |
 
 ## 6. Interfaces externas
 
@@ -67,6 +73,7 @@ Interfaz preliminar:
 - `POST /api/traducciones`
 - `GET /api/intenciones/{id}` solo durante desarrollo o administración.
 - `GET /api/salud`
+- `POST /api/deletreos`
 
 La definición exacta se documentará mediante OpenAPI al implementar.
 
@@ -75,6 +82,8 @@ La definición exacta se documentará mediante OpenAPI al implementar.
 Entrada principal: audio o texto en español.
 Salida intermedia: transcripción e intención.
 Salida final: guion de señas reproducible y metadatos de versión.
+Una salida de deletreo se identifica como `DELETREO_MANUAL` y contiene una
+secuencia de animaciones de letras; no se etiqueta como traducción LSC.
 
 ## 8. Restricciones
 
@@ -90,9 +99,11 @@ Salida final: guion de señas reproducible y metadatos de versión.
 - Navegador con WebGL.
 - Conexión de red para transcripción externa.
 - Disponibilidad de animaciones y guiones validados.
+- Disponibilidad de las 27 letras validadas para habilitar el deletreo.
 
 ## 10. Criterio de aceptación global
 
 El PMV se acepta cuando diez escenarios completos recorren texto y voz hasta la
-animación, los fallos producen un estado recuperable y las intenciones publicadas
-superan el protocolo de validación lingüística.
+animación, un escenario adicional recorre la elección de deletreo hasta una
+secuencia de letras, los fallos producen un estado recuperable y todo contenido
+publicado supera su validación lingüística.

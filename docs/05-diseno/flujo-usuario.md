@@ -1,6 +1,5 @@
 # Flujo de usuario
 
-**Versión:** 0.1
 **Estado:** Borrador
 
 ## Flujo principal por voz
@@ -22,7 +21,12 @@ flowchart TD
     J --> L[Reproducir avatar]
     L --> M[Repetir / pausar / lento]
     M --> A
-    K --> A
+    K -->|Editar o cancelar| A
+    K -->|Elegir deletreo| N[Mostrar texto y advertencia]
+    N -->|Cancelar| A
+    N -->|Confirmar deletreo| O[Validar letras y crear secuencia]
+    O -->|Válida| L
+    O -->|Carácter o letra faltante| K
 ```
 
 ## Flujo principal por texto
@@ -31,7 +35,8 @@ flowchart TD
 2. Confirmar la frase.
 3. Identificar la intención.
 4. Reproducir el guion si está validado.
-5. Informar con claridad si no está soportado.
+5. Si no está soportado, permitir editar, cancelar o elegir deletreo manual.
+6. Confirmar el texto exacto antes de generar la secuencia de letras.
 
 ## Estados visibles
 
@@ -44,7 +49,9 @@ flowchart TD
 | TRADUCIENDO | “Preparando la traducción…” | Cancelar |
 | CARGANDO | “Cargando el avatar…” | Esperar, reintentar |
 | REPRODUCIENDO | “Reproduciendo LSC.” | Pausar, repetir, lento |
-| NO_SOPORTADA | “Esta expresión aún no tiene traducción validada.” | Ver opciones |
+| NO_SOPORTADA | “Esta expresión aún no tiene traducción validada.” | Editar, ver opciones, deletrear |
+| CONFIRMANDO_DELETREO | “Esto deletrea el español; no es una traducción a LSC.” | Confirmar, cancelar |
+| DELETREANDO | “Reproduciendo deletreo manual.” | Pausar, repetir, lento |
 | ERROR | Mensaje específico y recuperable. | Reintentar, usar texto |
 
 ## Principios de interacción
@@ -55,3 +62,4 @@ flowchart TD
 - La animación no comienza hasta que el avatar y el guion están listos.
 - No se muestran porcentajes de “confianza de traducción” que puedan inducir una
   falsa sensación de precisión.
+- El deletreo nunca se activa sin una elección y confirmación del usuario.

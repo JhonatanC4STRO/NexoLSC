@@ -1,6 +1,5 @@
 # Visión y alcance del PMV
 
-**Versión:** 0.1
 **Estado:** Borrador para aprobación
 
 ## 1. Problema
@@ -45,11 +44,14 @@ inicial y está **POR CONFIRMAR**.
 - Revisión de la transcripción antes de reproducir.
 - Repetición, pausa y velocidad normal/lenta.
 - Mensaje explícito cuando la intención no esté soportada.
+- Modo de deletreo manual para nombres, siglas, palabras y frases cortas, siempre
+  identificado como español deletreado y activado por elección del usuario.
 
 ## 6. No-objetivos
 
 - No traducir cualquier oración del español.
 - No sustituir palabras una a una.
+- No presentar el deletreo manual como una traducción gramatical a LSC.
 - No traducir LSC a español.
 - No interpretar conversaciones continuas.
 - No generar señas o animaciones con IA.
@@ -62,6 +64,8 @@ inicial y está **POR CONFIRMAR**.
 Una persona abre la aplicación, graba una frase soportada, confirma la
 transcripción y ve al avatar reproducir el guion LSC correcto. Si la frase no está
 soportada, la aplicación lo informa sin inventar una traducción.
+El usuario puede elegir deletrear manualmente el texto confirmado cuando no exista
+una traducción, después de ver una advertencia clara sobre la diferencia.
 
 ## 8. Indicadores de éxito iniciales
 
@@ -71,6 +75,7 @@ soportada, la aplicación lo informa sin inventar una traducción.
 - Inicio de la animación en menos de 4 segundos después de confirmar el texto,
   bajo las condiciones de referencia.
 - Cero traducciones inventadas ante entradas no soportadas.
+- 100 % de las secuencias de deletreo utilizan letras publicadas y validadas.
 
 ## 9. Supuestos por confirmar
 

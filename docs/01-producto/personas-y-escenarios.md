@@ -1,6 +1,5 @@
 # Personas y escenarios
 
-**Versión:** 0.2
 **Estado:** Borrador
 
 Las personas son hipótesis de diseño, no perfiles demográficos definitivos.
@@ -74,7 +73,9 @@ flowchart TD
         intentSupported{"Intención validada?"}
         showUnsupported[Informar frase no soportada]
         loadScript[Cargar guion de señas]
-        resourcesReady{"Clips compatibles?"}
+        resourcesReady{"Animaciones compatibles?"}
+        confirmarDeletreo{"¿Elegir deletreo manual?"}
+        validarLetras{"¿Todas las letras están publicadas?"}
     end
 
     subgraph playbackPhase ["Reproducción para el receptor"]
@@ -120,7 +121,12 @@ flowchart TD
     reviewAction -->|"Confirmar"| classifyIntent
     classifyIntent --> intentSupported
     intentSupported -->|"No"| showUnsupported
-    showUnsupported --> enterText
+    showUnsupported -->|Editar| enterText
+    showUnsupported -->|Deletrear| confirmarDeletreo
+    confirmarDeletreo -->|No| finishFlow
+    confirmarDeletreo -->|Sí| validarLetras
+    validarLetras -->|No| resourceError
+    validarLetras -->|Sí| playAvatar
     intentSupported -->|"Sí"| loadScript
     loadScript --> resourcesReady
     resourcesReady -->|"No"| resourceError
@@ -164,7 +170,9 @@ de validación LSC.
 ### Frase no soportada
 
 El sistema informa que aún no puede traducirla y ofrece mostrar el texto. No
-compone una secuencia aproximada.
+compone una secuencia aproximada. El emisor puede editar, cancelar o confirmar
+un deletreo manual identificado claramente como español deletreado y no como
+traducción LSC.
 
 ### Transcripción incorrecta
 

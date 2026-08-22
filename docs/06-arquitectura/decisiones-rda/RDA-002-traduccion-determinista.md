@@ -15,6 +15,10 @@ Reconocer únicamente intenciones definidas y seleccionar guiones LSC versionado
 Ante una entrada desconocida se devuelve `NO_SOPORTADA`. No se usará un LLM para
 componer el guion del PMV.
 
+Después de devolver `NO_SOPORTADA`, la interfaz puede ofrecer el modo de deletreo
+manual definido en la [RDA-004](RDA-004-deletreo-manual.md). Esta salida también
+es determinista, requiere confirmación y no se presenta como traducción LSC.
+
 ## Consecuencias
 
 - Salidas trazables y reproducibles.

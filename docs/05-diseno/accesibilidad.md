@@ -1,6 +1,5 @@
 # Accesibilidad
 
-**Versión:** 0.1
 **Estado:** Borrador
 
 ## Objetivo
@@ -18,6 +17,8 @@ motoras, auditivas y cognitivas, sin reducir la legibilidad de la LSC.
 - Mensajes de estado anunciados mediante una región accesible sin interrumpir al usuario.
 - Objetivos táctiles de tamaño cómodo y separados.
 - No iniciar audio ni animación automáticamente al cargar la página.
+- Anunciar la advertencia y confirmación de deletreo antes de iniciar la secuencia.
+- Mantener visible el texto exacto que se deletrea.
 
 ## Accesibilidad del avatar
 

@@ -1,6 +1,5 @@
 # Catálogo de señas y animaciones
 
-**Versión:** 0.3
 **Estado:** Plantilla; sin contenido lingüístico validado
 
 La orden de producción propuesta para Blender se encuentra en el
@@ -13,6 +12,8 @@ trabajo pendiente antes de que los registros estén completos.
 | Campo | Descripción |
 |---|---|
 | `idAnimacion` | Identificador técnico estable. |
+| `tipoAnimacion` | `SENA`, `LETRA_MANUAL` o `POSE`. |
+| `caracter` | Letra asociada cuando `tipoAnimacion` es `LETRA_MANUAL`; vacío en los demás casos. |
 | `etiquetaGlosa` | Etiqueta humana, no traducción literal. |
 | `significado` | Significado o función en el contexto validado. |
 | `region` | Región o comunidad de referencia. |
@@ -33,6 +34,7 @@ El siguiente registro es solamente técnico:
 |---|---|---|---|---|---|
 | LSC_SALUDO_HOLA_V1 | HOLA | `LSC_SALUDO_HOLA_V1` | avatar-v1 | POR CONFIRMAR | PROPUESTA |
 | POSE_NEUTRAL_V1 | Pose neutral | `POSE_NEUTRAL_V1` | avatar-v1 | N/A | PROPUESTA |
+| LSC_ALFABETO_A_V1 | Letra A | `LSC_ALFABETO_A_V1` | avatar-v1 | Colombia | PROPUESTA |
 
 ## Convención de identificadores
 

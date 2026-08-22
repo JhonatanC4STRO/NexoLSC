@@ -1,6 +1,5 @@
 # Listado de animaciones del PMV para Blender
 
-**Versión:** 0.1
 **Estado:** Plan de producción; contenido LSC pendiente de validación
 **Esqueleto de animación objetivo:** `avatar-v1`
 **Velocidad de trabajo propuesta:** 30 fotogramas por segundo
@@ -24,6 +23,8 @@ de la LSC.
   pertenezcan a la intención.
 - No dividir una frase en animaciones léxicas reutilizables hasta que la validación LSC
   confirme que la división y las transiciones conservan el significado.
+- Mantener las letras del alfabeto en una categoría separada: representan
+  deletreo manual y no señas léxicas.
 - Publicar todas las Acciones aprobadas dentro del GLB `avatar-v1` durante el PMV.
 
 ## Resumen
@@ -32,12 +33,13 @@ de la LSC.
 |---|---:|---|
 | Base técnica | 1 | Pose neutral compatible con todas las Acciones. |
 | Ola 1 | 10 | Intenciones mínimas para el primer flujo por texto. |
-| Ola 2 | 9 | Ampliación del catálogo después del recorrido vertical. |
-| Bloqueada | 1 | Requiere resolver nombres propios o deletreo manual. |
-| **Total planificado** | **21** | 20 Acciones candidatas y una decisión bloqueada. |
+| Ola 2 | 10 | Ampliación del catálogo y presentación con nombre. |
+| Alfabeto manual | 27 | Letras para nombres, siglas y texto elegido por el usuario. |
+| **Total planificado** | **48** | Pose neutral, 20 intenciones y 27 letras. |
 
-La Acción bloqueada no se incluye en el primer GLB. Por tanto, el objetivo de
-publicación del PMV es una pose neutral más 19 intenciones.
+El objetivo documental completo del PMV es publicar las 48 animaciones. Para no
+bloquear las primeras pruebas, el GLB técnico de la Iteración 0 solo necesita la
+pose neutral y tres animaciones de la Ola 1.
 
 ## Base técnica
 
@@ -67,7 +69,7 @@ la Iteración 0.
 | 09 | `NECESIDAD_AYUDA` | `LSC_NECESIDAD_AYUDA_V1` | Necesito ayuda | — | PENDIENTE_REFERENCIA |
 | 10 | `COMUNICACION_REPETIR` | `LSC_COMUNICACION_REPETIR_V1` | Repite / otra vez | — | PENDIENTE_REFERENCIA |
 
-## Ola 2: ampliación del PMV
+## Ola 2: diez animaciones de ampliación
 
 Estas Acciones se producen después de probar el esqueleto de animación, el exportador y el reproductor
 con la Ola 1.
@@ -83,18 +85,21 @@ con la Ola 1.
 | 17 | `RESPUESTA_ESTOY_BIEN` | `LSC_RESPUESTA_ESTOY_BIEN_V1` | Estoy bien | Recomendada | PENDIENTE_REFERENCIA |
 | 18 | `NECESIDAD_AGUA` | `LSC_NECESIDAD_AGUA_V1` | Necesito agua | Recomendada | PENDIENTE_REFERENCIA |
 | 19 | `NECESIDAD_BANO` | `LSC_NECESIDAD_BANO_V1` | ¿Dónde está el baño? | Recomendada | PENDIENTE_REFERENCIA |
+| 20 | `PRESENTACION_MI_NOMBRE` | `LSC_PRESENTACION_MI_NOMBRE_V1` | Mi nombre es… | Recomendada | PENDIENTE_REFERENCIA |
 
 Las preguntas requieren una revisión específica de sus componentes no manuales.
 La tabla no define cuáles son; deben anotarse en la ficha aprobada de producción.
 
-## Intención bloqueada
+`PRESENTACION_MI_NOMBRE` contiene el guion validado para presentar el nombre. El
+nombre variable se añade después mediante una secuencia de letras; no se incorpora
+dentro de una Acción fija.
 
-| ID de intención | Acción candidata | Motivo | Decisión necesaria | Estado |
-|---|---|---|---|---|
-| `PRESENTACION_MI_NOMBRE` | `LSC_PRESENTACION_MI_NOMBRE_V1` | La frase necesita incorporar un nombre variable y puede requerir deletreo manual. Una Acción fija quedaría incompleta. | Definir si el PMV incorpora alfabeto manual, una pausa para deletreo humano o excluye esta intención. | BLOQUEADA |
+## Alfabeto manual
 
-No se debe animar esta Acción hasta resolver el comportamiento completo. Mientras
-esté bloqueada, el clasificador no debe publicarla como intención soportada.
+Las 27 animaciones, sus nombres, reglas de normalización, palabras de prueba y
+criterios de terminado se encuentran en el
+[alfabeto manual del PMV](alfabeto-manual-pmv.md). Ninguna letra puede pasar a
+producción usando solo una imagen o interpretación visual no validada.
 
 ## Estados de producción
 
@@ -170,6 +175,7 @@ Para cada Acción:
 
 ## Criterio de salida
 
-El listado del PMV está terminado cuando `POSE_NEUTRAL_V1` y las 19 Acciones no
-bloqueadas tienen estado `EXPORTADA`, pertenecen al mismo `avatar-v1.glb`, pasan
-las pruebas técnicas y cuentan con validación LSC para su versión exacta.
+El listado del PMV está terminado cuando `POSE_NEUTRAL_V1`, las 20 Acciones de
+intenciones y las 27 letras tienen estado `EXPORTADA`, pertenecen al mismo
+`avatar-v1.glb`, pasan las pruebas técnicas y cuentan con validación LSC para su
+versión exacta.

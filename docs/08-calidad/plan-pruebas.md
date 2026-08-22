@@ -1,6 +1,5 @@
 # Plan de pruebas
 
-**Versión:** 0.1
 **Estado:** Borrador
 
 ## Objetivo
@@ -17,6 +16,8 @@ avatar de forma legible, protege la entrada de audio y se recupera de fallos.
 - Entradas positivas y negativas.
 - Integridad de catálogos y versiones.
 - Construcción del guion y respuesta segura.
+- Normalización de vocales acentuadas, conservación de `Ñ` y mapeo de letras.
+- Rechazo de números, símbolos y letras sin animación publicada.
 
 ### Integración
 
@@ -24,12 +25,14 @@ avatar de forma legible, protege la entrada de audio y se recupera de fallos.
 - Servidor → proveedor de transcripción mediante dobles de prueba y prueba controlada real.
 - Servidor → motor → catálogo.
 - Carga de GLB y enumeración de animaciones.
+- Secuencia de deletreo → catálogo de letras → reproductor.
 
 ### De extremo a extremo
 
 - Texto → confirmación → avatar.
 - Voz → transcripción → corrección → avatar.
 - Frase no soportada.
+- Frase no soportada → elección y confirmación de deletreo → avatar.
 - Permiso de micrófono rechazado.
 - Error de red y recuperación.
 
@@ -47,6 +50,7 @@ avatar de forma legible, protege la entrada de audio y se recupera de fallos.
 - Comprensión sin mostrar el texto.
 - Variantes regionales y contexto.
 - Negativos que podrían confundirse con una intención.
+- Reconocimiento de letras aisladas y palabras deletreadas, sin mostrar el texto.
 
 ### Seguridad y privacidad
 

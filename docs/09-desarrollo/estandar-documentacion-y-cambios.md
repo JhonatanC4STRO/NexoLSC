@@ -1,6 +1,5 @@
 # Estándar de documentación y cambios
 
-**Versión:** 0.1
 **Estado:** Aceptado
 **Aplica desde:** 2026-08-22
 
@@ -186,6 +185,11 @@ Al cerrar cada iteración:
 4. revisar cambios sin entrada en el registro de cambios;
 5. confirmar que RDA y arquitectura reflejan la implementación;
 6. revisar que animaciones y catálogos apunten a las mismas versiones.
+
+El historial y las publicaciones documentales siguen la
+[política de versiones](politica-versiones.md). Los documentos Markdown no llevan
+un número manual en su encabezado; Git identifica cada revisión y una etiqueta
+anotada marca cada hito completo.
 
 ## 11. Idioma obligatorio
 

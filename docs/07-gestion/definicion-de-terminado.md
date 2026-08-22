@@ -1,6 +1,5 @@
 # Definición de terminado
 
-**Versión:** 0.1
 **Estado:** Propuesta
 
 ## Para una historia de software
@@ -17,7 +16,7 @@
 
 - [ ] Propósito y ejemplos positivos/negativos definidos.
 - [ ] Guion revisado por una persona competente en LSC.
-- [ ] Clips con versión y fuente registradas.
+- [ ] Animaciones con versión y fuente registradas.
 - [ ] Compatibilidad de esqueleto de animación verificada.
 - [ ] Revisión manual, no manual y de transiciones aprobada.
 - [ ] Prueba de comprensión registrada.
@@ -31,6 +30,14 @@
 - [ ] Reproduce en visor glTF y en la aplicación.
 - [ ] Manos, rostro y torso visibles.
 - [ ] Registro actualizado en el catálogo.
+
+## Para una letra del alfabeto manual
+
+- [ ] Tiene referencia colombiana autorizada y variante documentada.
+- [ ] Configuración, orientación y movimiento fueron validados.
+- [ ] Se reconoce de forma aislada y dentro de palabras de prueba.
+- [ ] Sus transiciones no forman configuraciones accidentales.
+- [ ] Identificador, carácter y versión están registrados en el catálogo.
 
 ## Para una iteración
 

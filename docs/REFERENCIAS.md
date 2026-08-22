@@ -1,6 +1,5 @@
 # Referencias normativas y técnicas
 
-**Versión:** 0.2
 **Estado:** Borrador
 
 ## Requisitos
@@ -17,6 +16,9 @@ cumplimiento formal con la norma.
 
 - Diccionario virtual bilingüe LSC–español de INSOR:
   <https://educativo.insor.gov.co/catdiccionario/cotidiano/>
+- Material educativo del Ministerio de Educación con el alfabeto manual usado en
+  Colombia:
+  <https://contenidos.mineducacion.gov.co/ntg/men/archivos/Referentes_Calidad/Modelos_Flexibles/Secundaria_Activa/Guias_del_estudiante/Etica/Etica_Grado07.pdf>
 
 El diccionario es una fuente de consulta, no una autorización para copiar o
 redistribuir videos o contenido sin revisar sus condiciones de uso.

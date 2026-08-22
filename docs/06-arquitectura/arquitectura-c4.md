@@ -1,6 +1,5 @@
 # Arquitectura C4
 
-**Versión:** 0.2
 **Estado:** Propuesta
 
 ## Nivel 1: contexto
@@ -73,6 +72,8 @@ flowchart TB
 - Distinguir intención soportada de entrada desconocida.
 - Verificar compatibilidad entre guion, animaciones y esqueleto de animación.
 - No generar libremente secuencias de LSC.
+- Generar secuencias de letras publicadas solo después de una elección explícita
+  del usuario y marcarlas como `DELETREO_MANUAL`.
 
 ### Catálogos
 

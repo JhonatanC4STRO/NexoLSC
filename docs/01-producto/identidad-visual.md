@@ -1,6 +1,5 @@
 # Identidad visual de NexoLSC
 
-**Versión:** 0.1
 **Fecha:** 2026-08-22
 **Estado:** Propuesta para aprobación
 **Aplicación:** PMV web español → Lengua de Señas Colombiana

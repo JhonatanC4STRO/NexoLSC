@@ -28,6 +28,10 @@ unidad de trabajo.
 9. Crear una confirmación en Git con un mensaje convencional en español.
 10. Enviar la confirmación al repositorio remoto.
 
+Las etiquetas de Git se crean únicamente para hitos completos, siguiendo la
+[política de versiones](docs/09-desarrollo/politica-versiones.md). No se etiqueta
+cada cambio individual.
+
 ## Confirmaciones en Git
 
 Formato:

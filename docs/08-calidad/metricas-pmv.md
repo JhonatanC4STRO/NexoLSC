@@ -1,6 +1,5 @@
 # Métricas del PMV
 
-**Versión:** 0.1
 **Estado:** Umbrales iniciales por confirmar
 
 ## Principio
@@ -25,6 +24,9 @@ dónde ocurre el error.
 | MET-EU-01 | Finalización sin ayuda | tareas completadas / intentos | ≥ 80 % |
 | MET-EU-02 | Recuperación de errores | recuperaciones exitosas / fallos recuperables | ≥ 95 % |
 | MET-PRIV-01 | Incidentes de audio o secretos | conteo | 0 |
+| MET-DEL-01 | Deletreos iniciados con confirmación | secuencias confirmadas / secuencias iniciadas | 100 % |
+| MET-TEC-03 | Integridad del alfabeto | letras válidas / letras reproducidas | 100 % |
+| MET-LIN-03 | Comprensión de palabras deletreadas | palabras reconocidas / palabras mostradas | ≥ 80 % |
 
 ## Segmentación mínima
 

@@ -1,6 +1,5 @@
 # Protocolo de validación LSC
 
-**Versión:** 0.1
 **Estado:** Borrador sujeto a acuerdo con las personas validadoras
 
 ## Objetivo

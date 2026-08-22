@@ -1,6 +1,5 @@
 # Diagramas de secuencia y estados
 
-**Versión:** 0.1
 **Estado:** Propuesta
 
 ## Secuencia de voz a avatar
@@ -31,8 +30,16 @@ sequenceDiagram
         P-->>U: Animación LSC
     else no soportada
         T-->>A: NO_SOPORTADA
-        A-->>W: Mensaje seguro
-        W-->>U: Editar o elegir una opción
+        A-->>W: Mensaje seguro y opción de deletreo
+        W-->>U: Editar, cancelar o elegir deletreo
+        opt usuario elige deletreo
+            W-->>U: Mostrar texto y advertencia
+            U->>W: Confirmar deletreo
+            W->>A: POST /deletreos
+            A-->>W: Secuencia DELETREO_MANUAL
+            W->>P: Reproducir letras
+            P-->>U: Deletreo manual
+        end
     end
 ```
 
@@ -51,6 +58,10 @@ stateDiagram-v2
     REVISANDO --> GRABANDO: volver a grabar
     TRADUCIENDO --> CARGANDO: soportada
     TRADUCIENDO --> NO_SOPORTADA: desconocida
+    NO_SOPORTADA --> CONFIRMANDO_DELETREO: elegir deletreo
+    CONFIRMANDO_DELETREO --> DELETREANDO: confirmar
+    CONFIRMANDO_DELETREO --> NO_SOPORTADA: cancelar
+    DELETREANDO --> LISTO: finalizar
     TRADUCIENDO --> ERROR: fallo
     CARGANDO --> REPRODUCIENDO: recursos listos
     CARGANDO --> ERROR: animación faltante

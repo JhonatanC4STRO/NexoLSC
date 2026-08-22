@@ -1,6 +1,5 @@
 # Casos de prueba iniciales
 
-**Versión:** 0.1
 **Estado:** Borrador
 
 | ID | Caso | Resultado esperado | Requisitos |
@@ -20,6 +19,9 @@
 | CP-013 | Denegar permiso de micrófono | Se ofrece texto sin bloquear la aplicación | RNF-005 |
 | CP-014 | Navegar solo con teclado | Todos los controles son alcanzables y visibles | RNF-008 |
 | CP-015 | Mostrar animación sin texto a usuarios LSC | Comprensión cumple el umbral acordado | RNF-009, RNF-012 |
+| CP-016 | Elegir deletreo para `JHONATAN` | Muestra advertencia, solicita confirmación y reproduce ocho letras en orden | RF-014, RF-015, RN-008 |
+| CP-017 | Deletrear `NIÑO` y `BOGOTÁ` | Conserva `Ñ`, normaliza `Á` y etiqueta la salida como deletreo | RF-016, RNF-015 |
+| CP-018 | Deletrear texto con número o letra no publicada | Bloquea toda la secuencia e identifica el carácter problemático | RF-017, RN-009, RNF-016 |
 
 ## Plantilla detallada
 

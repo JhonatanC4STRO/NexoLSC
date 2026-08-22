@@ -20,6 +20,7 @@ y el historial legible se mantiene en [CAMBIOS.md](CAMBIOS.md).
 - Entrada mediante voz o texto en español (`es-CO`).
 - Dominio cerrado de saludos y necesidades cotidianas.
 - Traducción mediante intenciones y reglas validadas, no sustitución palabra a palabra.
+- Deletreo manual opcional para nombres, siglas y palabras sin seña disponible.
 - Reproducción de animaciones creadas en Blender sobre un avatar 3D.
 - Aplicación web operada inicialmente por una sola persona desarrolladora.
 

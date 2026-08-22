@@ -1,6 +1,5 @@
 # Bocetos de baja fidelidad
 
-**Versión:** 0.2
 **Estado:** Borrador; no representa el diseño visual definitivo
 
 ## Pantalla principal
@@ -51,7 +50,23 @@
 │ • Gracias                                    │
 │ • Necesito ayuda                             │
 │                                              │
-│ [Editar texto]            [Ver expresiones]  │
+│ [Editar] [Ver expresiones] [Deletrear texto] │
+└──────────────────────────────────────────────┘
+```
+
+## Confirmación de deletreo
+
+```text
+┌──────────────────────────────────────────────┐
+│ Deletreo manual                              │
+│                                              │
+│ Esto representa letras del español. No es    │
+│ una traducción gramatical a LSC.             │
+│                                              │
+│ Texto que se reproducirá:                    │
+│ J H O N A T A N                              │
+│                                              │
+│ [Cancelar]                [Deletrear]         │
 └──────────────────────────────────────────────┘
 ```
 

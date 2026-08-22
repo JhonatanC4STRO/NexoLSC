@@ -1,6 +1,5 @@
 # Registro de riesgos
 
-**Versión:** 0.1
 **Estado:** Borrador
 
 Escala: probabilidad e impacto de 1 (bajo) a 5 (alto). Exposición = P × I.
@@ -19,6 +18,9 @@ Escala: probabilidad e impacto de 1 (bajo) a 5 (alto). Exposición = P × I.
 | R-10 | Fuente de señas sin permiso de reutilización | 3 | 4 | 12 | Registrar origen y derechos antes de animar | No hay autorización clara |
 | R-11 | Dependencia de un único validador | 4 | 4 | 16 | Planificar disponibilidad y buscar participantes de comprensión | Validación bloqueada > 1 iteración |
 | R-12 | Fatiga o abandono del desarrollador | 3 | 4 | 12 | Iteraciones cortas, un trabajo en curso y demostración semanal | Dos iteraciones sin incremento |
+| R-13 | El usuario confunde deletreo con traducción LSC | 4 | 5 | 20 | Elección explícita, advertencia visible y etiqueta permanente | Usuario interpreta el deletreo como traducción |
+| R-14 | Las 27 letras amplían demasiado la producción | 4 | 4 | 16 | Producir por grupos, reutilizar el mismo esqueleto y medir avance semanal | El alfabeto retrasa dos iteraciones |
+| R-15 | Transiciones entre letras reducen legibilidad | 3 | 4 | 12 | Validar palabras completas, ritmo y pausas además de letras aisladas | Letras aisladas se comprenden pero las palabras no |
 
 ## Revisión
 

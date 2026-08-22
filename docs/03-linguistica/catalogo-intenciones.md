@@ -1,6 +1,5 @@
 # Catálogo inicial de intenciones
 
-**Versión:** 0.2
 **Estado:** Propuesta; ninguna intención está validada todavía
 
 Estados permitidos: `PROPUESTA`, `EN_VALIDACION`, `VALIDADA`, `RECHAZADA`.
@@ -36,10 +35,11 @@ Estados permitidos: `PROPUESTA`, `EN_VALIDACION`, `VALIDADA`, `RECHAZADA`.
 - Todos sus animaciones existen y son compatibles con el esqueleto de animación.
 - Tiene pruebas positivas, negativas y de comprensión.
 
-## Decisión pendiente
+## Producción pendiente
 
 La primera ola de diez intenciones está propuesta en el
 [listado de animaciones del PMV](../04-animacion/listado-animaciones-pmv.md). La
 selección todavía debe revisarse con el validador lingüístico antes de comenzar a
-animar. `PRESENTACION_MI_NOMBRE` permanece bloqueada hasta definir cómo tratar
-nombres propios y deletreo manual.
+animar. `PRESENTACION_MI_NOMBRE` combinará un guion LSC validado con el deletreo
+manual del nombre confirmado por el usuario. No se publicará hasta que ambas
+partes estén validadas.

@@ -1,6 +1,5 @@
 # Modelo de datos
 
-**Versión:** 0.2
 **Estado:** Propuesta conceptual
 
 ## Convenciones
@@ -19,6 +18,8 @@ erDiagram
     INTENCION ||--|| GUION_SENAS : publica
     GUION_SENAS ||--|{ PASO_GUION : contiene
     PASO_GUION }o--|| ANIMACION_SENA : referencia
+    SECUENCIA_DELETREO ||--|{ PASO_DELETREO : contiene
+    PASO_DELETREO }o--|| ANIMACION_SENA : referencia
     ANIMACION_SENA }o--|| VERSION_ESQUELETO : requiere
     INTENCION ||--o{ REGISTRO_VALIDACION : valida
     ANIMACION_SENA ||--o{ REGISTRO_VALIDACION : valida
@@ -47,8 +48,21 @@ erDiagram
       entero pausaMilisegundos
       texto transicion
     }
+    SECUENCIA_DELETREO {
+      texto textoConfirmado
+      texto tipoSalida
+      texto versionEsqueleto
+    }
+    PASO_DELETREO {
+      entero orden
+      texto caracter
+      texto idAnimacion "Clave foránea: ANIMACION_SENA"
+      texto transicion
+    }
     ANIMACION_SENA {
       texto id "Clave primaria"
+      texto tipoAnimacion
+      texto caracter
       texto nombreAnimacionBlender
       texto versionEsqueleto "Clave foránea: VERSION_ESQUELETO"
       entero duracionMilisegundos
@@ -104,6 +118,21 @@ erDiagram
 }
 ```
 
+## Ejemplo de secuencia de deletreo
+
+```json
+{
+  "tipoSalida": "DELETREO_MANUAL",
+  "textoConfirmado": "ANA",
+  "versionEsqueleto": "avatar-v1",
+  "pasos": [
+    { "orden": 1, "caracter": "A", "idAnimacion": "LSC_ALFABETO_A_V1" },
+    { "orden": 2, "caracter": "N", "idAnimacion": "LSC_ALFABETO_N_V1" },
+    { "orden": 3, "caracter": "A", "idAnimacion": "LSC_ALFABETO_A_V1" }
+  ]
+}
+```
+
 Los valores lingüísticos del ejemplo no están validados.
 
 ## Reglas de integridad
@@ -112,5 +141,9 @@ Los valores lingüísticos del ejemplo no están validados.
 - Todas las animaciones de un guion usan el mismo valor de `versionEsqueleto`.
 - Los identificadores y versiones son inmutables después de publicación.
 - Los registros de validación no contienen datos personales innecesarios.
+- Una secuencia de deletreo referencia únicamente animaciones con
+  `tipoAnimacion` igual a `LETRA_MANUAL`.
+- Si un carácter no tiene una animación publicada, la secuencia completa es
+  inválida.
 - La suma de comprobación del GLB permite verificar que se probó el mismo recurso
   publicado.

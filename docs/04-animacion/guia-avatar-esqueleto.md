@@ -1,6 +1,5 @@
 # Guía del avatar y esqueleto de animación
 
-**Versión:** 0.1
 **Estado:** Borrador técnico
 
 ## Objetivo

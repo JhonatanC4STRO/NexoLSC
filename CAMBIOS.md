@@ -1,10 +1,12 @@
 # Registro de cambios
 
-Los cambios relevantes de NexoLSC se registran en este archivo. Se utiliza un
-registro cronológico y las versiones seguirán un versionado semántico cuando
-exista una primera versión ejecutable.
+Los cambios relevantes de NexoLSC se registran en este archivo. Las etiquetas de
+Git identifican hitos documentales y versiones ejecutables según la
+[política de versiones](docs/09-desarrollo/politica-versiones.md).
 
 ## [Sin publicar]
+
+## [0.1.0-documentacion] - 2026-08-22
 
 ### Añadido
 
@@ -22,6 +24,11 @@ exista una primera versión ejecutable.
 - Configuración inicial para Git, archivos ignorados y Git LFS para recursos 3D.
 - Estructura propuesta del repositorio, con responsabilidades y dependencias entre
   interfaz, servidor, contratos, catálogos y recursos 3D.
+- Plan de 27 animaciones para el alfabeto manual, con reglas de normalización,
+  reproducción, validación y palabras de prueba.
+- Decisión arquitectónica para ofrecer deletreo por elección sin confundirlo con
+  una traducción a LSC.
+- Política de versiones mediante historial y etiquetas de Git.
 
 ### Cambiado
 
@@ -31,6 +38,10 @@ exista una primera versión ejecutable.
   carga del GLB y el control de las animaciones del avatar.
 - Las confirmaciones, ramas y descripciones deben usar español sencillo y mensajes
   breves que reflejen la forma de escribir del responsable del proyecto.
+- Requisitos, historias, flujos, arquitectura, datos, riesgos, pruebas y métricas
+  incorporan el modo de deletreo manual.
+- Los documentos dejan de mantener números de versión manuales; los hitos completos
+  se identifican mediante etiquetas de Git.
 - El índice documental describe el propósito de cada archivo.
 - El documento de personas incorpora un flujo detallado de interacción.
 - El español pasa a ser el idioma obligatorio para documentación, interfaz,

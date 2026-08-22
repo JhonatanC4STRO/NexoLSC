@@ -1,6 +1,5 @@
 # Glosario
 
-**Versión:** 0.1
 
 | Término | Definición usada en el proyecto |
 |---|---|
@@ -23,3 +22,4 @@
 | Definición de terminado | Condiciones para considerar terminado un incremento. |
 | RDA | Registro breve de una decisión arquitectónica. |
 | Respuesta segura | Comportamiento seguro cuando el sistema no puede producir una traducción válida. |
+| Deletreo manual | Representación secuencial de letras mediante configuraciones y movimientos de la mano; sirve para nombres o términos escritos, pero no sustituye una traducción a LSC. |

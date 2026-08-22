@@ -1,6 +1,5 @@
 # Requisitos no funcionales
 
-**Versión:** 0.1
 **Estado:** Borrador; los umbrales requieren medición y ajuste
 
 | ID | Categoría | Requisito medible | Condición |
@@ -19,6 +18,8 @@
 | RNF-012 | Trazabilidad | Toda intención publicada tendrá fuente, versión, validador y fecha. | Inspección del catálogo |
 | RNF-013 | Observabilidad | Los errores tendrán código y contexto técnico sin guardar audio ni texto sensible completo. | Prueba de registros |
 | RNF-014 | Recuperación | La aplicación volverá a estado listo después de cualquier error recuperable. | Prueba de estados |
+| RNF-015 | Claridad lingüística | Toda secuencia de letras se identificará como deletreo manual y no como traducción LSC. | Inspección y prueba con usuarios |
+| RNF-016 | Integridad del deletreo | El 100 % de las letras reproducidas pertenecerá al catálogo publicado y a la versión activa del avatar. | Prueba automatizada |
 
 ## Condiciones de referencia por definir
 

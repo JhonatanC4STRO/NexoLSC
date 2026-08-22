@@ -1,6 +1,5 @@
 # Índice de documentación
 
-**Versión:** 0.7
 **Fecha:** 2026-08-22
 **Estado:** Borrador para revisión
 
@@ -70,9 +69,11 @@
 
 - [Listado de animaciones del PMV](04-animacion/listado-animaciones-pmv.md) —
   transforma las 20 intenciones en una orden concreta de producción para Blender,
-  separada en pose neutral, diez Acciones esenciales, nueve de ampliación y una
-  intención bloqueada; también incluye estados, Criterios de preparación y ficha por
-  Acción.
+  separada en pose neutral, dos olas de diez Acciones y el alfabeto manual;
+  también incluye estados, criterios de preparación y ficha por Acción.
+- [Alfabeto manual del PMV](04-animacion/alfabeto-manual-pmv.md) — enumera las 27
+  letras que se animarán en Blender, sus identificadores, normalización, palabras
+  de prueba, reglas de reproducción y criterios de terminado.
 - [Guía del avatar y esqueleto de animación](04-animacion/guia-avatar-esqueleto.md) — especifica los
   requisitos del modelo 3D, esqueleto, manos, rostro, pose neutral, cámara,
   iluminación, versionado y control de calidad del esqueleto de animación.
@@ -89,8 +90,9 @@
   texto, los estados visibles de la interfaz y el comportamiento esperado durante
   grabación, revisión, traducción, reproducción y errores.
 - [Bocetos](05-diseno/bocetos.md) — contiene bocetos de baja fidelidad para
-  la pantalla principal, confirmación de transcripción, frase no soportada y vista
-  móvil; sirve como base antes del diseño visual definitivo.
+  la pantalla principal, confirmación de transcripción, frase no soportada,
+  confirmación de deletreo y vista móvil; sirve como base antes del diseño visual
+  definitivo.
 - [Accesibilidad](05-diseno/accesibilidad.md) — reúne criterios para teclado,
   lector de pantalla, contraste, escalado de texto, movimiento, controles táctiles
   y legibilidad visual del avatar.
@@ -105,8 +107,8 @@
   catálogos, recursos de Blender, pruebas y documentación, junto con sus reglas de
   dependencia.
 - [Modelo de datos](06-arquitectura/modelo-datos.md) — define las entidades y
-  relaciones entre intenciones, ejemplos, guiones, pasos, animaciones, versiones del esqueleto de animación
-  y registros de validación, con ejemplos JSON.
+  relaciones entre intenciones, ejemplos, guiones, deletreo, animaciones,
+  versiones del esqueleto y registros de validación, con ejemplos JSON.
 - [Diagramas de secuencia y estados](06-arquitectura/diagramas-secuencia.md) —
   representa las interacciones temporales de voz a avatar, los estados de la
   interfaz y el proceso para publicar una nueva seña.
@@ -124,6 +126,9 @@
 - [RDA-003: GLB único con animaciones](06-arquitectura/decisiones-rda/RDA-003-glb-unico-con-animaciones.md)
   — explica por qué el primer PMV distribuirá un avatar con varias animaciones dentro de
   un único GLB y cuándo convendría revisar esa decisión.
+- [RDA-004: Deletreo manual](06-arquitectura/decisiones-rda/RDA-004-deletreo-manual.md)
+  — establece que el usuario puede elegir deletrear texto sin traducción, delimita
+  la diferencia frente a LSC y excluye números y símbolos del PMV.
 
 ### Gestión
 
@@ -138,7 +143,7 @@
   mitigaciones y disparadores.
 - [Definición de terminado](07-gestion/definicion-de-terminado.md) — contiene las
   listas que deben cumplirse para declarar terminados una historia, una intención
-  LSC, una animación de Blender y una iteración.
+  LSC, una animación de Blender, una letra manual y una iteración.
 
 ### Calidad
 
@@ -150,7 +155,7 @@
   privacidad, accesibilidad y comprensión lingüística.
 - [Métricas del PMV](08-calidad/metricas-pmv.md) — especifica cómo medir por
   separado transcripción, clasificación, comprensión, rendimiento, experiencia,
-  integridad y privacidad, y cómo decidir si continuar, cambiar o detener.
+  integridad, privacidad y deletreo, y cómo decidir si continuar, cambiar o detener.
 
 ### Desarrollo y cambios
 
@@ -159,6 +164,9 @@
 - [Estándar de documentación y cambios](09-desarrollo/estandar-documentacion-y-cambios.md)
   — especifica cómo documentar cada función, módulo, operación de API, dato y animación,
   con ejemplos TSDoc y reglas para explicar propósito, motivo y funcionamiento.
+- [Política de versiones](09-desarrollo/politica-versiones.md) — define Git como
+  historial de los documentos, reserva las etiquetas para hitos del proyecto y
+  conserva versiones propias para guiones, catálogos, avatar, animaciones y GLB.
 - [Registro de cambios](../CAMBIOS.md) — conserva un resumen legible de las
   funcionalidades, correcciones, decisiones y pendientes acumulados por versión.
 
@@ -176,4 +184,5 @@ Se puede iniciar la Iteración 1 cuando estén aprobados:
 - al menos diez intenciones del catálogo;
 - el formato del guion de señas;
 - tres animaciones de prueba exportadas correctamente desde Blender;
-- las historias HU-01 a HU-04 y sus criterios de aceptación.
+- las historias HU-01 a HU-04 y sus criterios de aceptación;
+- la decisión de alcance del deletreo manual y el plan de validación de sus letras.

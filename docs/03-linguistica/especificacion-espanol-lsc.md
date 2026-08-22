@@ -1,6 +1,5 @@
 # Especificación lingüística español–LSC
 
-**Versión:** 0.1
 **Estado:** Borrador no validado
 **Advertencia:** este documento requiere revisión de una persona competente en LSC.
 
@@ -98,22 +97,55 @@ Salida obligatoria:
 Opcionalmente se podrá sugerir una lista cerrada de intenciones soportadas, sin
 afirmar que una de ellas equivale a la entrada.
 
-## 9. Variación
+## 9. Deletreo manual
+
+Cuando no exista una traducción validada, el usuario podrá elegir deletrear el
+texto confirmado. Esta salida representa la escritura del español mediante el
+alfabeto manual y no una traducción gramatical a LSC.
+
+Reglas del PMV:
+
+- un guion LSC validado tiene prioridad;
+- el deletreo requiere elección y confirmación explícitas;
+- se conservan las letras `A` a `Z` y la `Ñ`;
+- `Á`, `É`, `Í`, `Ó`, `Ú` y `Ü` se normalizan a su vocal base;
+- un espacio produce una pausa entre palabras;
+- números y símbolos producen un mensaje de carácter no soportado;
+- si falta una animación, no se reproduce una secuencia parcial.
+
+Ejemplo técnico:
+
+```json
+{
+  "tipoSalida": "DELETREO_MANUAL",
+  "textoConfirmado": "NIÑO",
+  "pasos": [
+    { "idAnimacion": "LSC_ALFABETO_N_V1" },
+    { "idAnimacion": "LSC_ALFABETO_I_V1" },
+    { "idAnimacion": "LSC_ALFABETO_ENE_V1" },
+    { "idAnimacion": "LSC_ALFABETO_O_V1" }
+  ]
+}
+```
+
+## 10. Variación
 
 Cada seña o guion debe registrar la región y el contexto de validación. Si existen
 variantes, el PMV seleccionará una variante principal acordada y documentará las
 demás sin mezclarlas automáticamente.
 
-## 10. Contenido excluido
+## 11. Contenido excluido
 
 - Diagnósticos, tratamientos o emergencias.
 - Consentimiento legal y trámites de consecuencias materiales.
 - Insultos o contenido sensible hasta contar con protocolo específico.
-- Nombres propios que requieran deletreo no implementado.
+- Números y símbolos que requieran un repertorio manual no implementado.
 
-## 11. Decisiones abiertas
+## 12. Decisiones abiertas
 
 - Sistema exacto de glosas que se usará internamente.
 - Región o variante principal de LSC.
-- Tratamiento del deletreo manual.
+- Ritmo y duración de las transiciones entre letras.
+- Formas específicas para secuencias como `CH`, `LL` y `RR`, si la validación
+  colombiana recomienda tratarlas de manera diferente.
 - Convenciones para preguntas, negación y referencia espacial.

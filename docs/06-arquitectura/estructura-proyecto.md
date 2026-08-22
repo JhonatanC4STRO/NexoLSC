@@ -1,6 +1,5 @@
 # Estructura del proyecto
 
-**Versión:** 0.1
 **Estado:** Propuesta para iniciar la implementación
 
 ## Objetivo
@@ -39,7 +38,8 @@ NexoLSC/
 │       │   ├── servicios/
 │       │   ├── dominio/
 │       │   │   ├── intenciones/
-│       │   │   └── guiones/
+│       │   │   ├── guiones/
+│       │   │   └── deletreo/
 │       │   ├── integraciones/
 │       │   │   └── transcripcion/
 │       │   ├── esquemas/
@@ -74,7 +74,7 @@ son archivos técnicos reconocidos por las herramientas empleadas.
 |---|---|
 | `aplicaciones/interfaz` | Captura voz o texto, permite corregir la transcripción y presenta el avatar. |
 | `aplicaciones/interfaz/codigo/caracteristicas/avatar` | Carga el GLB, selecciona animaciones por identificador y controla reproducción, pausa y velocidad. |
-| `aplicaciones/servidor` | Protege secretos, recibe audio, solicita la transcripción y resuelve intenciones y guiones. |
+| `aplicaciones/servidor` | Protege secretos, recibe audio, solicita la transcripción y resuelve intenciones, guiones y secuencias de deletreo confirmadas. |
 | `bibliotecas/contratos` | Define en TypeScript las entradas y respuestas compartidas por interfaz y servidor. |
 | `catalogos` | Conserva los datos JSON versionados y validados de intenciones, guiones y animaciones. |
 | `recursos/blender` | Conserva el archivo fuente del avatar y las referencias con permiso de uso. |

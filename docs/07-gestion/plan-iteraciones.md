@@ -1,6 +1,5 @@
 # Plan de iteraciones
 
-**Versión:** 0.1
 **Estado:** Propuesta
 **Cadencia:** iteraciones de una semana
 
@@ -33,6 +32,7 @@
 - Implementar catálogos JSON y validación de integridad.
 - Implementar clasificación determinista.
 - Reproducir guiones y manejar `NO_SOPORTADA`.
+- Mostrar la elección de deletreo sin activarla automáticamente.
 - Automatizar pruebas unitarias del catálogo.
 
 **Salida:** flujo demostrable sin micrófono.
@@ -57,6 +57,8 @@
 - Revisar transiciones y marcadores no manuales.
 - Pausa, repetición y velocidad lenta.
 - Lista de expresiones soportadas.
+- Producir y validar las 27 letras del alfabeto manual.
+- Implementar normalización, confirmación y reproducción del deletreo.
 - Optimización básica del GLB tras medir.
 
 **Salida:** catálogo objetivo del PMV.
@@ -73,7 +75,8 @@
 
 **Salida:** informe de resultados y decisión continuar/cambiar/detener.
 
-## Stop condition
+## Condición de cierre
 
-El PMV termina cuando el flujo completo funciona, las intenciones publicadas están
-validadas y se ejecutó el piloto. Características nuevas pasan a una fase posterior.
+El PMV termina cuando el flujo completo funciona, las intenciones y letras
+publicadas están validadas y se ejecutó el piloto. Las características nuevas
+pasan a una fase posterior.

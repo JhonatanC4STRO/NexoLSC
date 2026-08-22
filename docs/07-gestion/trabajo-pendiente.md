@@ -1,6 +1,5 @@
 # Trabajo pendiente inicial
 
-**Versión:** 0.1
 **Estado:** Borrador priorizado
 
 Prioridades: `Obligatoria`, `Recomendada`, `Opcional`, `Fuera del PMV` para el PMV.
@@ -83,7 +82,7 @@ Como usuario, quiero una respuesta honesta cuando no exista traducción validada
 
 ### HU-07 — Bloquear incompatibilidades
 
-Como propietario, quiero detectar animaciones incompatibles antes de publicarlos.
+Como propietario, quiero detectar animaciones incompatibles antes de publicarlas.
 
 **Aceptación**
 
@@ -101,23 +100,39 @@ Como usuario, quiero que el audio y las credenciales se manejen de forma segura.
 - El servidor rechaza archivos fuera de límites.
 - El audio temporal se elimina tras completar o fallar la solicitud.
 
-## Historias Recomendada
+### HU-09 — Deletrear texto por elección
 
-- HU-09: precargar recursos esenciales y mostrar progreso.
-- HU-10: mostrar una lista navegable de expresiones soportadas.
-- HU-11: registrar errores técnicos sin almacenar texto completo por defecto.
-- HU-12: ejecutar el flujo completo por teclado.
+Como usuario, quiero elegir el deletreo manual de un texto sin traducción para
+comunicar nombres, siglas o términos nuevos.
 
-## Fuera del PMV del PMV
+**Aceptación**
+
+- El sistema primero informa que no existe una traducción validada.
+- El deletreo solo comienza después de mostrar y confirmar el texto exacto.
+- La interfaz explica que el resultado no es una traducción gramatical a LSC.
+- Las vocales acentuadas se normalizan y la `Ñ` se conserva.
+- Un número, símbolo o letra sin animación bloquea toda la secuencia y muestra el
+  carácter problemático.
+- La secuencia puede pausarse, repetirse y reproducirse lentamente.
+
+## Historias recomendadas
+
+- HU-10: precargar recursos esenciales y mostrar progreso.
+- HU-11: mostrar una lista navegable de expresiones soportadas.
+- HU-12: registrar errores técnicos sin almacenar texto completo por defecto.
+- HU-13: ejecutar el flujo completo por teclado.
+
+## Fuera del PMV
 
 - HU-X1: conversación continua bidireccional.
 - HU-X2: generación automática de señas.
 - HU-X3: cuentas de usuario e historial.
 - HU-X4: panel administrativo.
 - HU-X5: traducción para emergencias o decisiones de alto riesgo.
+- HU-X6: deletreo de números y símbolos.
 
 ## Criterios de preparación
 
-Una historia puede entrar al iteración cuando tiene propósito, alcance, criterios de
+Una historia puede entrar a la iteración cuando tiene propósito, alcance, criterios de
 aceptación, dependencias identificadas y contenido lingüístico disponible si lo
 requiere.
