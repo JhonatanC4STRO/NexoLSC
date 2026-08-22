@@ -42,8 +42,8 @@ Ejemplo ilustrativo, no validado lingüísticamente:
     {
       "idAnimacion": "LSC_SALUDO_HOLA_V1",
       "velocidad": 1.0,
-      "pausaMs": 150,
-      "noManual": null
+      "pausaMilisegundos": 150,
+      "componentesNoManuales": null
     }
   ]
 }

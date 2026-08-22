@@ -1,11 +1,11 @@
 # Catálogo de señas y animaciones
 
-**Versión:** 0.2
+**Versión:** 0.3
 **Estado:** Plantilla; sin contenido lingüístico validado
 
 La orden de producción propuesta para Blender se encuentra en el
 [listado de animaciones del PMV](../04-animacion/listado-animaciones-pmv.md).
-Este catálogo registra cada animación después de producirlo; el listado organiza el
+Este catálogo registra cada animación después de producirla; el listado organiza el
 trabajo pendiente antes de que los registros estén completos.
 
 ## Campos obligatorios
@@ -14,15 +14,15 @@ trabajo pendiente antes de que los registros estén completos.
 |---|---|
 | `idAnimacion` | Identificador técnico estable. |
 | `etiquetaGlosa` | Etiqueta humana, no traducción literal. |
-| `meaning` | Significado o función en el contexto validado. |
+| `significado` | Significado o función en el contexto validado. |
 | `region` | Región o comunidad de referencia. |
 | `versionEsqueleto` | Versión compatible del esqueleto de animación. |
-| `nombreAccion` | Nombre exacto de la Acción/NLA en Blender y GLB. |
-| `duracionMs` | Duración nominal. |
-| `noManual` | Marcadores no manuales incorporados o requeridos. |
+| `nombreAnimacionBlender` | Nombre exacto de la animación en Blender y GLB. |
+| `duracionMilisegundos` | Duración nominal en milisegundos. |
+| `componentesNoManuales` | Marcadores no manuales incorporados o requeridos. |
 | `fuente` | Fuente y condiciones de consulta. |
-| `validator` | Código de la persona validadora; evitar datos personales públicos. |
-| `validadoEn` | Fecha de aprobación. |
+| `codigoValidador` | Código de la persona validadora; evita publicar datos personales. |
+| `fechaValidacion` | Fecha de aprobación. |
 | `estado` | Estado del elemento. |
 
 ## Registro inicial de ejemplo

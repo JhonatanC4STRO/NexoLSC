@@ -1,7 +1,15 @@
 # Modelo de datos
 
-**Versión:** 0.1
+**Versión:** 0.2
 **Estado:** Propuesta conceptual
+
+## Convenciones
+
+- Los nombres de entidades, relaciones y atributos están en español.
+- Los identificadores técnicos omiten tildes y la letra `ñ` para facilitar su uso
+  posterior en código y archivos JSON.
+- Las claves se describen en español dentro del diagrama.
+- Los tiempos expresados en milisegundos utilizan el sufijo `Milisegundos`.
 
 ## Relaciones
 
@@ -16,47 +24,47 @@ erDiagram
     ANIMACION_SENA ||--o{ REGISTRO_VALIDACION : valida
 
     INTENCION {
-      string id PK
-      string proposito
-      string estado
-      string versionGuion
+      texto id "Clave primaria"
+      texto proposito
+      texto estado
+      texto versionGuion
     }
     EJEMPLO_ENUNCIADO {
-      string texto
-      string configuracionRegional
-      boolean positivo
+      texto contenido
+      texto configuracionRegional
+      booleano positivo
     }
     GUION_SENAS {
-      string idIntencion FK
-      string version
-      string versionEsqueleto FK
-      string estado
+      texto idIntencion "Clave foránea: INTENCION"
+      texto version
+      texto versionEsqueleto "Clave foránea: VERSION_ESQUELETO"
+      texto estado
     }
     PASO_GUION {
-      int orden
-      string idAnimacion FK
-      number velocidad
-      int pausaMs
-      string transicion
+      entero orden
+      texto idAnimacion "Clave foránea: ANIMACION_SENA"
+      numero velocidad
+      entero pausaMilisegundos
+      texto transicion
     }
     ANIMACION_SENA {
-      string id PK
-      string nombreAccion
-      string versionEsqueleto FK
-      int duracionMs
-      string estado
+      texto id "Clave primaria"
+      texto nombreAnimacionBlender
+      texto versionEsqueleto "Clave foránea: VERSION_ESQUELETO"
+      entero duracionMilisegundos
+      texto estado
     }
     VERSION_ESQUELETO {
-      string id PK
-      string urlRecurso
-      string sumaComprobacion
+      texto id "Clave primaria"
+      texto ubicacionRecurso
+      texto sumaComprobacion
     }
     REGISTRO_VALIDACION {
-      string tipoObjetivo
-      string idObjetivo
-      string version
-      date validadoEn
-      string resultado
+      texto tipoObjetivo
+      texto idObjetivo
+      texto version
+      fecha fechaValidacion
+      texto resultado
     }
 ```
 
@@ -89,7 +97,7 @@ erDiagram
       "orden": 1,
       "idAnimacion": "LSC_CORTESIA_GRACIAS_V1",
       "velocidad": 1,
-      "pausaMs": 100,
+      "pausaMilisegundos": 100,
       "transicion": "NEUTRAL_A_SENA"
     }
   ]
@@ -101,7 +109,8 @@ Los valores lingüísticos del ejemplo no están validados.
 ## Reglas de integridad
 
 - Un guion publicado referencia únicamente animaciones publicadas.
-- Todos las animaciones de un guion usan el mismo `versionEsqueleto`.
+- Todas las animaciones de un guion usan el mismo valor de `versionEsqueleto`.
 - Los identificadores y versiones son inmutables después de publicación.
 - Los registros de validación no contienen datos personales innecesarios.
-- El suma de comprobación del GLB permite comprobar que se probó el mismo recurso publicado.
+- La suma de comprobación del GLB permite verificar que se probó el mismo recurso
+  publicado.

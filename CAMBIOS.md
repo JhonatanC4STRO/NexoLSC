@@ -23,6 +23,8 @@ exista una primera versión ejecutable.
 
 ### Cambiado
 
+- El modelo de datos y el catálogo de señas utilizan nombres, tipos y campos en
+  español, incluidos los ejemplos JSON relacionados.
 - El índice documental describe el propósito de cada archivo.
 - El documento de personas incorpora un flujo detallado de interacción.
 - El español pasa a ser el idioma obligatorio para documentación, interfaz,
