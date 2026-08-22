@@ -9,7 +9,7 @@
 | RNF-002 | Latencia | La animación comenzará en menos de 4 s tras confirmar texto. | p95, red estable |
 | RNF-003 | Animación | El reproductor mantendrá al menos 30 fotogramas por segundo. | Dispositivo de referencia |
 | RNF-004 | Peso | El avatar inicial y sus recursos críticos no excederán 15 MB comprimidos. | **POR CONFIRMAR** |
-| RNF-005 | Disponibilidad | Un fallo del transcripción automática permitirá continuar mediante texto. | Siempre |
+| RNF-005 | Disponibilidad | Un fallo del servicio de transcripción permitirá continuar mediante texto. | Siempre |
 | RNF-006 | Seguridad | Ninguna clave o secreto se incluirá en el paquete compilado del navegador. | Inspección de compilación |
 | RNF-007 | Privacidad | El audio se eliminará al terminar la transcripción, salvo consentimiento de prueba. | Servidor y proveedor |
 | RNF-008 | Accesibilidad | Todos los controles tendrán nombre accesible, foco visible y operación por teclado. | Auditoría |

@@ -20,11 +20,15 @@ exista una primera versión ejecutable.
 - Propuesta de nombre e identidad visual de NexoLSC.
 - Política de documentación de código y gestión de cambios.
 - Configuración inicial para Git, archivos ignorados y Git LFS para recursos 3D.
+- Estructura propuesta del repositorio, con responsabilidades y dependencias entre
+  interfaz, servidor, contratos, catálogos y recursos 3D.
 
 ### Cambiado
 
 - El modelo de datos y el catálogo de señas utilizan nombres, tipos y campos en
   español, incluidos los ejemplos JSON relacionados.
+- La decisión del conjunto tecnológico explica el papel limitado de Drei en la
+  carga del GLB y el control de las animaciones del avatar.
 - El índice documental describe el propósito de cada archivo.
 - El documento de personas incorpora un flujo detallado de interacción.
 - El español pasa a ser el idioma obligatorio para documentación, interfaz,

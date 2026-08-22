@@ -1,6 +1,6 @@
 # Índice de documentación
 
-**Versión:** 0.6
+**Versión:** 0.7
 **Fecha:** 2026-08-22
 **Estado:** Borrador para revisión
 
@@ -100,6 +100,10 @@
 - [Arquitectura C4](06-arquitectura/arquitectura-c4.md) — explica el contexto y
   los contenedores principales: aplicación web, reproductor 3D, servidor, servicio
   de transcripción, motor de traducción, catálogos y recursos GLB.
+- [Estructura del proyecto](06-arquitectura/estructura-proyecto.md) — propone la
+  organización de carpetas para interfaz, servidor, contratos compartidos,
+  catálogos, recursos de Blender, pruebas y documentación, junto con sus reglas de
+  dependencia.
 - [Modelo de datos](06-arquitectura/modelo-datos.md) — define las entidades y
   relaciones entre intenciones, ejemplos, guiones, pasos, animaciones, versiones del esqueleto de animación
   y registros de validación, con ejemplos JSON.
@@ -111,7 +115,9 @@
   propuestas, aceptadas, reemplazadas o rechazadas.
 - [RDA-001: Conjunto tecnológico del PMV](06-arquitectura/decisiones-rda/RDA-001-tecnologias-pmv.md)
   — propone React, TypeScript, Vite, Three.js, React Three Fiber, Node.js,
-  Fastify, JSON, el servicio de transcripción y las herramientas de pruebas.
+  Fastify, JSON, el servicio de transcripción y las herramientas de pruebas;
+  también delimita el uso de Drei para cargar el avatar y controlar sus
+  animaciones.
 - [RDA-002: Traducción determinista](06-arquitectura/decisiones-rda/RDA-002-traduccion-determinista.md)
   — justifica reconocer únicamente intenciones y guiones validados, devolviendo
   `NO_SOPORTADA` en lugar de generar traducciones libres.

@@ -1,6 +1,6 @@
 # Arquitectura C4
 
-**Versión:** 0.1
+**Versión:** 0.2
 **Estado:** Propuesta
 
 ## Nivel 1: contexto
@@ -79,6 +79,13 @@ flowchart TB
 - Ser la fuente de verdad de intenciones, guiones y animaciones.
 - Mantener versión, estado y trazabilidad lingüística.
 - Permanecer como JSON durante el PMV.
+
+## Estructura del repositorio
+
+La distribución concreta de aplicaciones, módulos, catálogos, pruebas y recursos
+3D se define en [Estructura del proyecto](estructura-proyecto.md). La propuesta
+mantiene la interfaz y el servidor dentro de un repositorio único, pero evita que
+una aplicación importe detalles internos de la otra.
 
 ## Despliegue inicial
 

@@ -1,6 +1,6 @@
 # Referencias normativas y técnicas
 
-**Versión:** 0.1
+**Versión:** 0.2
 **Estado:** Borrador
 
 ## Requisitos
@@ -27,6 +27,8 @@ redistribuir videos o contenido sin revisar sus condiciones de uso.
   <https://docs.blender.org/manual/en/latest/addons/import_export/scene_gltf2.html>
 - Carga de modelos con React Three Fiber:
   <https://r3f.docs.pmnd.rs/tutorials/loading-models>
+- Repositorio oficial de Drei y catálogo de utilidades para React Three Fiber:
+  <https://github.com/pmndrs/drei>
 - Sistema de animación de Three.js:
   <https://threejs.org/manual/en/animation-system.html>
 
