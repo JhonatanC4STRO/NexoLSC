@@ -3,7 +3,7 @@
 **Versión:** 0.1
 **Fecha:** 2026-08-22
 **Estado:** Propuesta para aprobación
-**Aplicación:** MVP web español → Lengua de Señas Colombiana
+**Aplicación:** PMV web español → Lengua de Señas Colombiana
 
 ## 1. Estado de la marca
 
@@ -12,7 +12,7 @@ presentarse todavía como marca registrada. Antes de su lanzamiento público se
 deben revisar antecedentes en SIPI, dominios, nombres en tiendas y redes sociales,
 y validar el nombre con personas usuarias de LSC.
 
-Esta guía define una dirección visual coherente para diseñar el MVP. No incluye
+Esta guía define una dirección visual coherente para diseñar el PMV. No incluye
 todavía archivos finales de logotipo ni sustituye la validación cultural.
 
 ## 2. Nombre
@@ -44,7 +44,7 @@ seña específica ni pretende asignarle una seña a la marca sin validación.
 
 > **Del español a la LSC, con claridad.**
 
-El lema comunica la dirección real del MVP y evita prometer traducción universal
+El lema comunica la dirección real del PMV y evita prometer traducción universal
 o bidireccional.
 
 ### Versión corta
@@ -99,7 +99,7 @@ Dos trazos continuos se aproximan y forman una `N` abstracta:
 - la unión central representa el nexo entre las personas.
 
 El símbolo debe funcionar sin detalles pequeños y seguir siendo reconocible en un
-favicon de 24 × 24 px.
+icono del sitio de 24 × 24 px.
 
 ### Logotipo principal
 
@@ -117,7 +117,7 @@ fondo y el contraste lo permitan.
 
 1. Logotipo horizontal con lema.
 2. Logotipo horizontal sin lema.
-3. Símbolo cuadrado para favicon e icono de aplicación.
+3. Símbolo cuadrado para el icono del sitio y de la aplicación.
 4. Versión monocromática azul profundo.
 5. Versión monocromática blanca para fondos oscuros.
 
@@ -137,24 +137,24 @@ fondo y el contraste lo permitan.
 - No colocar sobre fotografías con ruido visual.
 - No sustituir el símbolo por una configuración manual inventada.
 - No utilizar una seña real como marca sin validación lingüística y cultural.
-- No animar el logotipo durante el MVP; el movimiento debe reservarse para la LSC.
+- No animar el logotipo durante el PMV; el movimiento debe reservarse para la LSC.
 
 ## 7. Paleta de color
 
 ### Colores principales
 
-| Token | Nombre | Hex | Uso |
+| Variable | Nombre | Hexadecimal | Uso |
 |---|---|---|---|
-| `brand.primary` | Azul profundo | `#123047` | Logotipo, navegación y botones principales. |
-| `brand.secondary` | Turquesa | `#22A699` | Acentos, selección y elementos de conexión. |
-| `brand.accent` | Amarillo cálido | `#F4B942` | Foco, llamadas de atención y progreso. |
-| `surface.default` | Blanco azulado | `#F7FAFC` | Fondo principal. |
-| `surface.raised` | Blanco | `#FFFFFF` | Tarjetas, paneles y modales. |
-| `text.primary` | Azul casi negro | `#10212B` | Texto principal. |
-| `text.muted` | Gris azulado | `#526573` | Texto secundario sobre fondos claros. |
-| `border.default` | Gris claro | `#CBD5DC` | Límites de campos y separadores. |
-| `status.success` | Verde | `#16794B` | Confirmación o contenido aprobado. |
-| `status.error` | Rojo | `#B42318` | Error o bloqueo. |
+| `marca.principal` | Azul profundo | `#123047` | Logotipo, navegación y botones principales. |
+| `marca.secundario` | Turquesa | `#22A699` | Acentos, selección y elementos de conexión. |
+| `marca.acento` | Amarillo cálido | `#F4B942` | Foco, llamadas de atención y progreso. |
+| `superficie.base` | Blanco azulado | `#F7FAFC` | Fondo principal. |
+| `superficie.elevada` | Blanco | `#FFFFFF` | Tarjetas, paneles y modales. |
+| `texto.principal` | Azul casi negro | `#10212B` | Texto principal. |
+| `texto.secundario` | Gris azulado | `#526573` | Texto secundario sobre fondos claros. |
+| `borde.base` | Gris claro | `#CBD5DC` | Límites de campos y separadores. |
+| `estado.exito` | Verde | `#16794B` | Confirmación o contenido aprobado. |
+| `estado.error` | Rojo | `#B42318` | Error o bloqueo. |
 
 ### Combinaciones verificadas
 
@@ -181,7 +181,7 @@ marca. Tipografías de respaldo: `Arial`, `Helvetica`, `sans-serif`.
 
 | Estilo | Tamaño / línea | Peso | Uso |
 |---|---|---:|---|
-| Display | 40 / 48 px | 700 | Portada o mensaje principal. |
+| Destacado | 40 / 48 px | 700 | Portada o mensaje principal. |
 | Título 1 | 32 / 40 px | 700 | Título de pantalla. |
 | Título 2 | 24 / 32 px | 700 | Secciones. |
 | Título 3 | 20 / 28 px | 600 | Subsecciones y tarjetas. |
@@ -200,7 +200,7 @@ marca. Tipografías de respaldo: `Arial`, `Helvetica`, `sans-serif`.
 ## 9. Iconografía
 
 - Iconos de línea simples, extremos redondeados y grosor consistente.
-- Utilizar una sola biblioteca durante el MVP.
+- Utilizar una sola biblioteca durante el PMV.
 - Acompañar con texto los controles esenciales.
 - Mantener área táctil mínima aunque el dibujo del icono sea pequeño.
 
@@ -283,33 +283,33 @@ crear una segunda mascota.
 | Cargando | “Preparando el avatar y la traducción.” |
 | Reproducción | “Reproduciendo la traducción en LSC.” |
 
-## 13. Tokens iniciales para desarrollo
+## 13. Variables iniciales para desarrollo
 
 ```css
 :root {
-  --color-brand-primary: #123047;
-  --color-brand-secondary: #22a699;
-  --color-brand-accent: #f4b942;
-  --color-surface-default: #f7fafc;
-  --color-surface-raised: #ffffff;
-  --color-text-primary: #10212b;
-  --color-text-muted: #526573;
-  --color-border-default: #cbd5dc;
-  --color-status-success: #16794b;
-  --color-status-error: #b42318;
+  --color-marca-principal: #123047;
+  --color-marca-secundario: #22a699;
+  --color-marca-acento: #f4b942;
+  --color-superficie-base: #f7fafc;
+  --color-superficie-elevada: #ffffff;
+  --color-texto-principal: #10212b;
+  --color-texto-secundario: #526573;
+  --color-borde-base: #cbd5dc;
+  --color-estado-exito: #16794b;
+  --color-estado-error: #b42318;
 
-  --font-family-brand: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif;
+  --fuente-marca: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif;
 
-  --radius-small: 6px;
-  --radius-medium: 12px;
-  --radius-large: 20px;
+  --radio-pequeno: 6px;
+  --radio-mediano: 12px;
+  --radio-grande: 20px;
 
-  --focus-ring-color: #f4b942;
-  --focus-ring-width: 3px;
+  --color-anillo-foco: #f4b942;
+  --ancho-anillo-foco: 3px;
 }
 ```
 
-Estos tokens son la fuente inicial para el diseño del MVP. Si cambian, debe
+Estas variables son la fuente inicial para el diseño del PMV. Si cambian, debe
 actualizarse este documento antes de modificar componentes de forma individual.
 
 ## 14. Entregables gráficos pendientes
@@ -318,7 +318,7 @@ actualizarse este documento antes de modificar componentes de forma individual.
 - [ ] Revisión cultural con personas usuarias de LSC.
 - [ ] Logotipo vectorial principal en SVG.
 - [ ] Variantes monocromáticas en SVG.
-- [ ] Favicon de 16, 24, 32 y 48 px.
+- [ ] Icono del sitio de 16, 24, 32 y 48 px.
 - [ ] Icono de aplicación de 512 × 512 px.
 - [ ] Pruebas del logotipo en fondos claros y oscuros.
 - [ ] Plantilla de portada para documentación y demostraciones.

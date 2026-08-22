@@ -10,14 +10,14 @@ flowchart LR
     Emisor[Emisor hispanohablante]
     Receptor[Receptor usuario de LSC]
     Sistema[Sistema Traductor Español–LSC]
-    STT[Servicio de transcripción]
+    TranscripcionAutomatica[Servicio de transcripción]
     Validador[Validador lingüístico externo]
 
     Emisor -->|Voz, texto y confirmación| Sistema
     Sistema -->|Avatar y estado| Receptor
-    Sistema -->|Audio temporal| STT
-    STT -->|Transcripción| Sistema
-    Validador -->|Aprueba guiones y clips fuera de la app| Sistema
+    Sistema -->|Audio temporal| TranscripcionAutomatica
+    TranscripcionAutomatica -->|Transcripción| Sistema
+    Validador -->|Aprueba guiones y animaciones fuera de la app| Sistema
 ```
 
 ## Nivel 2: contenedores
@@ -25,27 +25,27 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph Navegador
-        UI[React + TypeScript]
-        Player[React Three Fiber / Three.js]
+        InterfazUsuario[Interfaz: React + TypeScript]
+        Reproductor[Reproductor: React Three Fiber / Three.js]
     end
 
     subgraph Servidor
         API[API Fastify + TypeScript]
-        Translator[Motor de intenciones y guiones]
-        Catalog[Catálogos JSON versionados]
+        MotorTraduccion[Motor de intenciones y guiones]
+        Catalogo[Catálogos JSON versionados]
     end
 
-    STT[API de transcripción]
-    Assets[Archivos estáticos GLB]
+    TranscripcionAutomatica[API de transcripción]
+    Recursos[Archivos estáticos GLB]
 
-    UI -->|Audio / texto| API
-    API -->|Audio temporal| STT
-    STT -->|Texto| API
-    API --> Translator
-    Translator --> Catalog
-    API -->|Intención y guion| UI
-    UI --> Player
-    Player --> Assets
+    InterfazUsuario -->|Audio o texto| API
+    API -->|Audio temporal| TranscripcionAutomatica
+    TranscripcionAutomatica -->|Texto| API
+    API --> MotorTraduccion
+    MotorTraduccion --> Catalogo
+    API -->|Intención y guion| InterfazUsuario
+    InterfazUsuario --> Reproductor
+    Reproductor --> Recursos
 ```
 
 ## Responsabilidades
@@ -58,10 +58,10 @@ flowchart TB
 - Cargar el avatar y reproducir el guion.
 - No contener claves privadas.
 
-### Backend API
+### Servidor API
 
 - Validar tamaño, formato y duración del audio.
-- Proteger la clave del proveedor STT.
+- Proteger la clave del proveedor de transcripción.
 - Normalizar texto de forma limitada.
 - Clasificar intenciones soportadas.
 - Entregar únicamente guiones publicados.
@@ -71,14 +71,14 @@ flowchart TB
 
 - Operar de manera determinista sobre el catálogo aprobado.
 - Distinguir intención soportada de entrada desconocida.
-- Verificar compatibilidad entre guion, clips y rig.
+- Verificar compatibilidad entre guion, animaciones y esqueleto de animación.
 - No generar libremente secuencias de LSC.
 
 ### Catálogos
 
-- Ser la fuente de verdad de intenciones, guiones y clips.
+- Ser la fuente de verdad de intenciones, guiones y animaciones.
 - Mantener versión, estado y trazabilidad lingüística.
-- Permanecer como JSON durante el MVP.
+- Permanecer como JSON durante el PMV.
 
 ## Despliegue inicial
 
@@ -90,6 +90,6 @@ que una necesidad medida lo justifique.
 ## Límites de confianza
 
 - Navegador: entrada no confiable.
-- Backend: único lugar con secretos.
-- Proveedor STT: tercero que procesa audio bajo sus términos.
+- Servidor: único lugar con secretos.
+- Proveedor transcripción automática: tercero que procesa audio bajo sus términos.
 - Catálogo publicado: contenido confiable solo después de validación.

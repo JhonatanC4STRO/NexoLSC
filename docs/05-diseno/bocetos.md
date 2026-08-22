@@ -1,4 +1,4 @@
-# Wireframes de baja fidelidad
+# Bocetos de baja fidelidad
 
 **Versión:** 0.2
 **Estado:** Borrador; no representa el diseño visual definitivo

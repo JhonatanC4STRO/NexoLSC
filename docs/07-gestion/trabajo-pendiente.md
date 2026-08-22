@@ -1,9 +1,9 @@
-# Backlog inicial
+# Trabajo pendiente inicial
 
 **Versión:** 0.1
 **Estado:** Borrador priorizado
 
-Prioridades: `Must`, `Should`, `Could`, `Won't` para el MVP.
+Prioridades: `Obligatoria`, `Recomendada`, `Opcional`, `Fuera del PMV` para el PMV.
 
 ## Épicas
 
@@ -11,11 +11,11 @@ Prioridades: `Must`, `Should`, `Could`, `Won't` para el MVP.
 |---|---|---|
 | EP-01 | Captura y revisión | Obtener texto correcto desde voz o teclado. |
 | EP-02 | Traducción controlada | Convertir texto soportado en un guion validado. |
-| EP-03 | Avatar 3D | Reproducir clips con controles básicos. |
-| EP-04 | Contenido LSC | Producir, validar y versionar intenciones y clips. |
+| EP-03 | Avatar 3D | Reproducir animaciones con controles básicos. |
+| EP-04 | Contenido LSC | Producir, validar y versionar intenciones y animaciones. |
 | EP-05 | Calidad y despliegue | Medir, proteger datos y ejecutar un piloto. |
 
-## Historias Must
+## Historias obligatorias
 
 ### HU-01 — Ingresar una frase
 
@@ -57,9 +57,9 @@ intención.
 
 **Aceptación**
 
-- Los clips se reproducen en el orden del guion.
+- Las animaciones se reproducen en el orden del guion.
 - Manos, rostro y torso permanecen en cuadro.
-- Un clip faltante produce error y no una secuencia incompleta.
+- Una animación faltante produce error y no una secuencia incompleta.
 
 ### HU-05 — Controlar la reproducción
 
@@ -83,13 +83,13 @@ Como usuario, quiero una respuesta honesta cuando no exista traducción validada
 
 ### HU-07 — Bloquear incompatibilidades
 
-Como propietario, quiero detectar clips incompatibles antes de publicarlos.
+Como propietario, quiero detectar animaciones incompatibles antes de publicarlos.
 
 **Aceptación**
 
-- La validación falla si un guion referencia un clip inexistente.
-- La validación falla si mezcla versiones incompatibles del rig.
-- El error identifica el guion y el clip sin exponer secretos.
+- La validación falla si un guion referencia una animación inexistente.
+- La validación falla si mezcla versiones incompatibles del esqueleto de animación.
+- El error identifica el guion y la animación sin exponer secretos.
 
 ### HU-08 — Proteger audio y credenciales
 
@@ -97,18 +97,18 @@ Como usuario, quiero que el audio y las credenciales se manejen de forma segura.
 
 **Aceptación**
 
-- La clave STT no aparece en el navegador.
-- El backend rechaza archivos fuera de límites.
+- La clave del servicio de transcripción no aparece en el navegador.
+- El servidor rechaza archivos fuera de límites.
 - El audio temporal se elimina tras completar o fallar la solicitud.
 
-## Historias Should
+## Historias Recomendada
 
 - HU-09: precargar recursos esenciales y mostrar progreso.
 - HU-10: mostrar una lista navegable de expresiones soportadas.
 - HU-11: registrar errores técnicos sin almacenar texto completo por defecto.
 - HU-12: ejecutar el flujo completo por teclado.
 
-## Won't del MVP
+## Fuera del PMV del PMV
 
 - HU-X1: conversación continua bidireccional.
 - HU-X2: generación automática de señas.
@@ -116,8 +116,8 @@ Como usuario, quiero que el audio y las credenciales se manejen de forma segura.
 - HU-X4: panel administrativo.
 - HU-X5: traducción para emergencias o decisiones de alto riesgo.
 
-## Definition of Ready
+## Criterios de preparación
 
-Una historia puede entrar al sprint cuando tiene propósito, alcance, criterios de
+Una historia puede entrar al iteración cuando tiene propósito, alcance, criterios de
 aceptación, dependencias identificadas y contenido lingüístico disponible si lo
 requiere.

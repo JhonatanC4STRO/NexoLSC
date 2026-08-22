@@ -22,13 +22,13 @@ unidad de trabajo.
 3. Documentar todas las funciones nuevas o modificadas.
 4. Agregar o actualizar pruebas relevantes.
 5. Actualizar el documento funcional, técnico o lingüístico afectado.
-6. Registrar el cambio relevante en `CHANGELOG.md`, dentro de `[Sin publicar]`.
+6. Registrar el cambio relevante en `CAMBIOS.md`, dentro de `[Sin publicar]`.
 7. Ejecutar las verificaciones correspondientes.
 8. Revisar que no existan secretos ni archivos temporales.
-9. Crear un commit convencional.
-10. Subir el commit al repositorio remoto.
+9. Crear una confirmación en Git con un mensaje convencional en español.
+10. Enviar la confirmación al repositorio remoto.
 
-## Commits
+## Confirmaciones en Git
 
 Formato:
 
@@ -38,23 +38,23 @@ Formato:
 
 Tipos permitidos:
 
-- `feat`: comportamiento nuevo.
-- `fix`: corrección de un defecto.
-- `docs`: cambio exclusivamente documental.
-- `test`: creación o modificación de pruebas.
-- `refactor`: cambio estructural sin alterar comportamiento.
-- `perf`: mejora de rendimiento.
-- `build`: dependencias o compilación.
-- `ci`: automatización del repositorio.
-- `chore`: mantenimiento que no encaja en los anteriores.
-- `revert`: reversión explícita de un cambio.
+- `funcionalidad`: comportamiento nuevo.
+- `correccion`: corrección de un defecto.
+- `documentacion`: cambio exclusivamente documental.
+- `pruebas`: creación o modificación de pruebas.
+- `refactorizacion`: cambio estructural sin alterar comportamiento.
+- `rendimiento`: mejora de rendimiento.
+- `compilacion`: dependencias o proceso de compilación.
+- `integracion`: automatización del repositorio.
+- `mantenimiento`: tareas que no encajan en los anteriores.
+- `reversion`: reversión explícita de un cambio.
 
 Ejemplos:
 
 ```text
-docs: add initial MVP specification
-feat(avatar): play validated sign scripts
-fix(audio): recover after denied permission
+documentacion: crear especificacion inicial del PMV
+funcionalidad(avatar): reproducir guiones validados
+correccion(audio): recuperar permiso denegado
 ```
 
 El asunto debe ser breve, en modo imperativo y describir un solo cambio. El cuerpo
@@ -71,20 +71,20 @@ No se exige documentar funciones provenientes de dependencias.
 
 | Tipo de cambio | Documentación mínima |
 |---|---|
-| Alcance o comportamiento | Visión, SRS, backlog y casos de prueba afectados. |
+| Alcance o comportamiento | Visión, ERS, trabajo pendiente y casos de prueba afectados. |
 | Regla español–LSC | Especificación lingüística, catálogo y registro de validación. |
-| Animación | Listado de animaciones, catálogo de señas y pipeline Blender–GLB. |
-| Arquitectura o stack | ADR correspondiente y arquitectura C4. |
-| Interfaz | Flujo, wireframes y accesibilidad. |
-| Seguridad o privacidad | SRS, requisitos no funcionales, riesgos y pruebas. |
-| Corrección de defecto | Caso de prueba de regresión y `CHANGELOG.md`. |
+| Animación | Listado de animaciones, catálogo de señas y flujo de trabajo Blender–GLB. |
+| Arquitectura o conjunto tecnológico | RDA correspondiente y arquitectura C4. |
+| Interfaz | Flujo, bocetos y accesibilidad. |
+| Seguridad o privacidad | ERS, requisitos no funcionales, riesgos y pruebas. |
+| Corrección de defecto | Caso de prueba de regresión y `CAMBIOS.md`. |
 
-## Definition of Done del cambio
+## Definición de terminado del cambio
 
 - [ ] Existe relación con una necesidad, historia o corrección.
 - [ ] Las funciones están documentadas.
 - [ ] Las pruebas aplicables pasan.
 - [ ] Los documentos afectados coinciden con el comportamiento.
-- [ ] `CHANGELOG.md` fue actualizado si el cambio es relevante para el proyecto.
-- [ ] El diff no contiene secretos, credenciales, audio personal o temporales.
-- [ ] El commit tiene un único propósito y fue subido al remoto.
+- [ ] `CAMBIOS.md` fue actualizado si el cambio es relevante para el proyecto.
+- [ ] Los cambios preparados no contienen secretos, credenciales, audio personal o temporales.
+- [ ] La confirmación en Git tiene un único propósito y fue enviada al remoto.

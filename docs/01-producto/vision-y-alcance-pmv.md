@@ -1,4 +1,4 @@
-# Visión y alcance del MVP
+# Visión y alcance del PMV
 
 **Versión:** 0.1
 **Estado:** Borrador para aprobación
@@ -30,7 +30,7 @@ inicial y está **POR CONFIRMAR**.
 
 - Usuario emisor: persona hispanohablante que graba o escribe una frase.
 - Usuario receptor: persona sorda o usuaria de LSC que observa el avatar.
-- Propietario del producto: única persona desarrolladora del MVP.
+- Propietario del producto: única persona desarrolladora del PMV.
 - Validador lingüístico externo: persona sorda usuaria de LSC o profesional
   competente en LSC–español.
 
@@ -41,7 +41,7 @@ inicial y está **POR CONFIRMAR**.
 - Entrada por texto y por grabación corta, de máximo 10 segundos.
 - Dominio de saludos, cortesía y necesidades cotidianas.
 - Entre 20 y 30 intenciones validadas.
-- Catálogo inicial de 40 a 60 clips reutilizables.
+- Catálogo inicial de 40 a 60 animaciones reutilizables.
 - Revisión de la transcripción antes de reproducir.
 - Repetición, pausa y velocidad normal/lenta.
 - Mensaje explícito cuando la intención no esté soportada.
@@ -55,9 +55,9 @@ inicial y está **POR CONFIRMAR**.
 - No generar señas o animaciones con IA.
 - No cubrir comunicaciones médicas, legales o de emergencia.
 - No afirmar equivalencia con un intérprete profesional.
-- No crear aplicaciones móviles nativas durante el MVP.
+- No crear aplicaciones móviles nativas durante el PMV.
 
-## 7. Resultado observable del MVP
+## 7. Resultado observable del PMV
 
 Una persona abre la aplicación, graba una frase soportada, confirma la
 transcripción y ve al avatar reproducir el guion LSC correcto. Si la frase no está

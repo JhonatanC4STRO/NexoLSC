@@ -1,11 +1,11 @@
-# ADR-001: Stack técnico del MVP
+# RDA-001: Conjunto tecnológico del PMV
 
 **Estado:** Propuesta
 **Fecha:** 2026-08-22
 
 ## Contexto
 
-Una sola persona construirá una aplicación web con captura de audio, backend,
+Una sola persona construirá una aplicación web con captura de audio, servidor,
 motor de reglas y reproducción 3D. Se debe minimizar la cantidad de lenguajes y
 servicios operados.
 
@@ -13,8 +13,8 @@ servicios operados.
 
 - React 19, TypeScript y Vite para la interfaz.
 - Three.js, React Three Fiber y Drei para el avatar.
-- Node.js LTS, TypeScript y Fastify para el backend.
-- Catálogos JSON versionados durante el MVP.
+- Node.js LTS, TypeScript y Fastify para el servidor.
+- Catálogos JSON versionados durante el PMV.
 - API de transcripción `gpt-4o-mini-transcribe` como opción inicial.
 - Vitest, Testing Library y Playwright para pruebas.
 - Mermaid para diagramas versionables.
@@ -22,15 +22,15 @@ servicios operados.
 ## Consecuencias positivas
 
 - Un único lenguaje de programación principal.
-- El secreto del STT permanece en backend.
+- El secreto del transcripción automática permanece en servidor.
 - React Three Fiber integra el avatar con la interfaz.
 - Los catálogos pueden revisarse mediante cambios de texto.
 
 ## Costos y límites
 
-- Dependencia de red y costo variable del proveedor STT.
+- Dependencia de red y costo variable del proveedor de transcripción.
 - Node no es la primera opción para entrenar modelos propios; eso no forma parte
-  del MVP.
+  del PMV.
 - Los catálogos JSON no ofrecen edición concurrente ni consultas complejas.
 
 ## Alternativas descartadas por ahora

@@ -24,7 +24,7 @@ de repetir y encuadre estable.
 
 ## Persona C: propietario del producto
 
-**Objetivo:** incorporar y corregir intenciones, reglas y clips sin modificar todo
+**Objetivo:** incorporar y corregir intenciones, reglas y animaciones sin modificar todo
 el sistema.
 **Necesidades:** catálogo trazable, nombres consistentes, pruebas automatizadas y
 documentación breve.
@@ -153,7 +153,7 @@ flowchart TD
 | Emisor hispanohablante | Elegir la entrada, hablar o escribir, revisar y confirmar el texto. |
 | Sistema | Transcribir, clasificar, comprobar el catálogo y controlar el avatar. |
 | Receptor usuario de LSC | Observar la animación y solicitar pausa, repetición o menor velocidad. |
-| Propietario del producto | Corregir fuera de la interacción los errores de catálogo o clips faltantes. |
+| Propietario del producto | Corregir fuera de la interacción los errores de catálogo o animaciones faltantes. |
 
 El receptor no tiene que declarar al sistema si comprendió. Esa respuesta se
 recoge únicamente durante las pruebas de comprensión descritas en el protocolo
@@ -175,7 +175,7 @@ El emisor corrige el texto antes de traducir o vuelve a grabar.
 El audio no queda en un estado indefinido. Se muestra un error recuperable y se
 permite escribir la frase.
 
-### Clip faltante
+### Animación faltante
 
 El sistema bloquea la reproducción de la intención incompleta y registra el
 identificador faltante durante desarrollo.

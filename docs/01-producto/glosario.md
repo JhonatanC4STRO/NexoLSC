@@ -7,19 +7,19 @@
 | LSC | Lengua de Señas Colombiana. |
 | Intención | Propósito comunicativo estable, por ejemplo `SALUDO_HOLA`. |
 | Enunciado | Frase de entrada pronunciada o escrita por el usuario. |
-| Guion de señas | Representación estructurada que indica clips, marcadores no manuales, tiempos y transiciones. |
+| Guion de señas | Representación estructurada que indica animaciones, marcadores no manuales, tiempos y transiciones. |
 | Glosa | Etiqueta escrita usada para referirse a una seña; no es una traducción literal ni sustituye la seña. |
 | Seña | Unidad lingüística visual-gestual registrada en el catálogo. |
 | Marcador no manual | Componente expresado mediante rostro, cabeza, mirada, torso u otra articulación no manual. |
-| Clip | Animación individual exportable y reproducible sobre el rig del avatar. |
-| Rig | Esqueleto y controles usados para deformar y animar el avatar. |
-| Shape key | Forma del modelo usada, entre otros fines, para expresiones faciales. |
+| Animación | Fragmento animado exportable y reproducible sobre el esqueleto del avatar. |
+| Esqueleto de animación | Esqueleto y controles usados para deformar y animar el avatar. |
+| Clave de forma | Forma del modelo usada, entre otros fines, para expresiones faciales. |
 | NLA | Editor de animación no lineal de Blender. |
 | GLB | Forma binaria empaquetada de glTF 2.0. |
-| STT | Speech-to-text; conversión de audio a texto. |
-| SRS | Especificación de requisitos de software. |
-| MVP | Producto mínimo viable usado para validar hipótesis centrales. |
-| DoR | Definition of Ready; condiciones para iniciar una historia. |
-| DoD | Definition of Done; condiciones para considerar terminado un incremento. |
-| ADR | Registro breve de una decisión arquitectónica. |
-| Fallback | Comportamiento seguro cuando el sistema no puede producir una traducción válida. |
+| Transcripción automática | Conversión de audio o voz a texto. |
+| ERS | Especificación de requisitos de software. |
+| PMV | Producto mínimo viable usado para validar hipótesis centrales. |
+| Criterios de preparación | Condiciones que debe cumplir una historia antes de comenzar. |
+| Definición de terminado | Condiciones para considerar terminado un incremento. |
+| RDA | Registro breve de una decisión arquitectónica. |
+| Respuesta segura | Comportamiento seguro cuando el sistema no puede producir una traducción válida. |

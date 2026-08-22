@@ -10,7 +10,7 @@
 - ISO/IEC/IEEE 29148:2018, ingeniería de requisitos:
   <https://www.iso.org/standard/72089.html>
 
-La SRS del proyecto se inspira en ISO/IEC/IEEE 29148, pero no pretende declarar
+La ERS del proyecto se inspira en ISO/IEC/IEEE 29148, pero no pretende declarar
 cumplimiento formal con la norma.
 
 ## Lengua de Señas Colombiana

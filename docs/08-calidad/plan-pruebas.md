@@ -16,16 +16,16 @@ avatar de forma legible, protege la entrada de audio y se recupera de fallos.
 - Clasificación de intenciones.
 - Entradas positivas y negativas.
 - Integridad de catálogos y versiones.
-- Construcción del guion y fallback.
+- Construcción del guion y respuesta segura.
 
 ### Integración
 
-- Navegador → backend con audio válido.
-- Backend → proveedor STT mediante dobles de prueba y prueba controlada real.
-- Backend → motor → catálogo.
-- Carga de GLB y enumeración de clips.
+- Navegador → servidor con audio válido.
+- Servidor → proveedor de transcripción mediante dobles de prueba y prueba controlada real.
+- Servidor → motor → catálogo.
+- Carga de GLB y enumeración de animaciones.
 
-### End-to-end
+### De extremo a extremo
 
 - Texto → confirmación → avatar.
 - Voz → transcripción → corrección → avatar.
@@ -39,7 +39,7 @@ avatar de forma legible, protege la entrada de audio y se recupera de fallos.
 - Deformación de dedos, muñecas y hombros.
 - Componentes faciales.
 - Transiciones y pose neutral.
-- FPS, carga y comportamiento móvil.
+- Fotogramas por segundo, carga y comportamiento móvil.
 
 ### Lingüísticas
 
@@ -50,15 +50,15 @@ avatar de forma legible, protege la entrada de audio y se recupera de fallos.
 
 ### Seguridad y privacidad
 
-- Claves ausentes del bundle.
+- Claves ausentes del paquete compilado.
 - Rechazo de archivos grandes o tipos inválidos.
 - Eliminación de archivos temporales.
-- Logs sin audio ni texto completo por defecto.
+- Registros sin audio ni texto completo por defecto.
 - Mensajes de error sin información interna sensible.
 
 ## Entornos
 
-- Desarrollo local con STT simulado.
+- Desarrollo local con transcripción simulada.
 - Integración con credencial separada y audios de prueba consentidos.
 - Piloto desplegado con catálogo congelado.
 
@@ -70,7 +70,7 @@ avatar de forma legible, protege la entrada de audio y se recupera de fallos.
 
 ## Criterios de entrada al piloto
 
-- Todos los Must pasan pruebas automatizadas aplicables.
+- Todos los requisitos obligatorios pasan las pruebas automatizadas aplicables.
 - Cero defectos críticos abiertos.
 - Catálogo publicado validado.
 - Flujo de privacidad revisado.

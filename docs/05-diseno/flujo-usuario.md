@@ -17,7 +17,7 @@ flowchart TD
     G --> H{Usuario confirma}
     H -->|Corregir| G
     H -->|Confirmar| I[Identificar intención]
-    I -->|Soportada| J[Cargar guion y clips]
+    I -->|Soportada| J[Cargar guion y animaciones]
     I -->|No soportada| K[Mensaje seguro y alternativas]
     J --> L[Reproducir avatar]
     L --> M[Repetir / pausar / lento]

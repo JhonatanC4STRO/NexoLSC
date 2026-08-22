@@ -7,56 +7,56 @@
 
 ```mermaid
 erDiagram
-    INTENT ||--o{ UTTERANCE_EXAMPLE : reconoce
-    INTENT ||--|| SIGN_SCRIPT : publica
-    SIGN_SCRIPT ||--|{ SCRIPT_STEP : contiene
-    SCRIPT_STEP }o--|| SIGN_CLIP : referencia
-    SIGN_CLIP }o--|| RIG_VERSION : requiere
-    INTENT ||--o{ VALIDATION_RECORD : valida
-    SIGN_CLIP ||--o{ VALIDATION_RECORD : valida
+    INTENCION ||--o{ EJEMPLO_ENUNCIADO : reconoce
+    INTENCION ||--|| GUION_SENAS : publica
+    GUION_SENAS ||--|{ PASO_GUION : contiene
+    PASO_GUION }o--|| ANIMACION_SENA : referencia
+    ANIMACION_SENA }o--|| VERSION_ESQUELETO : requiere
+    INTENCION ||--o{ REGISTRO_VALIDACION : valida
+    ANIMACION_SENA ||--o{ REGISTRO_VALIDACION : valida
 
-    INTENT {
+    INTENCION {
       string id PK
-      string purpose
-      string status
-      string scriptVersion
+      string proposito
+      string estado
+      string versionGuion
     }
-    UTTERANCE_EXAMPLE {
-      string text
-      string locale
-      boolean positive
+    EJEMPLO_ENUNCIADO {
+      string texto
+      string configuracionRegional
+      boolean positivo
     }
-    SIGN_SCRIPT {
-      string intentId FK
+    GUION_SENAS {
+      string idIntencion FK
       string version
-      string rigVersion FK
-      string status
+      string versionEsqueleto FK
+      string estado
     }
-    SCRIPT_STEP {
-      int order
-      string clipId FK
-      number speed
-      int holdMs
-      string transition
+    PASO_GUION {
+      int orden
+      string idAnimacion FK
+      number velocidad
+      int pausaMs
+      string transicion
     }
-    SIGN_CLIP {
+    ANIMACION_SENA {
       string id PK
-      string actionName
-      string rigVersion FK
-      int durationMs
-      string status
+      string nombreAccion
+      string versionEsqueleto FK
+      int duracionMs
+      string estado
     }
-    RIG_VERSION {
+    VERSION_ESQUELETO {
       string id PK
-      string assetUrl
-      string checksum
+      string urlRecurso
+      string sumaComprobacion
     }
-    VALIDATION_RECORD {
-      string targetType
-      string targetId
+    REGISTRO_VALIDACION {
+      string tipoObjetivo
+      string idObjetivo
       string version
-      date validatedAt
-      string result
+      date validadoEn
+      string resultado
     }
 ```
 
@@ -65,14 +65,14 @@ erDiagram
 ```json
 {
   "id": "CORTESIA_GRACIAS",
-  "purpose": "Expresar agradecimiento",
-  "locale": "es-CO",
-  "status": "PROPUESTA",
-  "examples": {
-    "positive": ["gracias", "muchas gracias"],
-    "negative": ["no gracias"]
+  "proposito": "Expresar agradecimiento",
+  "configuracionRegional": "es-CO",
+  "estado": "PROPUESTA",
+  "ejemplos": {
+    "positivos": ["gracias", "muchas gracias"],
+    "negativos": ["no gracias"]
   },
-  "scriptVersion": null
+  "versionGuion": null
 }
 ```
 
@@ -80,17 +80,17 @@ erDiagram
 
 ```json
 {
-  "intentId": "CORTESIA_GRACIAS",
+  "idIntencion": "CORTESIA_GRACIAS",
   "version": "0.1.0",
-  "rigVersion": "avatar-v1",
-  "status": "PROPUESTA",
-  "steps": [
+  "versionEsqueleto": "avatar-v1",
+  "estado": "PROPUESTA",
+  "pasos": [
     {
-      "order": 1,
-      "clipId": "LSC_CORTESIA_GRACIAS_V1",
-      "speed": 1,
-      "holdMs": 100,
-      "transition": "NEUTRAL_TO_SIGN"
+      "orden": 1,
+      "idAnimacion": "LSC_CORTESIA_GRACIAS_V1",
+      "velocidad": 1,
+      "pausaMs": 100,
+      "transicion": "NEUTRAL_A_SENA"
     }
   ]
 }
@@ -100,8 +100,8 @@ Los valores lingüísticos del ejemplo no están validados.
 
 ## Reglas de integridad
 
-- Un guion publicado referencia únicamente clips publicados.
-- Todos los clips de un guion usan el mismo `rigVersion`.
+- Un guion publicado referencia únicamente animaciones publicadas.
+- Todos las animaciones de un guion usan el mismo `versionEsqueleto`.
 - Los identificadores y versiones son inmutables después de publicación.
 - Los registros de validación no contienen datos personales innecesarios.
-- El hash del GLB permite comprobar que se probó el mismo recurso publicado.
+- El suma de comprobación del GLB permite comprobar que se probó el mismo recurso publicado.

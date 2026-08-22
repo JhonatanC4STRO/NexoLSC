@@ -1,33 +1,33 @@
-# Dependencies and builds
+# Dependencias y compilaciones
 node_modules/
 dist/
 build/
 coverage/
 .vite/
 
-# Local configuration and secrets
+# Configuración local y secretos
 .env
 .env.*
 !.env.example
 
-# Logs and temporary files
+# Registros y archivos temporales
 *.log
 *.tmp
 *.temp
 .cache/
 
-# Editors and operating systems
+# Editores y sistemas operativos
 .idea/
 .vscode/
 .DS_Store
 Thumbs.db
 
-# Blender backup and autosave files
+# Copias de seguridad y guardado automático de Blender
 *.blend1
 *.blend2
 *.blend@
 *.blend~
 
-# Test artifacts
+# Resultados de pruebas
 playwright-report/
 test-results/

@@ -18,7 +18,7 @@ enunciado español
   -> identificación de intención
   -> selección de variante aprobada
   -> guion de señas
-  -> clips y marcadores no manuales
+  -> animaciones y marcadores no manuales
 ```
 
 ## 3. Entrada
@@ -35,15 +35,15 @@ Ejemplo ilustrativo, no validado lingüísticamente:
 
 ```json
 {
-  "intentId": "SALUDO_HOLA",
-  "scriptVersion": "0.1.0",
-  "rigVersion": "avatar-v1",
-  "steps": [
+  "idIntencion": "SALUDO_HOLA",
+  "versionGuion": "0.1.0",
+  "versionEsqueleto": "avatar-v1",
+  "pasos": [
     {
-      "clipId": "LSC_SALUDO_HOLA_V1",
-      "speed": 1.0,
-      "holdMs": 150,
-      "nonManual": null
+      "idAnimacion": "LSC_SALUDO_HOLA_V1",
+      "velocidad": 1.0,
+      "pausaMs": 150,
+      "noManual": null
     }
   ]
 }
@@ -66,7 +66,7 @@ El catálogo podrá registrar:
 - variante regional o contextual;
 - transiciones relevantes.
 
-## 6. Estrategia del MVP
+## 6. Estrategia del PMV
 
 1. Definir intenciones comunicativas completas.
 2. Recopilar formas frecuentes de expresarlas en español.
@@ -82,7 +82,7 @@ El catálogo podrá registrar:
 - Corrección manual del usuario.
 
 No se permite inferir libremente sinónimos ni construir gramática LSC mediante un
-modelo generativo durante el MVP.
+modelo generativo durante el PMV.
 
 ## 8. Frase no soportada
 
@@ -90,8 +90,8 @@ Salida obligatoria:
 
 ```json
 {
-  "status": "unsupported",
-  "message": "Esta expresión todavía no tiene una traducción validada."
+  "estado": "no_soportada",
+  "mensaje": "Esta expresión todavía no tiene una traducción validada."
 }
 ```
 
@@ -101,7 +101,7 @@ afirmar que una de ellas equivale a la entrada.
 ## 9. Variación
 
 Cada seña o guion debe registrar la región y el contexto de validación. Si existen
-variantes, el MVP seleccionará una variante principal acordada y documentará las
+variantes, el PMV seleccionará una variante principal acordada y documentará las
 demás sin mezclarlas automáticamente.
 
 ## 10. Contenido excluido

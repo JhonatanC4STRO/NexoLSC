@@ -1,6 +1,6 @@
 # Índice de documentación
 
-**Versión:** 0.5
+**Versión:** 0.6
 **Fecha:** 2026-08-22
 **Estado:** Borrador para revisión
 
@@ -10,7 +10,7 @@
 2. Corregir las decisiones marcadas como **POR CONFIRMAR**.
 3. Validar la especificación lingüística con una persona sorda usuaria de LSC o
    con un profesional competente en LSC–español.
-4. Convertir los requisitos aceptados en historias listas para Sprint 1.
+4. Convertir los requisitos aceptados en historias listas para la Iteración 1.
 
 ## Documentos
 
@@ -26,21 +26,21 @@
 
 - [Identidad visual de NexoLSC](01-producto/identidad-visual.md) — define el
   significado y uso del nombre, lema, propósito, personalidad, concepto del
-  logotipo, paleta accesible, tipografía, iconografía, avatar, tono verbal, tokens
+  logotipo, paleta accesible, tipografía, iconografía, avatar, tono verbal, variables
   de desarrollo y entregables gráficos pendientes.
-- [Visión y alcance del MVP](01-producto/vision-y-alcance-mvp.md) — define el
-  problema, la propuesta de valor, los usuarios, lo que incluye y excluye el MVP,
+- [Visión y alcance del PMV](01-producto/vision-y-alcance-pmv.md) — define el
+  problema, la propuesta de valor, los usuarios, lo que incluye y excluye el PMV,
   sus indicadores de éxito y los supuestos que todavía deben confirmarse.
 - [Personas y escenarios](01-producto/personas-y-escenarios.md) — describe quién
   utilizará el producto, sus necesidades y riesgos, y muestra mediante un diagrama
   detallado cómo transcurre una interacción principal y sus alternativas.
 - [Glosario](01-producto/glosario.md) — unifica el significado de términos como
-  LSC, intención, guion de señas, glosa, clip, rig, MVP, ADR y fallback para evitar
+  LSC, intención, guion de señas, glosa, animación, esqueleto de animación, PMV, RDA y respuesta segura para evitar
   interpretaciones diferentes entre documentos.
 
 ### Requisitos
 
-- [Especificación de requisitos (SRS)](02-requisitos/especificacion-requisitos-srs.md)
+- [Especificación de requisitos (ERS)](02-requisitos/especificacion-requisitos-ers.md)
   — concentra el propósito, actores, requisitos funcionales, reglas de negocio,
   interfaces, restricciones y criterio de aceptación global del sistema.
 - [Requisitos no funcionales](02-requisitos/requisitos-no-funcionales.md) — fija
@@ -57,29 +57,29 @@
   LSC validado, incluyendo normalización, variación y comportamiento ante entradas
   no soportadas.
 - [Catálogo de intenciones](03-linguistica/catalogo-intenciones.md) — enumera las
-  situaciones comunicativas que el MVP podrá reconocer, sus ejemplos españoles,
+  situaciones comunicativas que el PMV podrá reconocer, sus ejemplos españoles,
   prioridad y estado de validación.
 - [Catálogo de señas](03-linguistica/catalogo-senas.md) — define los campos y las
-  convenciones necesarias para registrar cada seña o clip, junto con versión del
-  rig, región, fuente y evidencia de validación.
+  convenciones necesarias para registrar cada seña o animación, junto con versión del
+  esqueleto de animación, región, fuente y evidencia de validación.
 - [Protocolo de validación LSC](03-linguistica/protocolo-validacion-lsc.md) — indica
   cómo revisar lingüísticamente guiones y animaciones, cómo realizar pruebas de
   comprensión y qué evidencia se necesita antes de publicar contenido.
 
 ### Animación
 
-- [Listado de animaciones del MVP](04-animacion/listado-animaciones-mvp.md) —
+- [Listado de animaciones del PMV](04-animacion/listado-animaciones-pmv.md) —
   transforma las 20 intenciones en una orden concreta de producción para Blender,
-  separada en pose neutral, diez Actions esenciales, nueve de ampliación y una
-  intención bloqueada; también incluye estados, Definition of Ready y ficha por
-  Action.
-- [Guía del avatar y rig](04-animacion/guia-avatar-rig.md) — especifica los
+  separada en pose neutral, diez Acciones esenciales, nueve de ampliación y una
+  intención bloqueada; también incluye estados, Criterios de preparación y ficha por
+  Acción.
+- [Guía del avatar y esqueleto de animación](04-animacion/guia-avatar-esqueleto.md) — especifica los
   requisitos del modelo 3D, esqueleto, manos, rostro, pose neutral, cámara,
-  iluminación, versionado y control de calidad del rig.
+  iluminación, versionado y control de calidad del esqueleto de animación.
 - [Convenciones de animaciones](04-animacion/convenciones-animaciones.md) — define
-  cómo nombrar Actions y clips, trabajar la línea de tiempo, configurar curvas y
+  cómo nombrar Acciones y animaciones, trabajar la línea de tiempo, configurar curvas y
   tratar transiciones entre señas de forma consistente.
-- [Pipeline Blender–GLB](04-animacion/pipeline-blender-glb.md) — documenta el flujo
+- [Flujo de trabajo Blender–GLB](04-animacion/flujo-blender-glb.md) — documenta el flujo
   desde una referencia LSC autorizada hasta Blender, exportación GLB, revisión en
   un visor glTF, prueba en Three.js y publicación en el catálogo.
 
@@ -88,7 +88,7 @@
 - [Flujo de usuario](05-diseno/flujo-usuario.md) — muestra las rutas por voz y
   texto, los estados visibles de la interfaz y el comportamiento esperado durante
   grabación, revisión, traducción, reproducción y errores.
-- [Wireframes](05-diseno/wireframes.md) — contiene bocetos de baja fidelidad para
+- [Bocetos](05-diseno/bocetos.md) — contiene bocetos de baja fidelidad para
   la pantalla principal, confirmación de transcripción, frase no soportada y vista
   móvil; sirve como base antes del diseño visual definitivo.
 - [Accesibilidad](05-diseno/accesibilidad.md) — reúne criterios para teclado,
@@ -98,41 +98,41 @@
 ### Arquitectura
 
 - [Arquitectura C4](06-arquitectura/arquitectura-c4.md) — explica el contexto y
-  los contenedores principales: aplicación web, reproductor 3D, backend, servicio
+  los contenedores principales: aplicación web, reproductor 3D, servidor, servicio
   de transcripción, motor de traducción, catálogos y recursos GLB.
 - [Modelo de datos](06-arquitectura/modelo-datos.md) — define las entidades y
-  relaciones entre intenciones, ejemplos, guiones, pasos, clips, versiones del rig
+  relaciones entre intenciones, ejemplos, guiones, pasos, animaciones, versiones del esqueleto de animación
   y registros de validación, con ejemplos JSON.
 - [Diagramas de secuencia y estados](06-arquitectura/diagramas-secuencia.md) —
   representa las interacciones temporales de voz a avatar, los estados de la
   interfaz y el proceso para publicar una nueva seña.
-- [Registro de decisiones arquitectónicas](06-arquitectura/decisiones-adr/README.md)
+- [Registro de decisiones arquitectónicas](06-arquitectura/decisiones-rda/README.md)
   — funciona como índice de decisiones técnicas importantes y muestra si están
   propuestas, aceptadas, reemplazadas o rechazadas.
-- [ADR-001: Stack técnico del MVP](06-arquitectura/decisiones-adr/ADR-001-stack-mvp.md)
+- [RDA-001: Conjunto tecnológico del PMV](06-arquitectura/decisiones-rda/RDA-001-tecnologias-pmv.md)
   — propone React, TypeScript, Vite, Three.js, React Three Fiber, Node.js,
-  Fastify, JSON, el servicio STT y las herramientas de pruebas.
-- [ADR-002: Traducción determinista](06-arquitectura/decisiones-adr/ADR-002-traduccion-determinista.md)
+  Fastify, JSON, el servicio de transcripción y las herramientas de pruebas.
+- [RDA-002: Traducción determinista](06-arquitectura/decisiones-rda/RDA-002-traduccion-determinista.md)
   — justifica reconocer únicamente intenciones y guiones validados, devolviendo
   `NO_SOPORTADA` en lugar de generar traducciones libres.
-- [ADR-003: GLB único con clips](06-arquitectura/decisiones-adr/ADR-003-glb-unico-con-clips.md)
-  — explica por qué el primer MVP distribuirá un avatar con varios clips dentro de
+- [RDA-003: GLB único con animaciones](06-arquitectura/decisiones-rda/RDA-003-glb-unico-con-animaciones.md)
+  — explica por qué el primer PMV distribuirá un avatar con varias animaciones dentro de
   un único GLB y cuándo convendría revisar esa decisión.
 
 ### Gestión
 
-- [Backlog](07-gestion/backlog.md) — organiza épicas, historias de usuario,
+- [Trabajo pendiente](07-gestion/trabajo-pendiente.md) — organiza épicas, historias de usuario,
   prioridades y criterios de aceptación; es la fuente para seleccionar el trabajo
-  de cada sprint.
-- [Plan de sprints](07-gestion/plan-sprints.md) — divide el MVP desde Sprint 0
+  de cada iteración.
+- [Plan de iteraciones](07-gestion/plan-iteraciones.md) — divide el PMV desde la Iteración 0
   hasta el piloto, asigna un objetivo y una salida observable a cada semana y fija
-  la condición para detener el desarrollo del MVP.
+  la condición para detener el desarrollo del PMV.
 - [Registro de riesgos](07-gestion/riesgos.md) — identifica riesgos lingüísticos,
   técnicos, legales, operativos y de alcance, calcula su exposición y establece
   mitigaciones y disparadores.
 - [Definición de terminado](07-gestion/definicion-de-terminado.md) — contiene las
   listas que deben cumplirse para declarar terminados una historia, una intención
-  LSC, un clip de Blender y un sprint.
+  LSC, una animación de Blender y una iteración.
 
 ### Calidad
 
@@ -142,18 +142,18 @@
 - [Casos de prueba](08-calidad/casos-prueba.md) — proporciona escenarios
   verificables para captura, transcripción, clasificación, reproducción, errores,
   privacidad, accesibilidad y comprensión lingüística.
-- [Métricas del MVP](08-calidad/metricas-mvp.md) — especifica cómo medir por
+- [Métricas del PMV](08-calidad/metricas-pmv.md) — especifica cómo medir por
   separado transcripción, clasificación, comprensión, rendimiento, experiencia,
   integridad y privacidad, y cómo decidir si continuar, cambiar o detener.
 
 ### Desarrollo y cambios
 
-- [Guía de contribución](../CONTRIBUTING.md) — define el flujo obligatorio para
+- [Guía de contribución](../CONTRIBUIR.md) — define el flujo obligatorio para
   implementar, documentar, probar, registrar, confirmar y subir cada cambio.
 - [Estándar de documentación y cambios](09-desarrollo/estandar-documentacion-y-cambios.md)
-  — especifica cómo documentar cada función, módulo, endpoint, dato y animación,
+  — especifica cómo documentar cada función, módulo, operación de API, dato y animación,
   con ejemplos TSDoc y reglas para explicar propósito, motivo y funcionamiento.
-- [Registro de cambios](../CHANGELOG.md) — conserva un resumen legible de las
+- [Registro de cambios](../CAMBIOS.md) — conserva un resumen legible de las
   funcionalidades, correcciones, decisiones y pendientes acumulados por versión.
 
 ### Fuentes
@@ -164,10 +164,10 @@
 
 ## Condición para empezar a programar
 
-Se puede iniciar Sprint 1 cuando estén aprobados:
+Se puede iniciar la Iteración 1 cuando estén aprobados:
 
 - el problema, el usuario y los no-objetivos;
 - al menos diez intenciones del catálogo;
 - el formato del guion de señas;
-- tres clips de prueba exportados correctamente desde Blender;
+- tres animaciones de prueba exportadas correctamente desde Blender;
 - las historias HU-01 a HU-04 y sus criterios de aceptación.

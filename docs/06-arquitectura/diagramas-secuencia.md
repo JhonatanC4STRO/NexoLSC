@@ -9,20 +9,20 @@
 sequenceDiagram
     actor U as Usuario
     participant W as Aplicación web
-    participant A as Backend API
-    participant S as Servicio STT
+    participant A as Servidor API
+    participant S as Servicio de transcripción
     participant T as Motor de traducción
     participant P as Reproductor 3D
 
     U->>W: Inicia y detiene grabación
-    W->>A: POST /transcriptions (audio)
+    W->>A: POST /transcripciones (audio)
     A->>A: Valida formato, tamaño y duración
     A->>S: Envía audio temporal
     S-->>A: Transcripción
     A-->>W: Texto
     W-->>U: Muestra texto editable
     U->>W: Confirma o corrige
-    W->>A: POST /translations (texto)
+    W->>A: POST /traducciones (texto)
     A->>T: Identificar intención
     alt intención validada
         T-->>A: Intención + guion versionado
@@ -53,7 +53,7 @@ stateDiagram-v2
     TRADUCIENDO --> NO_SOPORTADA: desconocida
     TRADUCIENDO --> ERROR: fallo
     CARGANDO --> REPRODUCIENDO: recursos listos
-    CARGANDO --> ERROR: clip faltante
+    CARGANDO --> ERROR: animación faltante
     REPRODUCIENDO --> PAUSADO: pausar
     PAUSADO --> REPRODUCIENDO: continuar
     REPRODUCIENDO --> LISTO: finalizar
@@ -73,13 +73,13 @@ sequenceDiagram
 
     D->>V: Presenta intención y contexto
     V-->>D: Guion/referencia acordada
-    D->>B: Crea Action
-    D->>V: Muestra render o visor
+    D->>B: Crea Acción
+    D->>V: Muestra representación preliminar o visor
     alt requiere ajustes
         V-->>D: Correcciones
         D->>B: Ajusta animación
     else aprobada
         V-->>D: Registra aprobación de versión
-        D->>C: Publica clip y metadatos
+        D->>C: Publica animación y metadatos
     end
 ```

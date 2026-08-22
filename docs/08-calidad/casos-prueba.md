@@ -10,12 +10,12 @@
 | CP-003 | Corregir una transcripción | Se traduce exactamente el texto corregido | RF-005, RN-004 |
 | CP-004 | Ejecutar ejemplos positivos por intención | Todos resuelven la intención esperada | RF-006 |
 | CP-005 | Ejecutar ejemplos negativos y ambiguos | No resuelven una intención incorrecta | RF-006, RN-002 |
-| CP-006 | Reproducir guion de varios clips | Orden, pose y componentes se conservan | RF-008, RNF-009 |
+| CP-006 | Reproducir guion de varias animaciones | Orden, pose y componentes se conservan | RF-008, RNF-009 |
 | CP-007 | Pausar, repetir y usar velocidad lenta | Cada control conserva estado y secuencia | RF-009 |
 | CP-008 | Enviar frase fuera del dominio | Devuelve `NO_SOPORTADA` sin animación | RF-010, RN-002 |
-| CP-009 | Referenciar clip faltante o rig incompatible | Validación o reproducción se bloquea con error | RF-011, RN-003 |
-| CP-010 | Provocar fallos en cada estado | La UI informa y permite recuperarse | RF-012, RNF-014 |
-| CP-011 | Inspeccionar bundle del frontend | No contiene clave ni secreto del STT | RNF-006 |
+| CP-009 | Referenciar animación faltante o esqueleto de animación incompatible | Validación o reproducción se bloquea con error | RF-011, RN-003 |
+| CP-010 | Provocar fallos en cada estado | La interfaz de usuario informa y permite recuperarse | RF-012, RNF-014 |
+| CP-011 | Inspeccionar el paquete compilado de la interfaz web | No contiene claves ni secretos del servicio de transcripción | RNF-006 |
 | CP-012 | Completar y abortar transcripción | Audio temporal eliminado en ambos casos | RNF-007 |
 | CP-013 | Denegar permiso de micrófono | Se ofrece texto sin bloquear la aplicación | RNF-005 |
 | CP-014 | Navegar solo con teclado | Todos los controles son alcanzables y visibles | RNF-008 |

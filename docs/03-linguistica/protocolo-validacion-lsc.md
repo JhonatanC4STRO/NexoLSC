@@ -22,7 +22,7 @@ programa.
 1. Documentar el propósito y los ejemplos españoles.
 2. Acordar el guion LSC y la variante regional.
 3. Registrar una referencia autorizada para animación.
-4. Producir el clip o secuencia.
+4. Producir la animación o secuencia.
 5. Revisar configuración manual, orientación, ubicación, movimiento, ritmo,
    componentes no manuales y transiciones.
 6. Mostrar la animación sin texto fuente a participantes de comprensión.
@@ -64,7 +64,7 @@ Una dimensión rechazada impide publicar.
 ```text
 Intención:
 Versión de guion:
-Versión de clips:
+Versión de animaciones:
 Región/contexto:
 Fecha:
 Revisión lingüística:

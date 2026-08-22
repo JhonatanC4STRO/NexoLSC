@@ -1,4 +1,4 @@
-# ADR-002: Traducción determinista por intenciones
+# RDA-002: Traducción determinista por intenciones
 
 **Estado:** Propuesta
 **Fecha:** 2026-08-22
@@ -13,13 +13,13 @@ manual y validación.
 
 Reconocer únicamente intenciones definidas y seleccionar guiones LSC versionados.
 Ante una entrada desconocida se devuelve `NO_SOPORTADA`. No se usará un LLM para
-componer el guion del MVP.
+componer el guion del PMV.
 
 ## Consecuencias
 
 - Salidas trazables y reproducibles.
 - Cobertura limitada pero explícita.
-- Cada ampliación requiere ejemplos, guion, clips y validación.
+- Cada ampliación requiere ejemplos, guion, animaciones y validación.
 - Se evita confundir plausibilidad textual con corrección lingüística.
 
 ## Revisión futura
