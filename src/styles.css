@@ -1,0 +1,81 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --stage: #e9ecef;
+  --text: #1d2330;
+  --muted: #5d6677;
+  --primary: #1f6feb;
+  --primary-text: #ffffff;
+  --accent: #f59f00;
+  --border: #d9dde4;
+  --danger: #c92a2a;
+  --radius: 14px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #11151c;
+    --surface: #1a2029;
+    --stage: #232a35;
+    --text: #e8ecf2;
+    --muted: #9aa4b5;
+    --border: #2f3847;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+
+.app { max-width: 880px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; }
+.app__header h1 { margin: 0; font-size: 1.6rem; }
+.app__header p { margin: 4px 0 0; color: var(--muted); }
+.app__footer { font-size: 0.8rem; color: var(--muted); text-align: center; }
+
+.input { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: grid; gap: 10px; }
+.input label { font-weight: 600; }
+.input__row { display: flex; gap: 8px; }
+.input__row input { flex: 1; min-width: 0; font-size: 1.25rem; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+.input__normalized { margin: 0; color: var(--muted); letter-spacing: 0.08em; }
+.input__warning { margin: 0; color: var(--danger); font-size: 0.9rem; }
+
+.btn { font: inherit; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn:focus-visible, .chip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.btn--primary { background: var(--primary); color: var(--primary-text); border-color: var(--primary); font-weight: 600; }
+.btn--active { border-color: var(--primary); color: var(--primary); }
+.btn--recording { background: var(--danger); color: #fff; border-color: var(--danger); }
+
+.speech { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.speech__interim { color: var(--muted); font-style: italic; }
+.speech__error, .speech__unsupported { color: var(--danger); margin: 0; font-size: 0.9rem; }
+
+.stage { height: min(60vh, 520px); border-radius: var(--radius); overflow: hidden; background: var(--stage); border: 1px solid var(--border); }
+.stage--loading { display: grid; place-items: center; color: var(--muted); }
+.stage--placeholder { display: grid; place-content: center; justify-items: center; text-align: center; padding: 16px; gap: 6px; }
+.placeholder__letter { font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; line-height: 1; }
+.placeholder__desc { max-width: 46ch; margin: 0; }
+.placeholder__move { margin: 0; color: var(--primary); }
+.placeholder__note { margin: 8px 0 0; font-size: 0.8rem; color: var(--muted); }
+
+.timeline { display: grid; gap: 8px; }
+.timeline__status { display: flex; justify-content: space-between; font-size: 1.1rem; }
+.timeline__chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; align-items: center; }
+.timeline__gap { width: 14px; }
+
+.chip { font: inherit; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.chip--active { background: var(--primary); border-color: var(--primary); color: var(--primary-text); }
+.chip--letter { min-width: 42px; font-size: 1.15rem; font-weight: 700; border-radius: 10px; }
+.chip--done { opacity: 0.55; }
+.chip--current { background: var(--accent); border-color: var(--accent); color: #1d2330; transform: scale(1.12); }
+.chip--missing { border-style: dashed; }
+
+.controls { display: grid; gap: 12px; }
+.controls__main, .controls__speed { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+.controls__speed span { color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .chip--current { transform: none; }
+}

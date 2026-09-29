@@ -1,0 +1,16 @@
+node_modules/
+dist/
+*.blend1
+*.blend@
+.DS_Store
+Thumbs.db
+tsconfig.tsbuildinfo
+
+# Documentos de gestión personales (no se publican)
+*.xlsx
+
+# Avatar de prueba con derechos de terceros (Miles Morales, Marvel/Sony):
+# solo para desarrollo local, nunca en el repositorio público.
+assets-src/avatar/*.blend
+assets-src/textures/
+public/models/*.glb
