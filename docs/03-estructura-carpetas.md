@@ -25,6 +25,8 @@ NexoLSC/
 │       ├── export_avatar.py       ← limpieza + exportación GLB (probado con Blender 5.2)
 │       └── pose_helpers.py        ← funciones para posar brazos y dedos por script
 ├── public/
+│   ├── favicon.svg                ← ícono de la app (marca NexoLSC)
+│   ├── brand/                     ← variantes del símbolo (color, oscuro, noche, blanco, ícono de app)
 │   ├── backgrounds/
 │   │   └── sena.jpg               ← fondo del escenario (src/avatar/stage.ts); opcional
 │   └── models/
@@ -56,13 +58,15 @@ NexoLSC/
 │   │   ├── usePlayer.ts           ← usePlayer (estado) y usePlayerClock (reloj rAF)
 │   │   └── useAvatarChoice.ts     ← qué candidatos existen y cuál eligió el usuario
 │   ├── ui/
+│   │   ├── Logo.tsx               ← símbolo + logotipo «nexo LSC» (SVG en línea)
+│   │   ├── icons.tsx              ← íconos de la marca (24 px, trazo 2, currentColor)
 │   │   ├── AvatarSelector.tsx
 │   │   ├── PlayerControls.tsx
 │   │   ├── LetterTimeline.tsx
 │   │   └── SpeechButton.tsx
 │   ├── App.tsx
 │   ├── main.tsx
-│   └── styles.css
+│   └── styles.css                 ← tokens de la marca (claro/oscuro) y estilos de la app
 ├── index.html
 ├── package.json
 ├── tsconfig.json

@@ -59,5 +59,5 @@ Versiones verificadas en npm el 2026-09-28 y probadas juntas (compilación + pru
 | Avatar 3D (WebGL2) | ✅ | ✅ | ✅ |
 | Voz (Web Speech API) | ✅ (envía el audio a servidores de Google) | ✅ parcial (`webkitSpeechRecognition`) | ❌ **no disponible** en la versión estable |
 
-> En **Firefox** el botón 🎤 muestra "voz no disponible" hasta que se añada un proveedor alternativo
+> En **Firefox** el botón «Hablar» muestra "voz no disponible" hasta que se añada un proveedor alternativo
 > (Whisper en el navegador).

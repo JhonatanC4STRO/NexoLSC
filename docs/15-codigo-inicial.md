@@ -47,7 +47,7 @@ blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_a
 | `src/avatar/ClipDriver.ts` | Estado del motor → mezcla de AnimationClips |
 | `src/avatar/Avatar3D.tsx` | Escena R3F y carga del GLB |
 | `src/speech/speechToText.ts` | Interfaz de voz + Web Speech API |
-| `src/ui/*` | Selector de avatar, controles, línea de tiempo, micrófono |
+| `src/ui/*` | Selector de avatar, controles, línea de tiempo, micrófono, logo e íconos de la marca |
 | `tools/blender/*` | Exportación del GLB y ayudas para posar por script |
 | `assets-src/avatars/mpfb2/build_avatar.py` | Genera el candidato MPFB2 (CC0) de forma reproducible |
 
@@ -59,7 +59,7 @@ blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_a
 {
   "name": "nexolsc",
   "private": true,
-  "version": "0.2.2",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -126,6 +126,14 @@ export default defineConfig({
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b6b4f" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap"
+    />
     <title>NexoLSC · Deletreador LSC</title>
   </head>
   <body>
@@ -1323,6 +1331,7 @@ export const webSpeechProvider: SpeechToTextProvider = {
 ```tsx
 import { useRef, useState } from 'react';
 import { webSpeechProvider, type SpeechToTextProvider } from '../speech/speechToText';
+import { MicIcon } from './icons';
 
 interface Props {
   onResult: (text: string) => void;
@@ -1365,7 +1374,7 @@ export function SpeechButton({ onResult, provider = webSpeechProvider }: Props) 
   if (!supported) {
     return (
       <p className="speech__unsupported">
-        🎤 Voz no disponible en este navegador (p. ej. Firefox). Usa Chrome o Edge, o escribe el texto.
+        Voz no disponible en este navegador (p. ej. Firefox). Usa Chrome o Edge, o escribe el texto.
       </p>
     );
   }
@@ -1373,7 +1382,8 @@ export function SpeechButton({ onResult, provider = webSpeechProvider }: Props) 
   return (
     <div className="speech">
       <button type="button" className={`btn ${listening ? 'btn--recording' : ''}`} onClick={toggle} aria-pressed={listening}>
-        {listening ? '⏺ Escuchando… (toca para detener)' : '🎤 Hablar'}
+        <MicIcon />
+        {listening ? 'Escuchando… (toca para detener)' : 'Hablar'}
       </button>
       {interim && <span className="speech__interim">“{interim}”</span>}
       {error && <span className="speech__error" role="alert">{error}</span>}
@@ -1387,6 +1397,7 @@ export function SpeechButton({ onResult, provider = webSpeechProvider }: Props) 
 ```tsx
 import { SPEEDS, type SignPlayer } from '../core/player/SignPlayer';
 import { usePlayer } from '../hooks/usePlayer';
+import { NextIcon, PauseIcon, PlayIcon, PrevIcon, RepeatIcon, RestartIcon, StopIcon } from './icons';
 
 export function PlayerControls({ player }: { player: SignPlayer }) {
   const { status, items, speed, loop } = usePlayer(player);
@@ -1396,27 +1407,30 @@ export function PlayerControls({ player }: { player: SignPlayer }) {
   return (
     <div className="controls">
       <div className="controls__main" role="group" aria-label="Controles de reproducción">
+        <button type="button" className="btn btn--icon" onClick={() => player.prev()} disabled={empty} title="Letra anterior (←)" aria-label="Letra anterior">
+          <PrevIcon />
+        </button>
+        <button type="button" className="btn btn--primary btn--play" onClick={() => player.togglePlay()} disabled={empty} title="Reproducir / Pausar (Espacio)">
+          {playing ? <PauseIcon /> : <PlayIcon />}
+          {playing ? 'Pausar' : status === 'paused' ? 'Continuar' : 'Reproducir'}
+        </button>
+        <button type="button" className="btn btn--icon" onClick={() => player.next()} disabled={empty} title="Letra siguiente (→)" aria-label="Letra siguiente">
+          <NextIcon />
+        </button>
+      </div>
+      <div className="controls__main" role="group" aria-label="Más controles">
         <button type="button" className="btn" onClick={() => player.restart()} disabled={empty} title="Reiniciar (R)">
-          ↶ Reiniciar
-        </button>
-        <button type="button" className="btn" onClick={() => player.prev()} disabled={empty} title="Letra anterior (←)" aria-label="Letra anterior">
-          ⏮
-        </button>
-        <button type="button" className="btn btn--primary" onClick={() => player.togglePlay()} disabled={empty} title="Reproducir / Pausar (Espacio)">
-          {playing ? '⏸ Pausar' : status === 'paused' ? '▶ Continuar' : '▶ Reproducir'}
-        </button>
-        <button type="button" className="btn" onClick={() => player.next()} disabled={empty} title="Letra siguiente (→)" aria-label="Letra siguiente">
-          ⏭
+          <RestartIcon /> Reiniciar
         </button>
         <button type="button" className="btn" onClick={() => player.stop()} disabled={empty || status === 'idle'} title="Detener">
-          ⏹ Detener
+          <StopIcon /> Detener
         </button>
         <button type="button" className={`btn ${loop ? 'btn--active' : ''}`} onClick={() => player.setLoop(!loop)} aria-pressed={loop} title="Repetir la palabra">
-          🔁 Repetir
+          <RepeatIcon /> Repetir
         </button>
       </div>
       <div className="controls__speed" role="radiogroup" aria-label="Velocidad">
-        <span>Velocidad:</span>
+        <span>Velocidad</span>
         {SPEEDS.map((s) => (
           <button
             key={s}
@@ -1523,6 +1537,128 @@ export function AvatarSelector({ choice }: { choice: AvatarChoice }) {
 }
 ```
 
+## `src/ui/Logo.tsx`
+
+```tsx
+import { useId } from 'react';
+
+/**
+ * Logo de NexoLSC: dos arcos en «C» (la letra del alfabeto manual) enlazados, más el
+ * logotipo «nexo» con la píldora «LSC». Los cortes (máscaras) muestran qué arco pasa
+ * por encima: arriba el verde, abajo el amarillo. Colores desde los tokens de marca.
+ */
+export function Logo({ size = 40 }: { size?: number }) {
+  const id = useId().replace(/:/g, '');
+  return (
+    <span className="logo" role="img" aria-label="NexoLSC" style={{ ['--logo-size' as string]: `${size}px` }}>
+      <svg className="logo__mark" viewBox="0 0 64 64" width={size} height={size} aria-hidden="true" focusable="false">
+        <defs>
+          <mask id={`${id}-d`} maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+            <rect width="64" height="64" fill="#fff" />
+            <path d="M28.79 18.84 A14 14 0 0 1 34.72 23" fill="none" stroke="#000" strokeWidth="13" strokeLinecap="round" />
+          </mask>
+          <mask id={`${id}-i`} maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+            <rect width="64" height="64" fill="#fff" />
+            <path d="M29.28 41 A14 14 0 0 0 35.21 45.16" fill="none" stroke="#000" strokeWidth="13" strokeLinecap="round" />
+          </mask>
+        </defs>
+        <g fill="none" strokeWidth="8" strokeLinecap="round">
+          <path className="logo__arc-selva" mask={`url(#${id}-i)`} d="M34.72 23 A14 14 0 1 0 32.03 43.47" />
+          <path className="logo__arc-mango" mask={`url(#${id}-d)`} d="M31.97 20.53 A14 14 0 1 1 29.28 41" />
+        </g>
+      </svg>
+      <span className="logo__word" aria-hidden="true">
+        nexo<span className="logo__pill">LSC</span>
+      </span>
+    </span>
+  );
+}
+```
+
+## `src/ui/icons.tsx`
+
+```tsx
+/**
+ * Íconos de la marca NexoLSC: cuadrícula de 24px, trazo de 2px, extremos redondeados,
+ * una sola tinta (currentColor, heredan el color del botón). Decorativos: el botón
+ * lleva el texto o un aria-label.
+ */
+import type { ReactNode } from 'react';
+
+function Icon({ children }: { children: ReactNode }) {
+  return (
+    <svg
+      className="icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {children}
+    </svg>
+  );
+}
+
+export const PlayIcon = () => (
+  <Icon>
+    <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" />
+  </Icon>
+);
+
+export const PauseIcon = () => (
+  <Icon>
+    <rect x="6" y="5" width="4" height="14" rx="1.5" />
+    <rect x="14" y="5" width="4" height="14" rx="1.5" />
+  </Icon>
+);
+
+export const StopIcon = () => (
+  <Icon>
+    <rect x="5.5" y="5.5" width="13" height="13" rx="3" />
+  </Icon>
+);
+
+export const RestartIcon = () => (
+  <Icon>
+    <path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" />
+    <path d="M4 4v4.5h4.5" />
+  </Icon>
+);
+
+export const RepeatIcon = () => (
+  <Icon>
+    <path d="M17 3.5l3 3-3 3" />
+    <path d="M4 11.5v-1a4 4 0 0 1 4-4h12" />
+    <path d="M7 20.5l-3-3 3-3" />
+    <path d="M20 12.5v1a4 4 0 0 1-4 4H4" />
+  </Icon>
+);
+
+export const MicIcon = () => (
+  <Icon>
+    <rect x="9" y="3" width="6" height="11" rx="3" />
+    <path d="M5.5 11a6.5 6.5 0 0 0 13 0" />
+    <path d="M12 17.5V21" />
+  </Icon>
+);
+
+export const PrevIcon = () => (
+  <Icon>
+    <path d="M15.5 6l-6 6 6 6" />
+  </Icon>
+);
+
+export const NextIcon = () => (
+  <Icon>
+    <path d="M8.5 6l6 6-6 6" />
+  </Icon>
+);
+```
+
 ## `src/App.tsx`
 
 ```tsx
@@ -1538,6 +1674,8 @@ import { AvatarSelector } from './ui/AvatarSelector';
 import { PlayerControls } from './ui/PlayerControls';
 import { LetterTimeline } from './ui/LetterTimeline';
 import { SpeechButton } from './ui/SpeechButton';
+import { Logo } from './ui/Logo';
+import { PlayIcon } from './ui/icons';
 
 export default function App() {
   const player = useMemo(() => new SignPlayer(), []);
@@ -1575,8 +1713,10 @@ export default function App() {
   return (
     <main className="app">
       <header className="app__header">
-        <h1>NexoLSC</h1>
-        <p>Deletreador en Lengua de Señas Colombiana</p>
+        <h1>
+          <Logo size={40} />
+        </h1>
+        <p>Deletrea en Lengua de Señas Colombiana</p>
       </header>
 
       <form className="input" onSubmit={onSubmit}>
@@ -1591,7 +1731,7 @@ export default function App() {
             autoComplete="off"
           />
           <button type="submit" className="btn btn--primary" disabled={!text.trim()}>
-            ▶ Reproducir
+            <PlayIcon /> Reproducir
           </button>
         </div>
         <SpeechButton onResult={onSpeech} />
@@ -1617,10 +1757,25 @@ export default function App() {
       <PlayerControls player={player} />
 
       <footer className="app__footer">
-        Configuraciones basadas en el Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006).
-        Animaciones en validación con la comunidad sorda.
+        <ValidationBadge />
+        <p>
+          Configuraciones basadas en el Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006).
+          Animaciones en validación con la comunidad sorda.
+        </p>
       </footer>
     </main>
+  );
+}
+
+/** Estado de validación del alfabeto: honesto con el usuario mientras las señas sean borradores. */
+function ValidationBadge() {
+  const letters = signRepository.all('letter');
+  const approved = letters.filter((l) => l.validation.status === 'approved').length;
+  const done = approved === letters.length;
+  return (
+    <span className={`status-badge ${done ? 'status-badge--approved' : 'status-badge--draft'}`}>
+      {done ? 'Aprobado' : 'Borrador'} · {approved} de {letters.length} letras validadas por personas sordas
+    </span>
   );
 }
 
@@ -1659,96 +1814,284 @@ createRoot(document.getElementById('root')!).render(
 ## `src/styles.css`
 
 ```css
+/*
+ * Marca NexoLSC (v0.3.0). Tokens tomados del sistema de diseño:
+ * https://claude.ai/artifact/EVFLVxqZYXv6AC4Kj38ork
+ * Selva = acción y foco · mango = la letra actual · achiote = errores (siempre con palabra).
+ */
 :root {
-  --bg: #f6f7f9;
-  --surface: #ffffff;
-  --stage: #e9ecef;
-  --text: #1d2330;
-  --muted: #5d6677;
-  --primary: #1f6feb;
-  --primary-text: #ffffff;
-  --accent: #f59f00;
-  --border: #d9dde4;
-  --danger: #c92a2a;
-  --radius: 14px;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  color: var(--text);
-  background: var(--bg);
+  --surface: #f5f9f6;
+  --surface-raised: #ffffff;
+  --bruma: #e2f0e8;
+  --arena: #fff3d6;
+  --line: #d3e2da;
+  --line-strong: #71898a;
+  --ink: #0f2a2e;
+  --ink-muted: #4a6266;
+  --selva: #0b6b4f;
+  --on-selva: #ffffff;
+  --mango: #ffb627;
+  --on-mango: #0f2a2e;
+  --mango-ink: #7a4f00;
+  --noche: #0f2a2e;
+  --achiote: #a8360b;
+  --achiote-soft: #fde4d8;
+  --escenario: #e9ecef;
+  --focus: var(--selva);
+  --shadow-card: 0 1px 2px rgba(15, 42, 46, 0.06), 0 8px 24px rgba(15, 42, 46, 0.08);
+
+  --font-display: 'Baloo 2', 'Nunito', ui-rounded, system-ui, sans-serif;
+  --font-body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  color-scheme: light dark;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--ink);
+  background: var(--surface);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #11151c;
-    --surface: #1a2029;
-    --stage: #232a35;
-    --text: #e8ecf2;
-    --muted: #9aa4b5;
-    --border: #2f3847;
+    --surface: #0c1a1c;
+    --surface-raised: #142629;
+    --bruma: #123a2d;
+    --arena: #3a2c08;
+    --line: #2a4145;
+    --line-strong: #6b8784;
+    --ink: #e8f3ee;
+    --ink-muted: #a6bbb6;
+    --selva: #52c99c;
+    --on-selva: #062a1e;
+    --mango: #ffc34d;
+    --on-mango: #1a1300;
+    --mango-ink: #ffc34d;
+    --noche: #1f4a50;
+    --achiote: #ff9a6b;
+    --achiote-soft: #3d1a0c;
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
   }
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); }
+body { margin: 0; background: var(--surface); }
 
-.app { max-width: 880px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; }
-.app__header h1 { margin: 0; font-size: 1.6rem; }
-.app__header p { margin: 4px 0 0; color: var(--muted); }
-.app__footer { font-size: 0.8rem; color: var(--muted); text-align: center; }
+/* ---------- Estructura ---------- */
+.app { max-width: 880px; margin: 0 auto; padding: var(--space-4); display: grid; gap: var(--space-6); }
+.app__header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-4); }
+.app__header h1 { margin: 0; line-height: 0; }
+.app__header p { margin: 0; color: var(--ink-muted); font-size: 14px; line-height: 20px; }
+.app__footer { font-size: 13px; line-height: 18px; color: var(--ink-muted); text-align: center; display: grid; gap: var(--space-2); justify-items: center; }
+.app__footer p { margin: 0; }
 
-.input { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: grid; gap: 10px; }
-.input label { font-weight: 600; }
-.input__row { display: flex; gap: 8px; }
-.input__row input { flex: 1; min-width: 0; font-size: 1.25rem; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
-.input__normalized { margin: 0; color: var(--muted); letter-spacing: 0.08em; }
-.input__warning { margin: 0; color: var(--danger); font-size: 0.9rem; }
+/* ---------- Logo ---------- */
+.logo { display: inline-flex; align-items: center; gap: calc(var(--logo-size, 40px) * 0.2); }
+.logo__mark { display: block; flex: none; }
+.logo__arc-selva { stroke: var(--selva); }
+.logo__arc-mango { stroke: var(--mango); }
+.logo__word {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: calc(var(--logo-size, 40px) * 0.8);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.12em;
+}
+.logo__pill {
+  background: var(--mango);
+  color: var(--on-mango);
+  border-radius: var(--radius-pill);
+  font-size: 0.58em;
+  letter-spacing: 0.02em;
+  padding: 0.18em 0.5em 0.08em;
+}
 
-.btn { font: inherit; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+/* ---------- Íconos ---------- */
+.icon { width: 20px; height: 20px; flex: none; }
+
+/* ---------- Tarjeta de entrada ---------- */
+.input {
+  background: var(--surface-raised);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-6);
+  display: grid;
+  gap: var(--space-3);
+}
+.input label { font-weight: 700; font-size: 14px; line-height: 20px; }
+.input__row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.input__row input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  font: inherit;
+  font-size: 18px;
+  line-height: 28px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+.input__row input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.input__normalized { margin: 0; color: var(--ink-muted); letter-spacing: 0.08em; }
+.input__warning {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--achiote-soft);
+  color: var(--achiote);
+  font-size: 14px;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  transition: background-color 120ms, border-color 120ms, color 120ms;
+}
+.btn:hover:not(:disabled) { border-color: var(--selva); color: var(--selva); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.btn:focus-visible, .chip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.btn--primary { background: var(--primary); color: var(--primary-text); border-color: var(--primary); font-weight: 600; }
-.btn--active { border-color: var(--primary); color: var(--primary); }
-.btn--recording { background: var(--danger); color: #fff; border-color: var(--danger); }
+.btn:focus-visible, .chip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.btn--icon { padding: var(--space-3); min-width: 44px; }
+.btn--play { min-width: 10rem; }
+.btn--primary { background: var(--selva); color: var(--on-selva); border-color: var(--selva); }
+.btn--primary:hover:not(:disabled) { color: var(--on-selva); filter: brightness(1.08); }
+.btn--active { background: var(--bruma); border-color: var(--selva); color: var(--selva); }
+.btn--recording { background: var(--achiote); color: var(--surface-raised); border-color: var(--achiote); }
+.btn--recording:hover:not(:disabled) { color: var(--surface-raised); border-color: var(--achiote); }
 
-.speech { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.speech__interim { color: var(--muted); font-style: italic; }
-.speech__error, .speech__unsupported { color: var(--danger); margin: 0; font-size: 0.9rem; }
+/* ---------- Voz ---------- */
+.speech { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
+.speech__interim { color: var(--ink-muted); font-style: italic; }
+.speech__error, .speech__unsupported { color: var(--achiote); margin: 0; font-size: 14px; }
 
-.avatar-selector { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
-.avatar-selector label { font-weight: 600; }
-.avatar-selector select { font: inherit; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
-.avatar-selector__license { font-size: 0.85rem; color: var(--muted); }
-.avatar-selector__license--warn { color: var(--danger); }
+/* ---------- Selector de avatar ---------- */
+.avatar-selector { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: center; }
+.avatar-selector label { font-weight: 700; font-size: 14px; }
+.avatar-selector select {
+  font: inherit;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+.avatar-selector select:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.avatar-selector__license { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.avatar-selector__license--warn { color: var(--achiote); }
 
-.stage { position: relative; height: min(60vh, 520px); border-radius: var(--radius); overflow: hidden; background: #e9ecef; border: 1px solid var(--border); }
+/* ---------- Escenario ---------- */
+/* Claro en ambos temas: la piel y la ropa oscura del avatar contrastan mejor sobre claro. */
+.stage {
+  position: relative;
+  height: min(60vh, 520px);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--escenario);
+  box-shadow: var(--shadow-card);
+  color: #0f2a2e;
+}
 /* Fondo del escenario (src/avatar/stage.ts). inset negativo: oculta los bordes borrosos del desenfoque. */
 .stage__bg { position: absolute; inset: 0; pointer-events: none; }
 .stage__bg-image { position: absolute; inset: -16px; background-size: cover; background-repeat: no-repeat; }
-.stage__bg-veil { position: absolute; inset: 0; background: #eef1f4; }
-.stage--placeholder, .stage--loading { background: var(--stage); }
-.stage--loading { display: grid; place-items: center; color: var(--muted); }
-.stage--placeholder { display: grid; place-content: center; justify-items: center; text-align: center; padding: 16px; gap: 6px; }
-.placeholder__letter { font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; line-height: 1; }
+.stage__bg-veil { position: absolute; inset: 0; background: #eef4f0; }
+.stage--loading { display: grid; place-items: center; color: #4a6266; }
+.stage--placeholder { display: grid; place-content: center; justify-items: center; text-align: center; padding: var(--space-4); gap: var(--space-2); }
+.placeholder__letter { font-family: var(--font-display); font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; line-height: 1; }
 .placeholder__desc { max-width: 46ch; margin: 0; }
-.placeholder__move { margin: 0; color: var(--primary); }
-.placeholder__note { margin: 8px 0 0; font-size: 0.8rem; color: var(--muted); }
+.placeholder__move { margin: 0; color: #0b6b4f; font-weight: 700; }
+.placeholder__note { margin: var(--space-2) 0 0; font-size: 13px; line-height: 18px; color: #4a6266; }
 
-.timeline { display: grid; gap: 8px; }
-.timeline__status { display: flex; justify-content: space-between; font-size: 1.1rem; }
-.timeline__chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; align-items: center; }
-.timeline__gap { width: 14px; }
+/* ---------- Línea de letras ---------- */
+.timeline { display: grid; gap: var(--space-3); }
+.timeline__status { display: flex; justify-content: space-between; gap: var(--space-4); font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 26px; }
+.timeline__chips { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: var(--space-1); align-items: center; }
+.timeline__gap { width: var(--space-4); }
 
-.chip { font: inherit; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
-.chip--active { background: var(--primary); border-color: var(--primary); color: var(--primary-text); }
-.chip--letter { min-width: 42px; font-size: 1.15rem; font-weight: 700; border-radius: 10px; }
-.chip--done { opacity: 0.55; }
-.chip--current { background: var(--accent); border-color: var(--accent); color: #1d2330; transform: scale(1.12); }
-.chip--missing { border-style: dashed; }
+.chip {
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  min-height: 44px;
+  border: 2px solid var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--ink);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms, border-color 160ms;
+}
+.chip--active { background: var(--selva); border-color: var(--selva); color: var(--on-selva); }
+.chip--letter {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+}
+.chip--done { background: var(--bruma); color: var(--selva); border-color: var(--bruma); }
+.chip--current { background: var(--mango); border-color: var(--mango-ink); color: var(--on-mango); transform: scale(1.12); }
+.chip--missing { border-style: dashed; color: var(--ink-muted); }
 
-.controls { display: grid; gap: 12px; }
-.controls__main, .controls__speed { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
-.controls__speed span { color: var(--muted); }
+/* ---------- Controles ---------- */
+.controls { display: grid; gap: var(--space-3); }
+.controls__main, .controls__speed { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; justify-content: center; }
+.controls__speed span { color: var(--ink-muted); font-size: 14px; font-weight: 700; }
+
+/* ---------- Estado de validación ---------- */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border-radius: var(--radius-pill);
+  padding: 2px var(--space-3);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 700;
+}
+.status-badge--draft { background: var(--arena); color: var(--mango-ink); }
+.status-badge--approved { background: var(--bruma); color: var(--selva); }
+.status-badge--rejected { background: var(--achiote-soft); color: var(--achiote); }
+
+@media (max-width: 480px) {
+  .input { padding: var(--space-4); }
+  .btn { padding: var(--space-3) var(--space-4); }
+}
 
 @media (prefers-reduced-motion: reduce) {
+  .chip, .btn { transition: none; }
   .chip--current { transform: none; }
 }
 ```

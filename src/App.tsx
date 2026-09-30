@@ -10,6 +10,8 @@ import { AvatarSelector } from './ui/AvatarSelector';
 import { PlayerControls } from './ui/PlayerControls';
 import { LetterTimeline } from './ui/LetterTimeline';
 import { SpeechButton } from './ui/SpeechButton';
+import { Logo } from './ui/Logo';
+import { PlayIcon } from './ui/icons';
 
 export default function App() {
   const player = useMemo(() => new SignPlayer(), []);
@@ -47,8 +49,10 @@ export default function App() {
   return (
     <main className="app">
       <header className="app__header">
-        <h1>NexoLSC</h1>
-        <p>Deletreador en Lengua de Señas Colombiana</p>
+        <h1>
+          <Logo size={40} />
+        </h1>
+        <p>Deletrea en Lengua de Señas Colombiana</p>
       </header>
 
       <form className="input" onSubmit={onSubmit}>
@@ -63,7 +67,7 @@ export default function App() {
             autoComplete="off"
           />
           <button type="submit" className="btn btn--primary" disabled={!text.trim()}>
-            ▶ Reproducir
+            <PlayIcon /> Reproducir
           </button>
         </div>
         <SpeechButton onResult={onSpeech} />
@@ -89,10 +93,25 @@ export default function App() {
       <PlayerControls player={player} />
 
       <footer className="app__footer">
-        Configuraciones basadas en el Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006).
-        Animaciones en validación con la comunidad sorda.
+        <ValidationBadge />
+        <p>
+          Configuraciones basadas en el Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006).
+          Animaciones en validación con la comunidad sorda.
+        </p>
       </footer>
     </main>
+  );
+}
+
+/** Estado de validación del alfabeto: honesto con el usuario mientras las señas sean borradores. */
+function ValidationBadge() {
+  const letters = signRepository.all('letter');
+  const approved = letters.filter((l) => l.validation.status === 'approved').length;
+  const done = approved === letters.length;
+  return (
+    <span className={`status-badge ${done ? 'status-badge--approved' : 'status-badge--draft'}`}>
+      {done ? 'Aprobado' : 'Borrador'} · {approved} de {letters.length} letras validadas por personas sordas
+    </span>
   );
 }
 

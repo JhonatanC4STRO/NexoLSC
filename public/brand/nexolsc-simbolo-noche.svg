@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NexoLSC">
+  <defs>
+    <mask id="m-der" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff"/><path d="M28.79 18.84 A14 14 0 0 1 34.72 23" fill="none" stroke="#000" stroke-width="13" stroke-linecap="round"/></mask>
+    <mask id="m-izq" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff"/><path d="M29.28 41 A14 14 0 0 0 35.21 45.16" fill="none" stroke="#000" stroke-width="13" stroke-linecap="round"/></mask>
+  </defs>
+  <g fill="none" stroke-width="8" stroke-linecap="round">
+    <path stroke="#0f2a2e" mask="url(#m-izq)" d="M34.72 23 A14 14 0 1 0 32.03 43.47"/>
+    <path stroke="#0f2a2e" mask="url(#m-der)" d="M31.97 20.53 A14 14 0 1 1 29.28 41"/>
+  </g>
+</svg>

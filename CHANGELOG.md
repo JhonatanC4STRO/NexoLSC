@@ -7,6 +7,28 @@ Todos los cambios relevantes del proyecto. Formato basado en
 Mientras la versión sea `0.x`, el MVP no se considera estable: una versión menor (`0.2.0`, `0.3.0`)
 puede cambiar formatos de datos o la estructura del proyecto.
 
+## [0.3.0] - 2026-09-30
+
+### Añadido
+- Marca visual NexoLSC aplicada a la app: símbolo de dos arcos en «C» enlazados con el logotipo
+  «nexo» + píldora «LSC» en la cabecera (`src/ui/Logo.tsx`), favicon (`public/favicon.svg`),
+  `theme-color` y variantes del símbolo en `public/brand/`.
+- Íconos propios de la marca (`src/ui/icons.tsx`) en lugar de emojis: reproducir, pausar, detener,
+  reiniciar, repetir, micrófono, anterior y siguiente.
+- Insignia de validación en el pie: cuántas letras han validado personas sordas (hoy 0 de 27, «Borrador»),
+  calculada desde `validation.status`.
+- Tipografías *Baloo 2* (títulos, letras) y *Atkinson Hyperlegible* (texto), desde Google Fonts.
+
+### Cambiado
+- `src/styles.css` reescrito con los tokens de la marca en tema claro y oscuro: acción primaria y foco
+  en verde selva, letra actual en amarillo mango con borde `mango-ink`, letras ya señadas en bruma,
+  errores en achiote. Botones en píldora, objetivos táctiles de 44 px, tarjeta de entrada y escenario
+  con esquinas de 24 px y sombra.
+- Controles en dos filas: transporte (anterior · reproducir/pausar · siguiente) y acciones secundarias
+  (reiniciar, detener, repetir); en pantallas estrechas el transporte ya no se parte.
+- Documentación: diseño de la interfaz (lenguaje visual con los tokens de la marca), estructura de
+  carpetas y README.
+
 ## [0.2.2] - 2026-09-30
 
 ### Eliminado
@@ -68,6 +90,7 @@ puede cambiar formatos de datos o la estructura del proyecto.
 - Scripts de Blender para limpiar y exportar avatares a GLB.
 - 15 pruebas con Vitest.
 
+[0.3.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.1.0...v0.2.0

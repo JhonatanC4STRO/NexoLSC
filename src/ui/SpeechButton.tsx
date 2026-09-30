@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { webSpeechProvider, type SpeechToTextProvider } from '../speech/speechToText';
+import { MicIcon } from './icons';
 
 interface Props {
   onResult: (text: string) => void;
@@ -42,7 +43,7 @@ export function SpeechButton({ onResult, provider = webSpeechProvider }: Props) 
   if (!supported) {
     return (
       <p className="speech__unsupported">
-        🎤 Voz no disponible en este navegador (p. ej. Firefox). Usa Chrome o Edge, o escribe el texto.
+        Voz no disponible en este navegador (p. ej. Firefox). Usa Chrome o Edge, o escribe el texto.
       </p>
     );
   }
@@ -50,7 +51,8 @@ export function SpeechButton({ onResult, provider = webSpeechProvider }: Props) 
   return (
     <div className="speech">
       <button type="button" className={`btn ${listening ? 'btn--recording' : ''}`} onClick={toggle} aria-pressed={listening}>
-        {listening ? '⏺ Escuchando… (toca para detener)' : '🎤 Hablar'}
+        <MicIcon />
+        {listening ? 'Escuchando… (toca para detener)' : 'Hablar'}
       </button>
       {interim && <span className="speech__interim">“{interim}”</span>}
       {error && <span className="speech__error" role="alert">{error}</span>}

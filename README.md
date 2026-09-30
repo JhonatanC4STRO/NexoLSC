@@ -19,7 +19,7 @@
 | 10 | [Flujo Voz → texto → letras → avatar](docs/10-flujo-voz-texto-avatar.md) | Web Speech API, límites, alternativas |
 | 11 | [Tildes, espacios y caracteres especiales](docs/11-manejo-caracteres-especiales.md) | Reglas y decisiones abiertas |
 | 12 | [Fuentes reales del alfabeto LSC](docs/12-fuentes-alfabeto-lsc.md) | Fichas de fuentes, lectura letra por letra, protocolo de validación |
-| 13 | [Diseño de la interfaz](docs/13-diseno-interfaz.md) | Pantalla, selector de avatar, fondo, estados, accesibilidad |
+| 13 | [Diseño de la interfaz](docs/13-diseno-interfaz.md) | Pantalla, marca visual, selector de avatar, fondo, estados, accesibilidad |
 | 14 | [Plan de implementación](docs/14-plan-implementacion.md) | Estado por etapas, siguientes pasos y riesgos |
 | 15 | [Código](docs/15-codigo-inicial.md) | Referencia legible del código y los scripts (generada desde el proyecto) |
 | 16 | [Palabras y frases completas](docs/16-estrategia-palabras-frases.md) | Cómo llegar de la fase 1 a la 5 sin rehacer |
@@ -38,8 +38,11 @@
    prueba local: tiene derechos de terceros, máscara sin cara y guantes negros con poco contraste.
 6. **Las letras son datos, no animaciones hechas a mano:** `assets-src/letters/alfabeto_lsc.json` se aplica
    a cualquier avatar con `tools/blender/bake_letters.py`. Cambiar de avatar no obliga a reanimar.
+7. **Marca visual propia** (desde la v0.3.0): dos arcos en «C» enlazados, verde selva + amarillo mango,
+   tipografías *Baloo 2* y *Atkinson Hyperlegible*. Sistema de diseño:
+   <https://claude.ai/artifact/EVFLVxqZYXv6AC4Kj38ork>; tokens en `src/styles.css`.
 
-## Estado verificado (2026-09-29)
+## Estado verificado (2026-09-30)
 
 - Código: 15 pruebas en verde, build sin errores.
 - **27 letras** (6 con movimiento: G, H, J, Ñ, S, Z) horneadas en los dos avatares MPFB2 desde los mismos
@@ -47,6 +50,7 @@
 - Avatares: `mpfb2-caricatura` (1,66 m) y `mpfb2` (1,71 m), 181 huesos de deformación (dedos,
   metacarpianos y cara), GLB de ~5 MB cada uno. Ver [assets-src/README.md](assets-src/README.md).
 - Fondo del escenario configurable (`public/backgrounds/sena.jpg`, desenfocado).
+- Interfaz con la marca NexoLSC en tema claro y oscuro (automático), íconos propios y favicon.
 - Voz: funciona en Chrome/Edge/Safari; **no en Firefox**.
 
 ## Cómo ejecutar el proyecto
