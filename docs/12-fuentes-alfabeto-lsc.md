@@ -102,8 +102,9 @@ Las letras con **flechas de movimiento** son G, H, J, Ñ, S y Z.
 ## Letras: lectura de la ilustración del DBLSC (p. 573)
 
 > Esto **no** es una definición nueva: es lo que muestra el dibujo de la fuente, descrito en texto para
-> guiar la animación. Todas las letras están en estado `draft`. Las marcadas con ⚠️ tienen detalles que
-> el dibujo no deja claros y deben revisarse con INSOR Educativo (video) y con personas sordas.
+> guiar la animación. Las 27 letras ya están animadas a partir de esta lectura
+> (`assets-src/letters/alfabeto_lsc.json`), todas en estado `draft`. Las marcadas con ⚠️ tienen detalles
+> que el dibujo no deja claros y deben revisarse con INSOR Educativo (video) y con personas sordas.
 
 | Letra | Tipo | Lectura de la ilustración |
 |---|---|---|
@@ -140,8 +141,9 @@ con las puntas de los dedos reunidas hacia arriba, no se parece a la Q de ASL, q
 
 ## Protocolo de validación propuesto
 
-1. Animar cada letra con la ilustración del DBLSC + un video de INSOR Educativo al lado.
-2. Render de frente y de perfil por letra (contact sheet).
+1. ✅ Animar cada letra a partir de la ilustración del DBLSC (primera versión hecha; contrastar además
+   con un video de INSOR Educativo, sobre todo las marcadas con ⚠️).
+2. ✅ Render de frente y de perfil por letra (hoja de revisión generada para los dos avatares).
 3. Revisión con **al menos dos personas sordas usuarias nativas de LSC** y un intérprete certificado
    (contactos: FENASCOL, INSOR, asociaciones regionales).
 4. Registrar en `validation` quién revisó, cuándo y observaciones; solo `approved` sale en la versión pública.

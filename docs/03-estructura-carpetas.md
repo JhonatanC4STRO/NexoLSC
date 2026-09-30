@@ -2,8 +2,10 @@
 
 ```text
 NexoLSC/
-├── README.md                      ← índice de la documentación y cómo ejecutar
-├── docs/                          ← documentos 00–16
+├── README.md                      ← índice de la documentación, cómo ejecutar y cómo versionar
+├── CHANGELOG.md                   ← cambios por versión (versionado semántico, etiquetas vX.Y.Z)
+├── .gitattributes                 ← .blend, .glb e imágenes como binarios
+├── docs/                          ← documentos 01–16
 ├── assets-src/                    ← archivos fuente de los avatares (no se sirven)
 │   ├── README.md                  ← cómo generar, hornear letras, exportar y añadir candidatos
 │   ├── letters/

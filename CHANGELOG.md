@@ -7,6 +7,18 @@ Todos los cambios relevantes del proyecto. Formato basado en
 Mientras la versión sea `0.x`, el MVP no se considera estable: una versión menor (`0.2.0`, `0.3.0`)
 puede cambiar formatos de datos o la estructura del proyecto.
 
+## [0.2.2] - 2026-09-30
+
+### Eliminado
+- `docs/00-analisis-video-referencia.md`: el análisis del producto de referencia ya no aporta al proyecto.
+
+### Cambiado
+- Documentación actualizada al estado de la v0.2.x: arquitectura con la producción de contenido
+  (avatares y letras como datos), tecnologías (MPFB, alternativas descartadas), diseño del avatar
+  reorganizado alrededor de los candidatos actuales, rigging con los ejes verificados del rig MPFB,
+  revisión de las 27 letras, modelo de datos (`SignEntry` + datos de pose), interfaz (selector de avatar
+  y fondo), plan con el estado real por etapas y estrategia de palabras basada en datos de pose.
+
 ## [0.2.1] - 2026-09-29
 
 ### Añadido
@@ -56,6 +68,7 @@ puede cambiar formatos de datos o la estructura del proyecto.
 - Scripts de Blender para limpiar y exportar avatares a GLB.
 - 15 pruebas con Vitest.
 
+[0.2.2]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/JhonatanC4STRO/NexoLSC/releases/tag/v0.1.0

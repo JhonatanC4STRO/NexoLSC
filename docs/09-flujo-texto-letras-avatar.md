@@ -76,9 +76,13 @@ aviso en UI:  "Omitidos (sin seña en el MVP): 5"
 
 ## Probado en el navegador
 
-Con tu avatar y un GLB de prueba (clips `rest`, `sign_A`, `sign_L`):
+Con el avatar `mpfb2-caricatura` y las 27 letras:
 
-- `Allá` → `ALLA`: el avatar hizo A → L → L → A, con la "re-articulación" en la L repetida y el
-  contador `2 / 4`.
+- `Hola Nexo` → `HOLA NEXO`: todas las letras tienen clip (ninguna aparece como "animación
+  pendiente"); al pausar y saltar a la L, el avatar muestra la L con el pulgar horizontal.
+- `Allá` → `ALLA`: A → L → L → A, con la "re-articulación" en la L repetida y el contador `2 / 4`.
 - `¿Hola, Ana 5?` → `HOLA ANA`, con el aviso "Omitidos: 5", el hueco entre palabras en la línea de
-  tiempo y `4 / 7`. Las letras sin clip (H, O, N) usaron la pose `rest` sin errores en consola.
+  tiempo y `4 / 7`.
+- Fondo del escenario con la foto del SENA desenfocada; la mano se sigue leyendo bien.
+
+Sin errores en consola.

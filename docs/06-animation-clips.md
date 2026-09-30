@@ -4,7 +4,7 @@
 
 | Criterio | A) `A.glb … Z.glb` (cada uno con malla) | B) `avatar.glb` con clips `sign_*` | C) `avatar.glb` + paquetes de animación sin malla |
 |---|---|---|---|
-| Descargas | 27 archivos; la malla se repite 27 veces (~1,5 MB × 27) | 1 archivo | 1 avatar + N paquetes pequeños |
+| Descargas | 27 archivos; la malla se repite 27 veces (~3,5 MB × 27) | 1 archivo | 1 avatar + N paquetes pequeños |
 | Memoria | 27 esqueletos/mallas o recargas | 1 esqueleto | 1 esqueleto |
 | Transiciones entre letras | Hay que cambiar de modelo o re-dirigir clips | Nativas: mismo `AnimationMixer` | Nativas si los nombres de huesos coinciden |
 | Añadir una letra | Exportar un archivo | Re-exportar el avatar | Exportar un paquete |
@@ -13,12 +13,15 @@
 
 ### Recomendación
 
-- **MVP: opción B.** Un único GLB por avatar (`public/models/avatars/<id>.glb`) con los clips `rest` + 27 letras. Las poses de
-  letras estáticas son clips de 1 fotograma; las 27 juntas añaden muy poco peso.
+- **MVP: opción B (implementada).** Un único GLB por avatar (`public/models/avatars/<id>.glb`) con los
+  clips `rest` + 27 letras. Hoy los clips suman ~1,5 MB porque cada uno guarda los 181 huesos, incluidos
+  cara y piernas que no se mueven; eliminar esas pistas es una optimización pendiente.
 - **Fase 2: opción C.** El modelo de datos ya incluye `animation.pack` (hoy siempre `"avatar"`). Cuando
   haya cientos de palabras, se exportan paquetes **solo con esqueleto + animaciones** (sin malla), se
-  cargan con `GLTFLoader` y sus clips se añaden al mismo `AnimationMixer`. Funciona porque three.js
-  vincula las pistas por **nombre de hueso**.
+  cargan con `GLTFLoader` y sus clips se añaden al mismo `AnimationMixer`: three.js vincula las pistas
+  por **nombre de hueso**. Como los clips exportados incluyen también la posición de cada hueso (que
+  depende de las proporciones del avatar), los paquetes se hornean por avatar con `bake_letters.py`, o se
+  exportan solo con rotaciones.
 - La opción A se descarta.
 
 ## 2. Convención de nombres
@@ -81,7 +84,7 @@ avatar Rigify, creando `rest` + `sign_A` … `sign_Z` + `sign_ENYE`.
 | `motion` | Fotogramas clave `t` (0..1) con ajustes que se suman: trayectorias de G, H, J, Ñ, S, Z |
 
 **Probado:** las mismas definiciones producen las 27 letras en el avatar caricaturesco y en el
-realista, sin cambiar ningún dato (ver [04-diseno-avatar.md](04-diseno-avatar.md#31-candidatos-creados)).
+realista, sin cambiar ningún dato (ver [04-diseno-avatar.md](04-diseno-avatar.md#1-candidatos-de-avatar)).
 Lo que puede requerir ajuste por avatar son los **contactos** (pulgar tocando dedos en O, D, F, T)
 cuando las proporciones de la mano cambian mucho.
 
@@ -102,22 +105,28 @@ Alternativa manual (para retoques finos): posar en Blender con la ilustración d
 referencia, guardar la pose en la *Pose Library* y trasladar los ángulos resultantes al JSON para que la
 corrección valga en todos los avatares.
 
-Salida esperada (probada con el avatar de prueba, que además trae restos que el script limpia):
+Salida esperada del horneado y la exportación:
 
 ```text
-[limpieza] mesh7.dat.desirefx.me_.obj: quitando modificador Armature -> metarig
-[limpieza] excluyendo acción rigAction
-[limpieza] excluyendo acción T-Pose
-[ok] public/models/avatars/miles-prueba.glb
-[clips] ['rest', 'sign_A', 'sign_L']
+[ok] Actions: ['rest', 'sign_A', 'sign_B', …, 'sign_ENYE', …, 'sign_Z']
+[ok] public/models/avatars/mpfb2.glb
+[clips] ['rest', 'sign_A', …, 'sign_Z']
 ```
 
-El script completo está en [15-codigo-inicial.md](15-codigo-inicial.md).
+### Cómo se revisó la primera versión
 
-## 5. Posar por script (opcional pero útil)
+Las 27 letras se renderizaron de frente y de perfil en los dos avatares y se corrigieron las que se veían
+mal: C, O, Q, A y X (la mano quedaba "acostada" al girar el antebrazo; ahora se reorienta la mano después
+del giro), P (muñeca imposible; ahora el antebrazo va hacia adelante con `forearm_dir`), H (dedos hacia
+afuera y arriba, como en la ilustración) y el pulgar de L e Y (apuntaba hacia el espectador; ahora queda
+horizontal en el plano de la palma). Todas siguen en `draft` hasta la validación con personas sordas.
 
-Para una primera aproximación rápida de las 27 poses, o para aplicar correcciones en lote,
-`tools/blender/pose_helpers.py` (probado en los dos rigs) ofrece:
+Los scripts completos están en [15-codigo-inicial.md](15-codigo-inicial.md).
+
+## 5. Funciones de pose (`pose_helpers.py`)
+
+`bake_letters.py` se apoya en `tools/blender/pose_helpers.py` (probado en los dos rigs), que también
+sirve para experimentar poses a mano:
 
 | Función | Qué hace |
 |---|---|

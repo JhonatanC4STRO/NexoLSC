@@ -2,20 +2,25 @@
 
 ## Resumen
 
-El MVP es una **aplicación 100 % frontend** (sitio estático) construida con React + Three.js.
-No necesita servidor propio: el léxico de 27 letras va en el código, el avatar es un archivo `.glb`
-estático y el reconocimiento de voz lo hace el navegador.
+El sistema tiene dos partes:
 
-El diseño separa lo que **cambiará** en las fases futuras (cómo se convierte el texto en señas) de lo que
-**se mantendrá** (el motor de reproducción y el avatar). Así, al pasar de deletrear letras a señar
-palabras no hay que rehacer el reproductor ni el visor 3D.
+1. **La app web** (sitio estático, React + three.js): convierte texto o voz en una cola de letras y la
+   reproduce con un avatar 3D. No necesita servidor: el léxico va en el código, los avatares son `.glb`
+   estáticos y el reconocimiento de voz lo hace el navegador.
+2. **La producción de contenido** (Blender + scripts de Python): genera los avatares y les aplica las 27
+   letras, que están definidas como datos independientes del avatar.
 
-## Diagrama de capas
+El diseño separa lo que **cambiará** en las fases futuras (cómo se convierte el texto en señas, qué avatar
+se usa) de lo que **se mantendrá** (el motor de reproducción). Así, al pasar de deletrear letras a señar
+palabras, o al cambiar de avatar, no hay que rehacer el reproductor ni volver a animar.
+
+## Diagrama de capas (app web)
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────┐
 │ UI (React)                                                           │
-│  TextInput · SpeechButton · PlayerControls · LetterTimeline          │
+│  TextInput · SpeechButton · AvatarSelector · PlayerControls ·        │
+│  LetterTimeline                                                      │
 └───────────────┬───────────────────────────────▲──────────────────────┘
                 │ texto                         │ snapshot (useSyncExternalStore)
                 ▼                               │
@@ -30,9 +35,31 @@ palabras no hay que rehacer el reproductor ni el visor 3D.
 │ Pipeline lingüístico (core, TS puro)            │  │ Avatar3D (R3F / Three.js)│
 │  normalizeText → Token[]                        │  │  ClipDriver              │
 │  buildQueue(tokens, SignRepository) → QueueItem │  │   └─ AnimationMixer      │
-│  SignRepository ← alphabet.lsc.ts               │  │  avatar.glb (clips)      │
-└─────────────────────────────────────────────────┘  └──────────────────────────┘
+│  SignRepository ← alphabet.lsc.ts               │  │  avatars/<id>.glb (clips)│
+└─────────────────────────────────────────────────┘  │  StageBackground (foto)  │
+                                                     └──────────────────────────┘
 ```
+
+## Diagrama de la producción de contenido
+
+```text
+assets-src/letters/alfabeto_lsc.json          assets-src/avatars/<id>/build_avatar.py
+  (27 letras como ángulos de dedos,             (configuración del personaje)
+   pulgar, mano y trayectorias)                          │ tools/blender/mpfb_builder.py
+            │                                            ▼   (MPFB 2 + Rigify, texturas web)
+            │                                  assets-src/avatars/<id>/avatar.blend
+            └──────────► tools/blender/bake_letters.py ◄──┘
+                                     │  crea las Actions rest + sign_A … sign_Z, sign_ENYE
+                                     ▼
+                         tools/blender/export_avatar.py
+                                     │  solo huesos DEF-*, clips horneados
+                                     ▼
+                         public/models/avatars/<id>.glb  ──►  registrado en src/avatar/avatars.ts
+```
+
+La misma definición de letras se aplica a todos los avatares: cambiar de avatar es volver a ejecutar
+`bake_letters.py` y `export_avatar.py`, no reanimar. Detalle en
+[06-animation-clips.md](06-animation-clips.md).
 
 Es la arquitectura que propusiste (TextInput, SpeechInput, SignPlayer → AnimationQueue, Avatar3D),
 con tres piezas añadidas que la hacen escalable:
@@ -55,10 +82,13 @@ con tres piezas añadidas que la hacen escalable:
    React.
 4. **Todo es un "SignEntry".** Una letra es una seña de tipo `letter`. Palabras, números y expresiones
    no manuales usarán el mismo modelo ([08-modelo-datos-letras.md](08-modelo-datos-letras.md)).
-5. **Degradación elegante.** Si falta el `.glb`, se muestra un visor de respaldo (letra grande +
+5. **Las letras son datos, los avatares son intercambiables.** Todos los avatares cumplen el mismo
+   contrato (rig Rigify, clips `rest` + `sign_*`) y se registran en `src/avatar/avatars.ts`; la app los
+   compara con un selector.
+6. **Degradación elegante.** Si no hay ningún `.glb`, se muestra un visor de respaldo (letra grande +
    descripción de la configuración). Si falta el clip de una letra, el avatar usa `rest` y la línea de
-   tiempo la marca como "animación pendiente". Si el navegador no soporta voz, se explica y se ofrece
-   escribir.
+   tiempo la marca como "animación pendiente". Si falta la foto de fondo, el escenario queda gris. Si el
+   navegador no soporta voz, se explica y se ofrece escribir.
 
 ## ¿Necesitamos Node.js, Express y PostgreSQL?
 
@@ -94,8 +124,10 @@ SignPlayer.update(dt) cada frame  ──►  getFrame() = {from, to, transition,
 | # | Decisión | Alternativa descartada | Motivo |
 |---|---|---|---|
 | A1 | SPA estática, sin backend | Node/Express desde el inicio | Menos piezas; nada del MVP lo requiere |
-| A2 | Un solo `avatar.glb` con N clips | Un `.glb` por letra (con malla) | Ver [06-animation-clips.md](06-animation-clips.md) |
+| A2 | Un `.glb` por avatar con todos los clips | Un `.glb` por letra (con malla) | Ver [06-animation-clips.md](06-animation-clips.md) |
 | A3 | Reloj propio en `SignPlayer` | Encadenar eventos `finished` del `AnimationMixer` | Con eventos, pausar/saltar/cambiar velocidad se vuelve frágil |
 | A4 | Transiciones calculadas en tiempo real (blending) | Animar a mano cada transición entre pares de letras | 27×27 = 729 transiciones; el blending las resuelve |
 | A5 | Estado con `useSyncExternalStore` | Redux / Zustand | El estado es pequeño y vive en una clase; no hace falta otra librería |
 | A6 | Voz con Web Speech API detrás de una interfaz | Servicio de voz en la nube | Sin costos ni claves; la interfaz permite cambiar de proveedor |
+| A7 | Letras como datos aplicados por script (`bake_letters.py`) | Animar cada letra a mano en cada avatar | Cambiar de avatar o corregir una letra no obliga a reanimar; probado con dos avatares |
+| A8 | Avatares generados por script con MPFB 2 (CC0) | Modelos descargados de terceros; malla generada por IA | Licencia libre, reproducible, rig con dedos y cara; las mallas por IA suelen dar manos fusionadas |

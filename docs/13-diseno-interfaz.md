@@ -14,9 +14,11 @@
 │ [🎤 Hablar]                                                        │
 │ Se deletreará: COMO ESTAS                                          │
 ├────────────────────────────────────────────────────────────────────┤
+│ Avatar [MPFB2 · caricatura ▾]   Licencia: CC0                      │
+├────────────────────────────────────────────────────────────────────┤
 │                                                                    │
 │                        AVATAR 3D                                   │
-│                   (plano medio, fondo gris)                        │
+│      (plano medio, foto de la sede del SENA desenfocada detrás)    │
 │                                                                    │
 ├────────────────────────────────────────────────────────────────────┤
 │ Letra actual: M                                            3 / 9   │
@@ -38,7 +40,9 @@ En móvil es la misma columna; los controles pasan a dos filas y el avatar ocupa
 |---|---|
 | `App` | Estado del texto, `spell()`, atajos de teclado |
 | `SpeechButton` | Micrófono, texto provisional, errores, aviso de "no disponible" |
-| `Avatar3D` | Canvas, cámara, luces; muestra `AvatarPlaceholder` si no hay GLB |
+| `AvatarSelector` | Elegir candidato de avatar; muestra su licencia (en rojo si no se puede publicar) y recuerda la elección |
+| `Avatar3D` | Canvas transparente, cámara, luces; muestra `AvatarPlaceholder` si no hay GLB |
+| `StageBackground` (en `Avatar3D`) | Foto de fondo desenfocada con velo claro (`src/avatar/stage.ts`) |
 | `LetterTimeline` | Letra actual, `n / total`, chips clicables (saltar), huecos entre palabras |
 | `PlayerControls` | Reiniciar, anterior, reproducir/pausar/continuar, siguiente, detener, repetir, velocidad |
 
@@ -51,7 +55,9 @@ En móvil es la misma columna; los controles pasan a dos filas y el avatar ocupa
 | Pausado | "▶ Continuar" | congelado en la pose | igual |
 | Terminado | "▶ Reproducir" (vuelve a empezar) | última letra | todas atenuadas |
 | Letra sin animación | — | `rest` | chip con borde discontinuo |
-| Sin GLB | — | vista de respaldo: letra grande + descripción de la configuración | igual |
+| Sin ningún GLB | — | vista de respaldo: letra grande + descripción de la configuración | igual |
+| Avatar sin GLB | — | aparece "(no disponible)" en el selector y se usa otro | — |
+| Sin foto de fondo | — | escenario gris liso | — |
 | Navegador sin voz | 🎤 reemplazado por aviso | — | — |
 
 ## Accesibilidad (objetivo WCAG 2.2 AA)
@@ -86,7 +92,7 @@ En móvil es la misma columna; los controles pasan a dos filas y el avatar ocupa
 |---|---|---|
 | Fondo | `#f6f7f9` | `#11151c` |
 | Superficie | `#ffffff` | `#1a2029` |
-| Escenario del avatar | `#e9ecef` | `#232a35` (el lienzo 3D se mantiene claro por contraste con la piel) |
+| Escenario del avatar | foto desenfocada con velo `#eef1f4`; sin foto, `#e9ecef` | igual (el escenario se mantiene claro por contraste con la piel) |
 | Primario (acciones) | `#1f6feb` | igual |
 | Acento (letra actual, foco) | `#f59f00` | igual |
 
@@ -106,10 +112,8 @@ Se configura en `src/avatar/stage.ts`:
 Si el archivo no existe, el escenario usa el gris liso. Regla: si en pruebas con usuarios cuesta leer los
 dedos, subir `blurPx`/`veil` antes que cambiar la ropa o la luz del avatar.
 
-## Inspiración del video de referencia (sin copiar)
+## Ideas para después
 
-- Del video: plano medio, fondo neutro, controles contextuales, velocidad visible, etiqueta de idioma.
-- Propio de NexoLSC: línea de tiempo por letra, texto normalizado visible, avisos de caracteres
-  omitidos, estado de validación, orientación educativa.
-- Futuro: un **modo widget** flotante (como el del video) para incrustar en otros sitios usando el mismo
-  núcleo.
+- **Modo widget** flotante para incrustar el deletreador en otros sitios (por ejemplo, páginas del SENA),
+  reutilizando el mismo núcleo.
+- Vistas rápidas de cámara (frente / perfil / primer plano de la mano) y modo espejo para aprender.

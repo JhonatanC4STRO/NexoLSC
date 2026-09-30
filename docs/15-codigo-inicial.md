@@ -1,16 +1,17 @@
-# 15 · Código inicial
+# 15 · Código
 
 > El proyecto ya está creado en la raíz de NexoLSC (`src/`, `public/`, `tools/`, `assets-src/`).
 > Este documento es la referencia legible de ese código; si difieren, manda el código.
 
-Código **probado** el 2026-09-28:
+Código **probado** el 2026-09-30 (v0.2.x):
 
 - `npm test` → 15 pruebas en verde (Vitest 5).
 - `npm run build` → compila sin errores (TypeScript 7 + Vite 8).
-- En el navegador (desarrollo y producción): selector con dos candidatos de avatar (`mpfb2`, CC0, y el de
-  prueba local); deletrea "Allá", "Lala" y "¿Hola, Ana 5?"; al saltar a una letra en pausa muestra esa
-  letra. Sin errores en consola.
-- Scripts de Blender probados con Blender 5.2 y MPFB 2.0.17.
+- En el navegador: selector con los candidatos de avatar (`mpfb2-caricatura` por defecto, `mpfb2` y el
+  de prueba local), las 27 letras con clip, fondo del SENA desenfocado; al saltar a una letra en pausa se
+  muestra esa letra. Sin errores en consola.
+- Scripts de Blender (`mpfb_builder.py`, `bake_letters.py`, `export_avatar.py`) probados con Blender 5.2
+  y MPFB 2.0.17.
 
 ## Cómo ejecutarlo
 
@@ -58,7 +59,7 @@ blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_a
 {
   "name": "nexolsc",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "module",
   "scripts": {
     "dev": "vite",

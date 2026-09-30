@@ -10,6 +10,7 @@
 | `buildQueue` | 🔄 busca palabras antes de deletrear | 🔄 recibe glosas en vez de texto | 🔄 | — |
 | `SignPlayer` | ✅ sin cambios | ✅ + pistas paralelas | ✅ | — |
 | `ClipDriver` / avatar | ✅ + paquetes bajo demanda | ✅ + morph targets faciales | ✅ | — |
+| Datos de pose + `bake_letters.py` | 🔄 se amplía a palabras (dos manos, ubicación) | ✅ + pistas de cara/cabeza | ✅ | — |
 | `SpeechToTextProvider` | ✅ | ✅ | ✅ | — |
 
 ## Fase 2 · Texto → palabras → señas
@@ -46,12 +47,14 @@ Cambios concretos:
 
 | Método | Calidad | Costo | Comentario |
 |---|---|---|---|
-| Animación manual en Blender | Alta si hay buen animador | Alto por seña | Lo del MVP; no escala a miles |
+| **Poses como datos + `bake_letters.py`** (lo del MVP) | Media-alta; se ajusta por datos | Bajo-medio por seña | Ya funciona para el alfabeto; para palabras hay que añadir la mano izquierda, ubicaciones en el cuerpo y trayectorias más ricas |
+| Animación manual en Blender | Alta si hay buen animador | Alto por seña | Para señas complejas; conviene trasladar el resultado a datos para reutilizarlo en todos los avatares |
 | Captura de movimiento con video + MediaPipe Holistic → retargeting | Media; dedos con ruido | Bajo | Grabar a señantes sordos; limpiar en Blender |
 | Captura óptica o guantes de captura | Alta | Alto (equipo) | Para un léxico central de alta calidad |
 | Síntesis desde notación (HamNoSys/SiGML, p. ej. JASigning) | Media, robótica | Bajo por seña, alto al inicio | Requiere transcribir cada seña en notación |
 
-Recomendación: animación manual para las primeras 100–200 palabras más frecuentes (validadas), y
+Recomendación: extender el formato de datos de las letras (`assets-src/letters/`) a palabras —mano
+izquierda, ubicación, trayectoria— para las primeras 100–200 palabras más frecuentes (validadas), y
 explorar captura con video grabando a **personas sordas, con consentimiento y remuneración**.
 
 Priorización del léxico: empezar por los campos temáticos del DBLSC más útiles (saludos, familia,

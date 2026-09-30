@@ -7,22 +7,21 @@
 
 | # | Documento | Contenido |
 |---|---|---|
-| 00 | [Análisis del video de referencia](docs/00-analisis-video-referencia.md) | Patrones de UX de Hand Talk que adoptamos y los que no |
-| 01 | [Arquitectura del MVP](docs/01-arquitectura-mvp.md) | Capas, principios, ¿hace falta backend? (no) |
-| 02 | [Tecnologías recomendadas](docs/02-tecnologias-recomendadas.md) | Stack con versiones probadas y alternativas |
+| 01 | [Arquitectura del MVP](docs/01-arquitectura-mvp.md) | App web + producción de contenido (avatares y letras); ¿hace falta backend? (no) |
+| 02 | [Tecnologías](docs/02-tecnologias-recomendadas.md) | Stack con versiones probadas (incluye MPFB y Rigify) y alternativas descartadas |
 | 03 | [Estructura de carpetas](docs/03-estructura-carpetas.md) | Árbol del proyecto y reglas |
-| 04 | [Diseño del avatar](docs/04-diseno-avatar.md) | Diagnóstico de tu avatar actual y requisitos del definitivo |
-| 05 | [Sistema de rigging](docs/05-sistema-rigging.md) | Rig de control Rigify vs. esqueleto de deformación exportado |
-| 06 | [Sistema de Animation Clips](docs/06-animation-clips.md) | Un GLB con clips vs. uno por letra; flujo en Blender; exportación |
+| 04 | [Diseño del avatar](docs/04-diseno-avatar.md) | Candidatos (MPFB2 caricatura y realista), requisitos, encuadre |
+| 05 | [Sistema de rigging](docs/05-sistema-rigging.md) | Rig Rigify, esqueleto exportado (181 huesos) y ejes verificados |
+| 06 | [Animation Clips y letras como datos](docs/06-animation-clips.md) | Formato de `alfabeto_lsc.json`, horneado por avatar, exportación, reproducción |
 | 07 | [Sistema AnimationQueue](docs/07-animation-queue.md) | Cola, estados, reloj, velocidad, saltos |
-| 08 | [Modelo de datos para las letras](docs/08-modelo-datos-letras.md) | `SignEntry` y su evolución |
+| 08 | [Modelo de datos para las letras](docs/08-modelo-datos-letras.md) | `SignEntry`, datos de pose y su evolución |
 | 09 | [Flujo Texto → letras → avatar](docs/09-flujo-texto-letras-avatar.md) | Paso a paso con ejemplos |
 | 10 | [Flujo Voz → texto → letras → avatar](docs/10-flujo-voz-texto-avatar.md) | Web Speech API, límites, alternativas |
 | 11 | [Tildes, espacios y caracteres especiales](docs/11-manejo-caracteres-especiales.md) | Reglas y decisiones abiertas |
 | 12 | [Fuentes reales del alfabeto LSC](docs/12-fuentes-alfabeto-lsc.md) | Fichas de fuentes, lectura letra por letra, protocolo de validación |
-| 13 | [Diseño de la interfaz](docs/13-diseno-interfaz.md) | Pantalla, estados, accesibilidad |
-| 14 | [Plan de implementación](docs/14-plan-implementacion.md) | Etapas, criterios de "listo" y riesgos |
-| 15 | [Código inicial](docs/15-codigo-inicial.md) | Todo el código del proyecto base (probado) |
+| 13 | [Diseño de la interfaz](docs/13-diseno-interfaz.md) | Pantalla, selector de avatar, fondo, estados, accesibilidad |
+| 14 | [Plan de implementación](docs/14-plan-implementacion.md) | Estado por etapas, siguientes pasos y riesgos |
+| 15 | [Código](docs/15-codigo-inicial.md) | Referencia legible del código y los scripts (generada desde el proyecto) |
 | 16 | [Palabras y frases completas](docs/16-estrategia-palabras-frases.md) | Cómo llegar de la fase 1 a la 5 sin rehacer |
 
 ## Decisiones clave

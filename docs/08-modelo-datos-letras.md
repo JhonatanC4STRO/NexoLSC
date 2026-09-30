@@ -146,8 +146,22 @@ create table sign_sources (sign_id text references signs(id), source_id text, lo
 create table sign_reviews (sign_id text references signs(id), reviewer text, status text, notes text, reviewed_at timestamptz);
 ```
 
+## Dos archivos de datos por letra
+
+Cada letra vive en dos lugares, con responsabilidades distintas:
+
+| Archivo | Qué describe | Quién lo usa |
+|---|---|---|
+| `src/core/signs/alphabet.lsc.ts` (`SignEntry`) | **Qué** es la seña: glosa, nombre, clip, duraciones, descripción legible, fuente, validación | La app web (cola, línea de tiempo, vista de respaldo) |
+| `assets-src/letters/alfabeto_lsc.json` | **Cómo** la hace el avatar: ángulos de dedos y pulgar, orientación de la mano, trayectoria | `tools/blender/bake_letters.py` al generar los clips de cada avatar |
+
+El vínculo entre ambos es el nombre del clip: la entrada `"L"` del JSON produce la Action `sign_L`, que es
+el `animation.clip` de `lsc.letter.L` (la Ñ usa `sign_ENYE`). El formato del JSON está en
+[06-animation-clips.md](06-animation-clips.md).
+
 ## Estado actual de los datos
 
-Las 27 letras están cargadas con `validation.status = "draft"`. Las descripciones `fingers` son una
-**lectura de la ilustración** del DBLSC (p. 573); donde la ilustración deja dudas se marca
-"(Verificar.)". Ver la tabla completa en [12-fuentes-alfabeto-lsc.md](12-fuentes-alfabeto-lsc.md).
+Las 27 letras están cargadas con `validation.status = "draft"` en los dos archivos. Las descripciones
+`fingers` y los ángulos del JSON son una **lectura de la ilustración** del DBLSC (p. 573); donde la
+ilustración deja dudas se marca "(Verificar.)". Ver la tabla completa en
+[12-fuentes-alfabeto-lsc.md](12-fuentes-alfabeto-lsc.md).
