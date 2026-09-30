@@ -1,0 +1,454 @@
+{
+  "version": 1,
+  "description": "Alfabeto manual LSC como datos independientes del avatar. Fuente: DBLSC (INSOR – Instituto Caro y Cuervo, 2006), Anexos, Alfabeto manual, p. 573. BORRADOR: lectura de la ilustración, pendiente de validación por personas sordas usuarias de LSC. Formato: ver tools/blender/bake_letters.py.",
+  "defaults": {
+    "arm": {
+      "twist": -60
+    }
+  },
+  "letters": {
+    "A": {
+      "status": "draft",
+      "note": "Puño cerrado; pulgar extendido y apoyado al costado del índice.",
+      "fingers": {
+        "index": [85, 100, 60, 0],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [40, 5, 0, 5, 0],
+      "arm": {
+        "twist": -40
+      }
+    },
+    "B": {
+      "status": "draft",
+      "note": "Cuatro dedos extendidos y juntos; pulgar doblado sobre la palma.",
+      "fingers": {
+        "index": [0, 0, 0, -3],
+        "middle": [0, 0, 0, 0],
+        "ring": [0, 0, 0, 3],
+        "pinky": [0, 0, 0, 6]
+      },
+      "thumb": [25, 55, 0, 25, 15]
+    },
+    "C": {
+      "status": "draft",
+      "note": "Dedos y pulgar curvados formando una C, sin tocarse.",
+      "fingers": {
+        "index": [25, 45, 25, 0],
+        "middle": [25, 45, 25, 0],
+        "ring": [25, 45, 25, 0],
+        "pinky": [25, 45, 25, 0]
+      },
+      "thumb": [0, 15, 0, 15, 10],
+      "arm": {
+        "twist": -70
+      }
+    },
+    "D": {
+      "status": "draft",
+      "note": "Índice extendido; medio, anular y meñique curvados en contacto con el pulgar.",
+      "fingers": {
+        "index": [0, 0, 0, 0],
+        "middle": [45, 70, 40, 0],
+        "ring": [45, 70, 40, 0],
+        "pinky": [45, 70, 40, 0]
+      },
+      "thumb": [20, 40, 0, 25, 20]
+    },
+    "E": {
+      "status": "draft",
+      "note": "Dedos flexionados con las puntas hacia la palma; pulgar doblado bajo ellos.",
+      "fingers": {
+        "index": [30, 105, 80, 0],
+        "middle": [30, 105, 80, 0],
+        "ring": [30, 105, 80, 0],
+        "pinky": [30, 105, 80, 0]
+      },
+      "thumb": [25, 55, 0, 30, 20]
+    },
+    "F": {
+      "status": "draft",
+      "note": "Índice extendido con el pulgar en contacto lateral; demás cerrados. (Verificar.)",
+      "fingers": {
+        "index": [0, 0, 0, 0],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [45, 25, 0, 20, 10]
+    },
+    "G": {
+      "status": "draft",
+      "note": "Mano cerrada con el índice extendido en diagonal; flecha curva junto a la punta: giro/flexión corta. (Verificar.)",
+      "fingers": {
+        "index": [0, 0, 0, 0],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [40, 5, 0, 5, 0],
+      "arm": {
+        "dev": 20,
+        "twist": -30
+      },
+      "duration_s": 0.9,
+      "motion": [
+        {
+          "t": 0
+        },
+        {
+          "t": 0.5,
+          "twist": 30,
+          "fingers": {
+            "index": [25, 20, 10, 0]
+          }
+        },
+        {
+          "t": 1
+        }
+      ]
+    },
+    "H": {
+      "status": "draft",
+      "note": "Índice y medio extendidos juntos en diagonal; pulgar sobre anular y meñique. Flecha diagonal: desplazamiento corto.",
+      "fingers": {
+        "index": [0, 0, 0, -8],
+        "middle": [0, 0, 0, 2],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [30, 40, 0, 30, 25],
+      "arm": {
+        "hand_dir": [-0.65, -0.3, 0.7]
+      },
+      "duration_s": 0.8,
+      "motion": [
+        {
+          "t": 0
+        },
+        {
+          "t": 1,
+          "swing": -4,
+          "lift": -5
+        }
+      ]
+    },
+    "I": {
+      "status": "draft",
+      "note": "Meñique extendido; demás cerrados con el pulgar encima.",
+      "fingers": {
+        "index": [85, 100, 60, 0],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [0, 0, 0, -5]
+      },
+      "thumb": [30, 40, 0, 30, 25]
+    },
+    "J": {
+      "status": "draft",
+      "note": "Configuración de la I; el meñique traza una curva descendente en forma de J.",
+      "fingers": {
+        "index": [85, 100, 60, 0],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [0, 0, 0, -5]
+      },
+      "thumb": [30, 40, 0, 30, 25],
+      "duration_s": 1,
+      "motion": [
+        {
+          "t": 0,
+          "lift": 4
+        },
+        {
+          "t": 0.5,
+          "lift": -5
+        },
+        {
+          "t": 0.8,
+          "lift": -7,
+          "swing": -3,
+          "twist": 25
+        },
+        {
+          "t": 1,
+          "lift": -5,
+          "swing": -6,
+          "twist": 45
+        }
+      ]
+    },
+    "K": {
+      "status": "draft",
+      "note": "Índice arriba, medio hacia adelante, pulgar tocando el medio; anular y meñique cerrados.",
+      "fingers": {
+        "index": [0, 0, 0, 5],
+        "middle": [60, 0, 0, -5],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [25, 30, 0, 10, 0]
+    },
+    "L": {
+      "status": "draft",
+      "note": "Índice arriba y pulgar horizontal formando una L; demás cerrados.",
+      "fingers": {
+        "index": [0, 0, 0, 0],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [-30, -20, 0, 0, 0]
+    },
+    "M": {
+      "status": "draft",
+      "note": "Puño con índice, medio y anular doblados sobre el pulgar.",
+      "fingers": {
+        "index": [80, 90, 50, 0],
+        "middle": [80, 90, 50, 0],
+        "ring": [80, 90, 50, 0],
+        "pinky": [90, 105, 60, 0]
+      },
+      "thumb": [30, 45, 0, 15, 10]
+    },
+    "N": {
+      "status": "draft",
+      "note": "Puño con índice y medio doblados sobre el pulgar.",
+      "fingers": {
+        "index": [80, 90, 50, 0],
+        "middle": [80, 90, 50, 0],
+        "ring": [90, 105, 60, 0],
+        "pinky": [90, 105, 60, 0]
+      },
+      "thumb": [30, 40, 0, 15, 10]
+    },
+    "Ñ": {
+      "status": "draft",
+      "note": "Configuración de la N con oscilación lateral de la muñeca (flecha doble).",
+      "fingers": {
+        "index": [80, 90, 50, 0],
+        "middle": [80, 90, 50, 0],
+        "ring": [90, 105, 60, 0],
+        "pinky": [90, 105, 60, 0]
+      },
+      "thumb": [30, 40, 0, 15, 10],
+      "duration_s": 1,
+      "motion": [
+        {
+          "t": 0,
+          "dev": -12
+        },
+        {
+          "t": 0.33,
+          "dev": 12
+        },
+        {
+          "t": 0.66,
+          "dev": -12
+        },
+        {
+          "t": 1,
+          "dev": 12
+        }
+      ]
+    },
+    "O": {
+      "status": "draft",
+      "note": "Todos los dedos curvados tocando la punta del pulgar, formando una O.",
+      "fingers": {
+        "index": [45, 55, 35, 0],
+        "middle": [45, 55, 35, 0],
+        "ring": [45, 55, 35, 0],
+        "pinky": [45, 55, 35, 0]
+      },
+      "thumb": [20, 35, 0, 25, 20],
+      "arm": {
+        "twist": -70
+      }
+    },
+    "P": {
+      "status": "draft",
+      "note": "Como la K orientada hacia abajo: índice hacia abajo, medio hacia adelante, pulgar entre ellos. (Verificar.)",
+      "fingers": {
+        "index": [0, 0, 0, 5],
+        "middle": [60, 0, 0, -5],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [25, 30, 0, 10, 0],
+      "arm": {
+        "forearm_dir": [0.15, -0.9, 0.4],
+        "hand_dir": [0.1, -0.45, -0.89]
+      }
+    },
+    "Q": {
+      "status": "draft",
+      "note": "Puntas de todos los dedos reunidas con el pulgar, apuntando hacia arriba. (Verificar.)",
+      "fingers": {
+        "index": [50, 35, 15, -6],
+        "middle": [50, 35, 15, 0],
+        "ring": [50, 35, 15, 6],
+        "pinky": [50, 35, 15, 12]
+      },
+      "thumb": [15, 35, 0, 20, 15],
+      "arm": {
+        "twist": -40
+      }
+    },
+    "R": {
+      "status": "draft",
+      "note": "Índice y medio extendidos y cruzados.",
+      "fingers": {
+        "index": [0, 0, 0, -14],
+        "middle": [8, 0, 0, 14],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [30, 40, 0, 30, 25]
+    },
+    "S": {
+      "status": "draft",
+      "note": "Índice extendido que traza una S en el aire. (Verificar si participa el medio.)",
+      "fingers": {
+        "index": [0, 0, 0, 0],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [30, 40, 0, 30, 25],
+      "duration_s": 1.1,
+      "motion": [
+        {
+          "t": 0,
+          "swing": 5,
+          "lift": 7
+        },
+        {
+          "t": 0.25,
+          "swing": -5,
+          "lift": 5
+        },
+        {
+          "t": 0.5,
+          "swing": 0,
+          "lift": 0
+        },
+        {
+          "t": 0.75,
+          "swing": 5,
+          "lift": -5
+        },
+        {
+          "t": 1,
+          "swing": -5,
+          "lift": -7
+        }
+      ]
+    },
+    "T": {
+      "status": "draft",
+      "note": "Medio, anular y meñique extendidos; índice flexionado en contacto con el pulgar. (Verificar.)",
+      "fingers": {
+        "index": [60, 70, 35, 0],
+        "middle": [0, 0, 0, 0],
+        "ring": [0, 0, 0, 3],
+        "pinky": [0, 0, 0, 6]
+      },
+      "thumb": [25, 30, 0, 20, 10]
+    },
+    "U": {
+      "status": "draft",
+      "note": "Dos dedos extendidos y separados con los intermedios flexionados (lectura: índice y meñique). (VERIFICAR.)",
+      "fingers": {
+        "index": [0, 0, 0, 8],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [0, 0, 0, -8]
+      },
+      "thumb": [30, 40, 0, 30, 25]
+    },
+    "V": {
+      "status": "draft",
+      "note": "Índice y medio extendidos y separados en V.",
+      "fingers": {
+        "index": [0, 0, 0, 10],
+        "middle": [0, 0, 0, -10],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [30, 40, 0, 30, 25]
+    },
+    "W": {
+      "status": "draft",
+      "note": "Índice, medio y anular extendidos y separados; el pulgar sujeta el meñique.",
+      "fingers": {
+        "index": [0, 0, 0, 10],
+        "middle": [0, 0, 0, 0],
+        "ring": [0, 0, 0, -10],
+        "pinky": [80, 95, 55, 0]
+      },
+      "thumb": [30, 55, 0, 35, 30]
+    },
+    "X": {
+      "status": "draft",
+      "note": "Índice flexionado en gancho; demás cerrados.",
+      "fingers": {
+        "index": [15, 95, 70, 0],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [30, 40, 0, 30, 25],
+      "arm": {
+        "twist": -50
+      }
+    },
+    "Y": {
+      "status": "draft",
+      "note": "Pulgar y meñique extendidos; demás cerrados.",
+      "fingers": {
+        "index": [85, 100, 60, 0],
+        "middle": [85, 100, 60, 0],
+        "ring": [85, 100, 60, 0],
+        "pinky": [0, 0, 0, -12]
+      },
+      "thumb": [-30, -20, 0, 0, 0]
+    },
+    "Z": {
+      "status": "draft",
+      "note": "Índice y medio extendidos juntos; trazan una Z en el aire.",
+      "fingers": {
+        "index": [0, 0, 0, -3],
+        "middle": [0, 0, 0, 3],
+        "ring": [85, 100, 60, 0],
+        "pinky": [85, 100, 60, 0]
+      },
+      "thumb": [30, 40, 0, 30, 25],
+      "duration_s": 1.1,
+      "motion": [
+        {
+          "t": 0,
+          "swing": -6,
+          "lift": 6
+        },
+        {
+          "t": 0.33,
+          "swing": 6,
+          "lift": 6
+        },
+        {
+          "t": 0.66,
+          "swing": -6,
+          "lift": -6
+        },
+        {
+          "t": 1,
+          "swing": 6,
+          "lift": -6
+        }
+      ]
+    }
+  }
+}

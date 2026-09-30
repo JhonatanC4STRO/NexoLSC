@@ -23,8 +23,9 @@ modo consola, **sin modificar el original** (trabajé sobre una copia).
 
 Úsalo **solo para prototipar el pipeline técnico** (rig → poses → GLB → navegador). Con él ya validé que
 la cadena completa funciona. Antes de mostrar el MVP a usuarios o publicarlo, **cámbialo por un avatar
-original o con licencia libre**. El código no cambia: basta con reemplazar `public/models/avatar.glb`,
-siempre que el nuevo avatar tenga los clips con los mismos nombres.
+original o con licencia libre**. El código no cambia: cada avatar es un GLB en `public/models/avatars/`
+registrado en `src/avatar/avatars.ts`, siempre que tenga los clips con los mismos nombres. Ahora vive en
+`assets-src/avatars/miles-prueba/` y está excluido de git.
 
 ## 2. Requisitos del avatar definitivo
 
@@ -72,7 +73,61 @@ siempre que el nuevo avatar tenga los clips con los mismos nombres.
 | **Encargar a un artista 3D** | Cesión de derechos por contrato | Identidad propia, manos a medida | Costo y tiempo |
 
 Verifica la licencia vigente de cualquier opción antes de publicar; guarda una copia de los términos en
-`assets-src/avatar/LICENSE.md`.
+`assets-src/avatars/<id>/LICENSE.md`.
+
+## 3.1 Candidatos creados
+
+La app tiene un **selector de avatar** para compararlos con las mismas palabras y controles.
+
+### Candidato `mpfb2` — hombre joven (2026-09-28)
+
+Generado por script con MPFB 2.0.17 + Rigify (`assets-src/avatars/mpfb2/build_avatar.py`), solo con
+recursos **CC0** (ver `assets-src/avatars/mpfb2/LICENSE.md`).
+
+| Aspecto | Resultado | vs. requisitos |
+|---|---|---|
+| Aspecto | Hombre de ~25 años, piel morena media (mezcla 50/50 de dos pieles CC0), pelo corto, camisa azul oscuro lisa de manga larga, jeans | ✅ Contraste mano/ropa como el de los intérpretes |
+| Altura | 1,71 m, pies en el origen, 1 unidad = 1 m | ✅ |
+| Vértices | ~24.000 en total (cuerpo 7.840, ropa 8.426, dientes 3.868, pelo 1.755…) | ✅ Presupuesto web |
+| Rig | Rigify completo: 930 huesos de control, **181 de deformación** | ⚠️ Más que el objetivo (55–80) por el **rig facial**; útil para las fases con expresiones. Rendimiento a medir en móviles |
+| Manos | 3 falanges por dedo + **metacarpianos** (`DEF-palm.01–04`) | ✅ Permite ahuecar la mano (C, O, Q) |
+| Cara | Visible, con huesos de párpados, cejas, mandíbula, labios y lengua | ✅ Preparado para no manuales |
+| GLB | **3,7 MB**, texturas JPEG (PNG solo en pelo, cejas y pestañas), materiales opacos salvo pelo/cejas/pestañas en `MASK` | ✅ < 5 MB |
+| Estilo | Realista genérico (MakeHuman) | ⚠️ Menos amable que un estilo caricaturesco; evaluar con usuarios |
+
+### Candidato `mpfb2-caricatura` — versión caricaturesca con los rasgos del autor (2026-09-29) · por defecto
+
+El objetivo era un estilo caricaturesco como el del video de referencia, pero con identidad propia (sin
+copiar a Hugo de Hand Talk) y parecido a los rasgos del autor del proyecto, tomados de sus fotos.
+
+- **Camino descartado:** diseño 2D con IA → malla 3D. El plan gratuito del servicio conectado no permite
+  el modelo de imagen necesario y la conversión a 3D (9–38 créditos) no cabía en el saldo; además, las
+  mallas generadas por IA suelen dar manos fusionadas.
+- **Camino elegido:** MPFB2 con ajustes finos. Es gratuito y conserva manos y rig que ya funcionan.
+
+| Rasgo | Cómo se logró |
+|---|---|
+| Cara redonda y llena, cabeza más grande | *targets* `head-round`, `head-fat`, `head-scale-*`, `cheek-volume`, `chin-width` |
+| Ojos más grandes, café oscuro | `eye-scale` + iris recoloreado (el "brown" de MakeHuman es rojizo) |
+| Nariz ancha, labios llenos | `nose-scale-horiz`, `nose-volume`, `mouth-*lip-volume` |
+| Cejas negras gruesas y rectas | cejas `eyebrow009` |
+| Pelo negro peinado hacia arriba/atrás | pelo `short04` |
+| Piel trigueña clara | mezcla de pieles CC0 (55 % `young_caucasian_male`, 25 % `young_asian_male`, 20 % `young_african_male`) |
+| Camiseta negra lisa | `male_casualsuit06` con la camiseta recoloreada a negro y el logo eliminado |
+| Manos más grandes | `hand-scale` y `hand-fingers-diameter`: se leen mejor las configuraciones |
+
+Resultado: 1,66 m, 181 huesos de deformación, GLB de ~5 MB con las 27 letras. **Límite honesto:** MPFB
+produce humanos realistas; el resultado es "realista con proporciones caricaturescas", no un personaje de
+animación estilizado. Para ese acabado, la ruta es un artista 3D (o recargar créditos y retomar el diseño
+2D → 3D) y aplicarle las mismas letras con `bake_letters.py`.
+
+Lecciones del proceso (ya resueltas en el script):
+- Los materiales de MakeHuman conectan el alfa de todas las texturas; el exportador los marcaba como
+  transparentes (`BLEND`), lo que en three.js causa errores de orden de dibujo, y guardaba todo en PNG
+  (19 MB). Se desconecta el alfa en los opacos y se usa recorte (`MASK`) en pelo, cejas y pestañas.
+- En el Rigify actual los dedos usan rotación Euler y los brazos cuaterniones; los brazos vienen en IK
+  y se pasan a FK. `tools/blender/pose_helpers.py` maneja ambos modos.
+- El parámetro `height` de MakeHuman no es lineal en metros: 0,5 → 1,59 m, 0,6 → 1,71 m, 0,8 → 1,97 m.
 
 ## 4. Encuadre y escena
 

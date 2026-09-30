@@ -5,12 +5,14 @@ dist/
 .DS_Store
 Thumbs.db
 tsconfig.tsbuildinfo
+__pycache__/
 
 # Documentos de gestión personales (no se publican)
 *.xlsx
 
 # Avatar de prueba con derechos de terceros (Miles Morales, Marvel/Sony):
 # solo para desarrollo local, nunca en el repositorio público.
-assets-src/avatar/*.blend
-assets-src/textures/
-public/models/*.glb
+assets-src/avatars/miles-prueba/
+public/models/avatars/miles-prueba.glb
+
+# Los candidatos con licencia libre (p. ej. assets-src/avatars/mpfb2/, CC0) sí se versionan.

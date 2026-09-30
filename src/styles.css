@@ -52,7 +52,18 @@ body { margin: 0; background: var(--bg); }
 .speech__interim { color: var(--muted); font-style: italic; }
 .speech__error, .speech__unsupported { color: var(--danger); margin: 0; font-size: 0.9rem; }
 
-.stage { height: min(60vh, 520px); border-radius: var(--radius); overflow: hidden; background: var(--stage); border: 1px solid var(--border); }
+.avatar-selector { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.avatar-selector label { font-weight: 600; }
+.avatar-selector select { font: inherit; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+.avatar-selector__license { font-size: 0.85rem; color: var(--muted); }
+.avatar-selector__license--warn { color: var(--danger); }
+
+.stage { position: relative; height: min(60vh, 520px); border-radius: var(--radius); overflow: hidden; background: #e9ecef; border: 1px solid var(--border); }
+/* Fondo del escenario (src/avatar/stage.ts). inset negativo: oculta los bordes borrosos del desenfoque. */
+.stage__bg { position: absolute; inset: 0; pointer-events: none; }
+.stage__bg-image { position: absolute; inset: -16px; background-size: cover; background-repeat: no-repeat; }
+.stage__bg-veil { position: absolute; inset: 0; background: #eef1f4; }
+.stage--placeholder, .stage--loading { background: var(--stage); }
 .stage--loading { display: grid; place-items: center; color: var(--muted); }
 .stage--placeholder { display: grid; place-content: center; justify-items: center; text-align: center; padding: 16px; gap: 6px; }
 .placeholder__letter { font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; line-height: 1; }

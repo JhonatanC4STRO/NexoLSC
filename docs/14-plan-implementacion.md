@@ -20,23 +20,24 @@ probar. Las etapas 0–2 ya están **resueltas en el código inicial** y validad
 
 ## Etapa 2 · Pipeline Blender → GLB → navegador (1–2 días) — ✅ validado con tu avatar
 
-- Copiar tu `.blend` a `assets-src/avatar/`.
+- Copiar tu `.blend` a `assets-src/avatars/miles-prueba/` (solo local).
 - Crear las Actions `rest`, `sign_A`, `sign_L` (poses de prueba).
-- Exportar con `tools/blender/export_avatar.py` a `public/models/avatar.glb`.
+- Exportar con `tools/blender/export_avatar.py` a `public/models/avatars/miles-prueba.glb`.
 
 **Listo cuando:** "ALLA" mueve el avatar A → L → L → A. *(Probado: funciona, sin errores en consola.)*
 
 ## Etapa 3 · Avatar definitivo (1–3 semanas, en paralelo con la 4)
 
-- [ ] Elegir la fuente del avatar legal (MPFB2, Human Base Meshes, VRoid o encargo). Ver [04](04-diseno-avatar.md).
-- [ ] Rig Rigify con metacarpianos; escala 1,7 m; pesos limitados a 4 influencias.
-- [ ] Pruebas de deformación en las poses difíciles (A, E, M, N, O, R, P).
-- [ ] Clip `rest` y, opcionalmente, `idle`.
+- [x] Selector de avatar en la app para comparar candidatos.
+- [x] Candidato 1: **MPFB2** (CC0), con metacarpianos, rig facial, 1,71 m y GLB de 3,7 MB. Ver [04](04-diseno-avatar.md#31-candidatos-creados).
+- [ ] Otros candidatos (p. ej. mujer MPFB2, estilo caricaturesco, VRoid, encargo) y elegir uno.
+- [ ] Pruebas de deformación en las poses difíciles (A, E, M, N, O, R, P) en el candidato elegido.
+- [ ] Medir rendimiento en un móvil de gama media (181 huesos de deformación en MPFB2).
+- [ ] Clip `idle` opcional.
 
-**Listo cuando:** el nuevo `avatar.glb` reemplaza al de prueba sin cambiar una sola línea de código.
+**Listo cuando:** hay un candidato elegido, sin cambiar una sola línea de código de la app (solo su GLB).
 
-> Mientras tanto se puede seguir animando letras sobre tu avatar actual: si el nuevo usa los mismos
-> nombres de huesos (Rigify), las poses se pueden transferir.
+> Las poses se pueden transferir entre candidatos porque todos usan nombres de huesos Rigify.
 
 ## Etapa 4 · Las 27 letras (2–3 semanas)
 

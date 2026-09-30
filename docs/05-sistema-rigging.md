@@ -32,7 +32,7 @@ y un clip por Action.
 | Mano | `DEF-hand.L/R` | Orientación de la mano |
 | Pulgar | `DEF-thumb.01–03.L/R` | Crítico: A, D, E, L, M, N, O, Y… |
 | Dedos | `DEF-f_index/f_middle/f_ring/f_pinky.01–03.L/R` | Configuración de cada letra |
-| Palma (recomendado) | `DEF-palm.01–04.L/R` (metacarpianos de Rigify) | Ahuecar la mano (C, O, Q); **tu avatar actual no los tiene** |
+| Palma (recomendado) | `DEF-palm.01–04.L/R` (metacarpianos de Rigify) | Ahuecar la mano (C, O, Q); el avatar de prueba no los tiene, **el candidato MPFB2 sí** |
 | Cara (avatar definitivo) | *shape keys* o huesos de mandíbula, ojos y cejas | Expresiones no manuales |
 
 Las piernas pueden existir, pero el MVP no las anima.

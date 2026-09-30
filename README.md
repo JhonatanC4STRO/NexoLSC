@@ -34,13 +34,20 @@
 4. **Fuente del alfabeto:** Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006), p. 573:
    27 letras; G, H, J, Ñ, S y Z tienen movimiento. Todas las letras quedan en `draft` hasta que las
    validen personas sordas usuarias de LSC.
-5. **Tu avatar actual (Miles Morales) sirve para probar el pipeline, no para publicar**: personaje con
-   derechos de terceros, máscara sin cara y guantes negros con poco contraste.
+5. **Avatares como candidatos comparables** (selector en la app). Por defecto: **MPFB2 · caricatura**
+   (CC0, con los rasgos del autor); también **MPFB2** realista. El modelo de Miles Morales queda solo como
+   prueba local: tiene derechos de terceros, máscara sin cara y guantes negros con poco contraste.
+6. **Las letras son datos, no animaciones hechas a mano:** `assets-src/letters/alfabeto_lsc.json` se aplica
+   a cualquier avatar con `tools/blender/bake_letters.py`. Cambiar de avatar no obliga a reanimar.
 
-## Estado verificado (2026-09-28)
+## Estado verificado (2026-09-29)
 
-- Código inicial: 15 pruebas en verde, build sin errores.
-- Pipeline Blender 5.2 → GLB → navegador probado con una copia de tu avatar (clips `rest`, `sign_A`, `sign_L`).
+- Código: 15 pruebas en verde, build sin errores.
+- **27 letras** (6 con movimiento: G, H, J, Ñ, S, Z) horneadas en los dos avatares MPFB2 desde los mismos
+  datos, en estado `draft` hasta su validación con personas sordas.
+- Avatares: `mpfb2-caricatura` (1,66 m) y `mpfb2` (1,71 m), 181 huesos de deformación (dedos,
+  metacarpianos y cara), GLB de ~5 MB cada uno. Ver [assets-src/README.md](assets-src/README.md).
+- Fondo del escenario configurable (`public/backgrounds/sena.jpg`, desenfocado).
 - Voz: funciona en Chrome/Edge/Safari; **no en Firefox**.
 
 ## Cómo ejecutar el proyecto
@@ -55,7 +62,32 @@ npm run dev
 
 Abre http://localhost:5173 y escribe una palabra. Pruebas: `npm test`.
 
-**El avatar no está en el repositorio.** El modelo de prueba usado en desarrollo es un personaje con
-derechos de terceros y no se publica. Sin `public/models/avatar.glb` la app muestra la **vista de
-respaldo** (letra grande + descripción de la configuración) y todo el flujo funciona igual. Para generar
-el GLB desde un `.blend` propio, ver [assets-src/README.md](assets-src/README.md).
+Sobre el avatar aparece un **selector** para comparar candidatos. El repositorio incluye los candidatos
+**MPFB2 · caricatura** y **MPFB2** (CC0). El avatar de prueba con derechos de terceros solo existe en el
+equipo local y en el selector aparece como "no disponible" si falta. Para el fondo del escenario, guarda la
+foto como `public/backgrounds/sena.jpg`. Si no hay ningún GLB, la app muestra la **vista de
+respaldo** (letra grande + descripción de la configuración). Cómo generar o añadir avatares:
+[assets-src/README.md](assets-src/README.md).
+
+## Versiones
+
+El proyecto usa [versionado semántico](https://semver.org/lang/es/) y registra los cambios en
+[CHANGELOG.md](CHANGELOG.md). Cada versión publicada tiene una etiqueta de git `vX.Y.Z`.
+
+Para publicar una versión nueva:
+1. Añadir la sección de la versión en `CHANGELOG.md`.
+2. Subir la versión sin crear etiqueta todavía:
+
+```bash
+npm version 0.3.0 --no-git-tag-version
+```
+
+3. Hacer el commit, crear la etiqueta anotada y subir ambos:
+
+```bash
+git tag -a v0.3.0 -m "v0.3.0"
+```
+
+```bash
+git push origin main --follow-tags
+```

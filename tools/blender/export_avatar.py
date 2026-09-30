@@ -2,7 +2,7 @@
 Prepara y exporta el avatar de NexoLSC a GLB con un AnimationClip por seña.
 
 Uso (sin abrir la interfaz de Blender):
-  blender -b assets-src/avatar/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatar.glb
+  blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
 
 Qué hace:
   1. Deja UNA sola armadura deformando la malla (quita modificadores Armature extra).

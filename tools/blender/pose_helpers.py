@@ -18,7 +18,13 @@ def upd():
 
 
 def reset():
-    """Vuelve todos los huesos a la pose de descanso del rig."""
+    """Vuelve todos los huesos a la pose de descanso del rig.
+
+    También desasigna la Action activa: si no, al actualizar la escena Blender
+    vuelve a aplicar sus fotogramas clave y la pose anterior se suma a la nueva.
+    """
+    if rig.animation_data:
+        rig.animation_data.action = None
     for b in pb:
         b.location = (0, 0, 0)
         if b.rotation_mode == 'QUATERNION':
@@ -28,16 +34,26 @@ def reset():
     upd()
 
 
+def _post_multiply(b, q):
+    """Aplica una rotación local sin importar el modo de rotación del hueso (cuaternión o Euler).
+
+    Ojo: en el Rigify actual los dedos usan Euler XYZ y los brazos cuaterniones.
+    Escribir solo rotation_quaternion en un hueso Euler no tiene efecto.
+    """
+    if b.rotation_mode == 'QUATERNION':
+        b.rotation_quaternion = b.rotation_quaternion @ q
+    elif b.rotation_mode == 'AXIS_ANGLE':
+        raise ValueError(f'{b.name}: modo AXIS_ANGLE no soportado')
+    else:
+        b.rotation_euler = (b.rotation_euler.to_quaternion() @ q).to_euler(b.rotation_mode, b.rotation_euler)
+
+
 def rot_world(name, axis, deg):
     """Rota el hueso alrededor de un eje en espacio de armadura, respetando la pose actual."""
     b = pb[name]
     upd()
     axis_local = (b.matrix.to_3x3().inverted() @ Vector(axis)).normalized()
-    q = Quaternion(axis_local, math.radians(deg))
-    if b.rotation_mode == 'QUATERNION':
-        b.rotation_quaternion = b.rotation_quaternion @ q
-    else:
-        b.rotation_euler = (b.rotation_euler.to_quaternion() @ q).to_euler(b.rotation_mode)
+    _post_multiply(b, Quaternion(axis_local, math.radians(deg)))
     upd()
 
 
@@ -56,7 +72,7 @@ def curl(finger, deg, side='R'):
     """Flexiona las 3 falanges de un dedo (X local positivo = cerrar)."""
     for i, k in enumerate(['01', '02', '03']):
         b = pb[f'{finger}.{k}.{side}']
-        b.rotation_quaternion = b.rotation_quaternion @ Quaternion((1, 0, 0), math.radians(deg * (0.8 if i == 0 else 1.0)))
+        _post_multiply(b, Quaternion((1, 0, 0), math.radians(deg * (0.8 if i == 0 else 1.0))))
     upd()
 
 

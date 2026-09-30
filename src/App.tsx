@@ -5,6 +5,8 @@ import { signRepository } from './core/signs/SignRepository';
 import { normalizeText } from './core/text/normalize';
 import { Avatar3D } from './avatar/Avatar3D';
 import { usePlayerClock } from './hooks/usePlayer';
+import { useAvatarChoice } from './hooks/useAvatarChoice';
+import { AvatarSelector } from './ui/AvatarSelector';
 import { PlayerControls } from './ui/PlayerControls';
 import { LetterTimeline } from './ui/LetterTimeline';
 import { SpeechButton } from './ui/SpeechButton';
@@ -15,6 +17,7 @@ export default function App() {
   const [display, setDisplay] = useState('');
   const [skipped, setSkipped] = useState<string[]>([]);
   const [missing, setMissing] = useState<string[]>([]);
+  const avatarChoice = useAvatarChoice();
   usePlayerClock(player);
 
   const spell = useCallback(
@@ -76,7 +79,12 @@ export default function App() {
         )}
       </form>
 
-      <Avatar3D player={player} onMissingClips={setMissing} />
+      <AvatarSelector choice={avatarChoice} />
+      <Avatar3D
+        player={player}
+        avatar={avatarChoice.available ? avatarChoice.selected : undefined}
+        onMissingClips={setMissing}
+      />
       <LetterTimeline player={player} missing={missing} />
       <PlayerControls player={player} />
 

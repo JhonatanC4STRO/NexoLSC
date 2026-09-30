@@ -92,6 +92,20 @@ En móvil es la misma columna; los controles pasan a dos filas y el avatar ocupa
 
 Tipografía del sistema, esquinas redondeadas de 10–14 px, un solo color de acento para "dónde estoy".
 
+## Fondo del escenario
+
+Detrás del avatar puede ir una foto del lugar (proyecto SENA: la sede, `public/backgrounds/sena.jpg`).
+Se configura en `src/avatar/stage.ts`:
+
+| Parámetro | Valor | Motivo |
+|---|---|---|
+| `blurPx` | 5 | El fondo da contexto, pero con detalle nítido compite con las manos |
+| `veil` | 0.35 | Velo claro que baja el contraste de la foto y mantiene la mano como lo más visible |
+| `position` | `center 35%` | Qué parte de la foto queda detrás del avatar |
+
+Si el archivo no existe, el escenario usa el gris liso. Regla: si en pruebas con usuarios cuesta leer los
+dedos, subir `blurPx`/`veil` antes que cambiar la ropa o la luz del avatar.
+
 ## Inspiración del video de referencia (sin copiar)
 
 - Del video: plano medio, fondo neutro, controles contextuales, velocidad visible, etiqueta de idioma.

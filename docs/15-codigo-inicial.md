@@ -7,14 +7,14 @@ Código **probado** el 2026-09-28:
 
 - `npm test` → 15 pruebas en verde (Vitest 5).
 - `npm run build` → compila sin errores (TypeScript 7 + Vite 8).
-- En el navegador (modo desarrollo y build de producción): carga `public/models/avatar.glb` (exportado
-  desde `assets-src/avatar/avatar.blend`, clips `rest`, `sign_A`, `sign_L`), deletrea "Allá", "Lala" y
-  "¿Hola, Ana 5?" correctamente, y al saltar a una letra en pausa muestra esa letra. Sin errores en consola.
-- `tools/blender/export_avatar.py` probado con Blender 5.2 sobre una copia de tu avatar.
+- En el navegador (desarrollo y producción): selector con dos candidatos de avatar (`mpfb2`, CC0, y el de
+  prueba local); deletrea "Allá", "Lala" y "¿Hola, Ana 5?"; al saltar a una letra en pausa muestra esa
+  letra. Sin errores en consola.
+- Scripts de Blender probados con Blender 5.2 y MPFB 2.0.17.
 
 ## Cómo ejecutarlo
 
-Requisitos: Node.js 20+ (probado con Node 24) y Blender 5.x para exportar el avatar.
+Requisitos: Node.js 20+ (probado con Node 24) y Blender 5.x para exportar avatares.
 
 ```bash
 npm install
@@ -28,15 +28,11 @@ npm test
 npm run dev
 ```
 
-Abre http://localhost:5173. Sin `public/models/avatar.glb` verás la **vista de respaldo** (letra grande +
-descripción). Para regenerar el GLB desde el `.blend`:
+Abre http://localhost:5173. Para generar o añadir avatares, ver `assets-src/README.md`. Por ejemplo:
 
 ```bash
-blender -b assets-src/avatar/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatar.glb
+blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
 ```
-
-El `.blend` debe tener un objeto armadura llamado `rig` y Actions llamadas `rest` y `sign_*`
-(ver [06-animation-clips.md](06-animation-clips.md)).
 
 ## Mapa de archivos
 
@@ -46,11 +42,13 @@ El `.blend` debe tener un objeto armadura llamado `rig` y Actions llamadas `rest
 | `src/core/text/normalize.ts` | Texto → tokens (tildes, Ñ, pausas, números, no soportados) |
 | `src/core/player/queue.ts` | Tokens → cola de reproducción ("AnimationQueue") |
 | `src/core/player/SignPlayer.ts` | Motor: estados, reloj, velocidad, saltos, bucle |
+| `src/avatar/avatars.ts` + `src/hooks/useAvatarChoice.ts` | Candidatos de avatar y elección del usuario |
 | `src/avatar/ClipDriver.ts` | Estado del motor → mezcla de AnimationClips |
 | `src/avatar/Avatar3D.tsx` | Escena R3F y carga del GLB |
 | `src/speech/speechToText.ts` | Interfaz de voz + Web Speech API |
-| `src/ui/*` | Controles, línea de tiempo, micrófono |
+| `src/ui/*` | Selector de avatar, controles, línea de tiempo, micrófono |
 | `tools/blender/*` | Exportación del GLB y ayudas para posar por script |
+| `assets-src/avatars/mpfb2/build_avatar.py` | Genera el candidato MPFB2 (CC0) de forma reproducible |
 
 ---
 
@@ -60,7 +58,7 @@ El `.blend` debe tener un objeto armadura llamado `rig` y Actions llamadas `rest
 {
   "name": "nexolsc",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -145,8 +143,18 @@ dist/
 *.blend@
 .DS_Store
 Thumbs.db
-~$*.xlsx
 tsconfig.tsbuildinfo
+__pycache__/
+
+# Documentos de gestión personales (no se publican)
+*.xlsx
+
+# Avatar de prueba con derechos de terceros (Miles Morales, Marvel/Sony):
+# solo para desarrollo local, nunca en el repositorio público.
+assets-src/avatars/miles-prueba/
+public/models/avatars/miles-prueba.glb
+
+# Los candidatos con licencia libre (p. ej. assets-src/avatars/mpfb2/, CC0) sí se versionan.
 ```
 
 ## `src/core/signs/types.ts`
@@ -872,6 +880,144 @@ export function usePlayerClock(player: SignPlayer) {
 }
 ```
 
+## `src/hooks/useAvatarChoice.ts`
+
+```ts
+import { useEffect, useState } from 'react';
+import { AVATARS, DEFAULT_AVATAR_ID, isModelAvailable, type AvatarOption } from '../avatar/avatars';
+
+const STORAGE_KEY = 'nexolsc.avatar';
+
+export interface AvatarChoice {
+  /** null mientras se comprueba qué GLB existen. */
+  available: Record<string, boolean> | null;
+  /** Avatar en uso; null si no hay ninguno disponible. */
+  selected: AvatarOption | null;
+  select: (id: string) => void;
+}
+
+/** Comprueba qué candidatos tienen GLB y recuerda la elección del usuario en este navegador. */
+export function useAvatarChoice(): AvatarChoice {
+  const [available, setAvailable] = useState<Record<string, boolean> | null>(null);
+  const [chosenId, setChosenId] = useState<string | null>(() => readStored());
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all(AVATARS.map(async (a) => [a.id, await isModelAvailable(a.url)] as const)).then((entries) => {
+      if (!cancelled) setAvailable(Object.fromEntries(entries));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const selected = available ? pickAvailable(available, chosenId) : null;
+
+  const select = (id: string) => {
+    setChosenId(id);
+    try {
+      localStorage.setItem(STORAGE_KEY, id);
+    } catch {
+      // Almacenamiento bloqueado (modo privado, etc.): la elección vale solo para esta sesión.
+    }
+  };
+
+  return { available, selected, select };
+}
+
+function pickAvailable(available: Record<string, boolean>, chosenId: string | null): AvatarOption | null {
+  const order = [chosenId, DEFAULT_AVATAR_ID, ...AVATARS.map((a) => a.id)];
+  const id = order.find((candidate) => candidate && available[candidate]);
+  return AVATARS.find((a) => a.id === id) ?? null;
+}
+
+function readStored(): string | null {
+  try {
+    return localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+```
+
+## `src/avatar/avatars.ts`
+
+```ts
+/**
+ * Candidatos de avatar para comparar. Cada uno es un GLB con el mismo contrato:
+ * esqueleto Rigify (huesos DEF-*) y clips "rest" + "sign_*".
+ * Fuentes y scripts de cada candidato: assets-src/avatars/<id>/
+ */
+export interface AvatarOption {
+  id: string;
+  name: string;
+  url: string;
+  license: string;
+  /** false = no puede publicarse (solo desarrollo local; su GLB está en .gitignore). */
+  publishable: boolean;
+}
+
+export const AVATARS: AvatarOption[] = [
+  {
+    id: 'mpfb2-caricatura',
+    name: 'MPFB2 · caricatura',
+    url: '/models/avatars/mpfb2-caricatura.glb',
+    license: 'CC0 (MakeHuman / MPFB2)',
+    publishable: true,
+  },
+  {
+    id: 'mpfb2',
+    name: 'MPFB2 · hombre joven',
+    url: '/models/avatars/mpfb2.glb',
+    license: 'CC0 (MakeHuman / MPFB2)',
+    publishable: true,
+  },
+  {
+    id: 'miles-prueba',
+    name: 'Prueba de pipeline (solo local)',
+    url: '/models/avatars/miles-prueba.glb',
+    license: 'Derechos de terceros — no publicar',
+    publishable: false,
+  },
+];
+
+export const DEFAULT_AVATAR_ID = 'mpfb2-caricatura';
+
+/**
+ * ¿Existe el GLB? Vite (y muchos hostings SPA) responden index.html con 200 para
+ * rutas inexistentes, así que además del estado se valida que no sea HTML.
+ */
+export async function isModelAvailable(url: string): Promise<boolean> {
+  try {
+    const r = await fetch(url, { method: 'HEAD' });
+    return r.ok && !(r.headers.get('content-type') ?? '').includes('text/html');
+  } catch {
+    return false;
+  }
+}
+```
+
+## `src/avatar/stage.ts`
+
+```ts
+/**
+ * Fondo del escenario del avatar.
+ *
+ * La imagen se muestra desenfocada y aclarada: el fondo da contexto (el lugar),
+ * pero no debe competir con las manos, que es lo que la persona necesita leer.
+ * Si el archivo no existe, el escenario queda con el gris liso de siempre.
+ */
+export const STAGE_BACKGROUND = {
+  url: '/backgrounds/sena.jpg',
+  /** Desenfoque en px. 0 = nítido (no recomendado para legibilidad de las manos). */
+  blurPx: 5,
+  /** Velo claro sobre la foto (0 = ninguno, 1 = gris liso). */
+  veil: 0.35,
+  /** Recorte de la foto: qué parte queda visible detrás del avatar. */
+  position: 'center 35%',
+};
+```
+
 ## `src/avatar/ClipDriver.ts`
 
 ```ts
@@ -960,7 +1106,7 @@ function easeInOut(x: number) {
 ## `src/avatar/Avatar3D.tsx`
 
 ```tsx
-import { Component, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { Component, Suspense, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { ContactShadows, OrbitControls, useGLTF } from '@react-three/drei';
 import { Box3, Vector3, type Object3D } from 'three';
@@ -968,41 +1114,65 @@ import type { SignPlayer } from '../core/player/SignPlayer';
 import { signRepository } from '../core/signs/SignRepository';
 import { ClipDriver } from './ClipDriver';
 import { AvatarPlaceholder } from './AvatarPlaceholder';
-
-const MODEL_URL = '/models/avatar.glb';
+import type { AvatarOption } from './avatars';
+import { STAGE_BACKGROUND } from './stage';
 
 interface Props {
   player: SignPlayer;
+  /** undefined = todavía comprobando; null = no hay ningún GLB disponible. */
+  avatar: AvatarOption | null | undefined;
   onMissingClips?: (letters: string[]) => void;
 }
 
-export function Avatar3D({ player, onMissingClips }: Props) {
-  const modelAvailable = useModelAvailable(MODEL_URL);
-
-  if (modelAvailable === null) return <div className="stage stage--loading">Cargando avatar…</div>;
-  if (!modelAvailable) return <AvatarPlaceholder player={player} reason="No se encontró /models/avatar.glb" />;
+export function Avatar3D({ player, avatar, onMissingClips }: Props) {
+  if (avatar === undefined) return <div className="stage stage--loading">Cargando avatar…</div>;
+  if (avatar === null) {
+    return <AvatarPlaceholder player={player} reason="No hay ningún avatar en public/models/avatars/" />;
+  }
 
   return (
     <div className="stage">
-      <ModelErrorBoundary fallback={<AvatarPlaceholder player={player} reason="Error al cargar el avatar" />}>
-        <Canvas camera={{ position: [0, 1.4, 1.35], fov: 30 }} dpr={[1, 2]}>
-          <color attach="background" args={['#e9ecef']} />
+      <StageBackground />
+      {/* key: al cambiar de avatar se reinicia el manejo de errores */}
+      <ModelErrorBoundary key={avatar.url} fallback={<AvatarPlaceholder player={player} reason={`Error al cargar ${avatar.name}`} />}>
+        {/* Lienzo transparente: el fondo lo pone StageBackground (CSS) */}
+        <Canvas camera={{ position: [0, 1.42, 1.6], fov: 30 }} dpr={[1, 2]} gl={{ alpha: true }}>
           <hemisphereLight args={['#ffffff', '#8a8f98', 1.2]} />
           <directionalLight position={[1.5, 2.5, 2]} intensity={1.6} />
           <directionalLight position={[-2, 2, -1]} intensity={0.6} />
           <Suspense fallback={null}>
-            <AvatarModel player={player} onMissingClips={onMissingClips} />
+            <AvatarModel key={avatar.url} url={avatar.url} player={player} onMissingClips={onMissingClips} />
             <ContactShadows position={[0, 0, 0]} opacity={0.35} blur={2.5} far={2} />
           </Suspense>
-          <OrbitControls target={[0, 1.3, 0]} enablePan={false} minDistance={0.8} maxDistance={3} />
+          <OrbitControls target={[0, 1.33, 0]} enablePan={false} minDistance={0.8} maxDistance={3} />
         </Canvas>
       </ModelErrorBoundary>
     </div>
   );
 }
 
-function AvatarModel({ player, onMissingClips }: Props) {
-  const { scene, animations } = useGLTF(MODEL_URL);
+/** Foto de fondo desenfocada y con un velo claro, para dar contexto sin restar legibilidad a las manos. */
+function StageBackground() {
+  const { url, blurPx, veil, position } = STAGE_BACKGROUND;
+  return (
+    <div className="stage__bg" aria-hidden="true">
+      <div
+        className="stage__bg-image"
+        style={{ backgroundImage: `url("${url}")`, backgroundPosition: position, filter: `blur(${blurPx}px)` }}
+      />
+      <div className="stage__bg-veil" style={{ opacity: veil }} />
+    </div>
+  );
+}
+
+interface ModelProps {
+  url: string;
+  player: SignPlayer;
+  onMissingClips?: (letters: string[]) => void;
+}
+
+function AvatarModel({ url, player, onMissingClips }: ModelProps) {
+  const { scene, animations } = useGLTF(url);
   const driverRef = useRef<ClipDriver | null>(null);
   const scale = useMemo(() => normalizeHeight(scene), [scene]);
 
@@ -1032,22 +1202,6 @@ function AvatarModel({ player, onMissingClips }: Props) {
 function normalizeHeight(scene: Object3D, targetHeight = 1.75) {
   const height = new Box3().setFromObject(scene).getSize(new Vector3()).y;
   return height > 0 ? targetHeight / height : 1;
-}
-
-/** Vite devuelve index.html (200) para rutas inexistentes, así que se valida el content-type. */
-function useModelAvailable(url: string) {
-  const [available, setAvailable] = useState<boolean | null>(null);
-  useEffect(() => {
-    let cancelled = false;
-    fetch(url, { method: 'HEAD' })
-      .then((r) => r.ok && !(r.headers.get('content-type') ?? '').includes('text/html'))
-      .catch(() => false)
-      .then((ok) => !cancelled && setAvailable(ok));
-    return () => {
-      cancelled = true;
-    };
-  }, [url]);
-  return available;
 }
 
 class ModelErrorBoundary extends Component<{ fallback: ReactNode; children: ReactNode }, { failed: boolean }> {
@@ -1336,6 +1490,38 @@ export function LetterTimeline({ player, missing }: { player: SignPlayer; missin
 }
 ```
 
+## `src/ui/AvatarSelector.tsx`
+
+```tsx
+import { AVATARS } from '../avatar/avatars';
+import type { AvatarChoice } from '../hooks/useAvatarChoice';
+
+/** Permite comparar los candidatos de avatar. Los que no tienen GLB aparecen deshabilitados. */
+export function AvatarSelector({ choice }: { choice: AvatarChoice }) {
+  const { available, selected, select } = choice;
+  if (!available) return null;
+
+  return (
+    <div className="avatar-selector">
+      <label htmlFor="avatar">Avatar</label>
+      <select id="avatar" value={selected?.id ?? ''} onChange={(e) => select(e.target.value)} disabled={!selected}>
+        {AVATARS.map((a) => (
+          <option key={a.id} value={a.id} disabled={!available[a.id]}>
+            {a.name}
+            {available[a.id] ? '' : ' (no disponible)'}
+          </option>
+        ))}
+      </select>
+      {selected && (
+        <span className={`avatar-selector__license ${selected.publishable ? '' : 'avatar-selector__license--warn'}`}>
+          Licencia: {selected.license}
+        </span>
+      )}
+    </div>
+  );
+}
+```
+
 ## `src/App.tsx`
 
 ```tsx
@@ -1346,6 +1532,8 @@ import { signRepository } from './core/signs/SignRepository';
 import { normalizeText } from './core/text/normalize';
 import { Avatar3D } from './avatar/Avatar3D';
 import { usePlayerClock } from './hooks/usePlayer';
+import { useAvatarChoice } from './hooks/useAvatarChoice';
+import { AvatarSelector } from './ui/AvatarSelector';
 import { PlayerControls } from './ui/PlayerControls';
 import { LetterTimeline } from './ui/LetterTimeline';
 import { SpeechButton } from './ui/SpeechButton';
@@ -1356,6 +1544,7 @@ export default function App() {
   const [display, setDisplay] = useState('');
   const [skipped, setSkipped] = useState<string[]>([]);
   const [missing, setMissing] = useState<string[]>([]);
+  const avatarChoice = useAvatarChoice();
   usePlayerClock(player);
 
   const spell = useCallback(
@@ -1417,7 +1606,12 @@ export default function App() {
         )}
       </form>
 
-      <Avatar3D player={player} onMissingClips={setMissing} />
+      <AvatarSelector choice={avatarChoice} />
+      <Avatar3D
+        player={player}
+        avatar={avatarChoice.available ? avatarChoice.selected : undefined}
+        onMissingClips={setMissing}
+      />
       <LetterTimeline player={player} missing={missing} />
       <PlayerControls player={player} />
 
@@ -1518,7 +1712,18 @@ body { margin: 0; background: var(--bg); }
 .speech__interim { color: var(--muted); font-style: italic; }
 .speech__error, .speech__unsupported { color: var(--danger); margin: 0; font-size: 0.9rem; }
 
-.stage { height: min(60vh, 520px); border-radius: var(--radius); overflow: hidden; background: var(--stage); border: 1px solid var(--border); }
+.avatar-selector { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.avatar-selector label { font-weight: 600; }
+.avatar-selector select { font: inherit; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+.avatar-selector__license { font-size: 0.85rem; color: var(--muted); }
+.avatar-selector__license--warn { color: var(--danger); }
+
+.stage { position: relative; height: min(60vh, 520px); border-radius: var(--radius); overflow: hidden; background: #e9ecef; border: 1px solid var(--border); }
+/* Fondo del escenario (src/avatar/stage.ts). inset negativo: oculta los bordes borrosos del desenfoque. */
+.stage__bg { position: absolute; inset: 0; pointer-events: none; }
+.stage__bg-image { position: absolute; inset: -16px; background-size: cover; background-repeat: no-repeat; }
+.stage__bg-veil { position: absolute; inset: 0; background: #eef1f4; }
+.stage--placeholder, .stage--loading { background: var(--stage); }
 .stage--loading { display: grid; place-items: center; color: var(--muted); }
 .stage--placeholder { display: grid; place-content: center; justify-items: center; text-align: center; padding: 16px; gap: 6px; }
 .placeholder__letter { font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; line-height: 1; }
@@ -1547,6 +1752,518 @@ body { margin: 0; background: var(--bg); }
 }
 ```
 
+## `tools/blender/mpfb_builder.py`
+
+```python
+"""
+Generador reutilizable de candidatos de avatar con MPFB 2 + Rigify.
+
+Cada candidato vive en assets-src/avatars/<id>/ y tiene un build_avatar.py que
+solo define su configuración y llama a build_candidate(). Requiere la extensión
+MPFB y el paquete "makehuman_system_assets" instalados en Blender.
+
+Salida en la carpeta del candidato:
+  avatar.blend   personaje + rig Rigify (armadura "rig"), listo para glTF
+  textures/      texturas copiadas y optimizadas para web
+  skin.mhmat     material de piel (mezcla de pieles CC0)
+
+Las poses (rest + letras) NO se crean aquí: las aplica tools/blender/bake_letters.py
+a cualquier avatar, para que las letras no dependan del avatar.
+"""
+import os
+
+import bpy
+import numpy as np
+
+bpy.ops.preferences.addon_enable(module='rigify')
+from bl_ext.blender_org.mpfb.services import (  # noqa: E402
+    AssetService, HumanService, LocationService, ObjectService, RigService, SystemService, TargetService,
+)
+
+TEXTURE_SIZE = 2048
+ALPHA_CUTOFF = 0.35
+
+
+def build_candidate(cfg, out_dir):
+    """cfg: dict con name, macro, targets, skin_mix, eyes_material, bodyparts, clothes, recolor."""
+    tex_dir = os.path.join(out_dir, 'textures')
+    os.makedirs(tex_dir, exist_ok=True)
+
+    _clear_scene()
+    basemesh = HumanService.create_human(scale=0.1, macro_detail_dict=cfg['macro'])  # 1 unidad = 1 m
+    basemesh.name = cfg['name']
+    if cfg.get('targets'):
+        # Detalles de cara/cuerpo; se aplican antes del rig y de la ropa para que ajusten a la forma final.
+        TargetService.bulk_load_targets(basemesh, cfg['targets'])
+
+    HumanService.add_builtin_rig(basemesh, 'rigify.human', import_weights=True)
+    skin = _build_skin(cfg, out_dir, tex_dir)
+    HumanService.set_character_skin(skin, basemesh, skin_type='GAMEENGINE', material_instances=False)
+
+    eyes = _asset('eyes', 'low-poly/low-poly.mhclo')
+    HumanService.add_mhclo_asset(eyes, basemesh, asset_type='eyes', subdiv_levels=0, material_type='MAKESKIN',
+                                 alternative_materials=_eye_material(eyes, cfg['eyes_material']))
+    for kind, fragment in cfg['bodyparts']:
+        HumanService.add_mhclo_asset(_asset(kind, fragment), basemesh, asset_type=kind, subdiv_levels=0, material_type='MAKESKIN')
+    for fragment in cfg['clothes']:
+        HumanService.add_mhclo_asset(_asset('clothes', fragment), basemesh, asset_type='Clothes', subdiv_levels=0, material_type='MAKESKIN')
+
+    metarig = ObjectService.find_object_of_type_amongst_nearest_relatives(basemesh, 'Skeleton')
+    assert SystemService.check_for_rigify(), 'Rigify no está habilitado'
+    rig = RigService.generate_rigify_rig(metarig, meta_rig_action='delete')
+    assert rig is not None, 'Rigify rechazó el metarig'
+    rig.name = 'rig'
+    _move_feet_to_ground(basemesh, rig)
+
+    _finalize_for_web(basemesh, rig)
+    alpha_keys = _alpha_keys(cfg)
+    _prepare_materials(alpha_keys)
+    _localize_textures(tex_dir, alpha_keys, cfg.get('recolor', {}))
+
+    blend_path = os.path.join(out_dir, 'avatar.blend')
+    bpy.ops.wm.save_as_mainfile(filepath=blend_path)
+    bpy.ops.file.make_paths_relative()  # texturas relativas a avatar.blend (//textures/...)
+    bpy.ops.wm.save_mainfile(filepath=blend_path)
+    missing = [i.name for i in bpy.data.images if i.source == 'FILE' and not os.path.isfile(bpy.path.abspath(i.filepath))]
+    assert not missing, f'Texturas no encontradas: {missing}'
+
+    height = _height(basemesh)
+    print(f'[ok] {blend_path}')
+    print(f'[altura] {height:.3f} m')
+    print('[rig] huesos', len(rig.data.bones), 'deformación', sum(b.use_deform for b in rig.data.bones))
+    for o in bpy.data.objects:
+        if o.type == 'MESH' and o.parent == rig:
+            print('[malla]', o.name, len(o.data.vertices), 'vértices')
+    return basemesh, rig
+
+
+# --- Pasos ---------------------------------------------------------------------
+
+def _clear_scene():
+    for obj in list(bpy.data.objects):
+        bpy.data.objects.remove(obj, do_unlink=True)
+
+
+def _asset(subdir, fragment):
+    path = AssetService.find_asset_absolute_path(fragment, subdir)
+    if not path:
+        raise SystemExit(f'No se encontró el recurso {subdir}/{fragment}. ¿Está instalado el paquete de MakeHuman?')
+    return path
+
+
+def _eye_material(eyes_path, material):
+    from bl_ext.blender_org.mpfb.entities.clothes.mhclo import Mhclo
+    mhclo = Mhclo()
+    mhclo.load(eyes_path, only_metadata=True)
+    return {mhclo.uuid: f'materials/{material}.mhmat'} if mhclo.uuid else None
+
+
+def _build_skin(cfg, out_dir, tex_dir):
+    """Mezcla pieles CC0 (todas comparten el mismo mapa UV) según cfg['skin_mix'] = [(nombre, peso), ...]."""
+    skins_dir = LocationService.get_user_data('skins')
+    mix = cfg['skin_mix']
+    total = sum(w for _, w in mix)
+    acc = np.zeros(TEXTURE_SIZE * TEXTURE_SIZE * 4, dtype=np.float32)
+    for name, weight in mix:
+        folder = os.path.join(skins_dir, name)
+        img = bpy.data.images.load(os.path.join(folder, _mhmat_diffuse(os.path.join(folder, name + '.mhmat'))))
+        img.scale(TEXTURE_SIZE, TEXTURE_SIZE)
+        px = np.empty_like(acc)
+        img.pixels.foreach_get(px)
+        acc += px * (weight / total)
+        bpy.data.images.remove(img)
+    out = bpy.data.images.new('skin_diffuse', TEXTURE_SIZE, TEXTURE_SIZE)
+    out.pixels.foreach_set(acc)
+    out.filepath_raw = os.path.join(tex_dir, 'skin_diffuse.png')
+    out.file_format = 'PNG'
+    out.save()
+
+    # mhmat propio que apunta a la textura mezclada (basado en el de la primera piel).
+    first = mix[0][0]
+    lines = []
+    with open(os.path.join(skins_dir, first, first + '.mhmat'), encoding='utf-8') as fh:
+        for line in fh:
+            if line.startswith('name '):
+                line = f'name {cfg["name"]}_skin\n'
+            elif line.startswith('diffuseTexture '):
+                line = 'diffuseTexture textures/skin_diffuse.png\n'
+            elif line.split(' ')[0] in ('normalmapTexture', 'specularmapTexture', 'bumpmapTexture', 'transmissionmapTexture'):
+                continue
+            lines.append(line)
+    mhmat = os.path.join(out_dir, 'skin.mhmat')
+    with open(mhmat, 'w', encoding='utf-8') as fh:
+        fh.writelines(lines)
+    return mhmat
+
+
+def _mhmat_diffuse(mhmat_path):
+    """Nombre del archivo de textura difusa declarado en un .mhmat (no siempre termina en _diffuse.png)."""
+    with open(mhmat_path, encoding='utf-8') as fh:
+        for line in fh:
+            if line.startswith('diffuseTexture '):
+                return line.split(' ', 1)[1].strip()
+    raise ValueError(f'{mhmat_path} no declara diffuseTexture')
+
+
+def _move_feet_to_ground(basemesh, rig):
+    bpy.context.view_layer.update()
+    lowest = min((basemesh.matrix_world @ v.co).z for v in basemesh.data.vertices)
+    rig.location.z -= lowest
+
+
+def _height(basemesh):
+    bpy.context.view_layer.update()
+    zs = [(basemesh.matrix_world @ v.co).z for v in basemesh.data.vertices]
+    return max(zs) - min(zs)
+
+
+def _finalize_for_web(basemesh, rig):
+    """Deja el personaje listo para glTF: sin shape keys, sin máscaras, un solo Armature."""
+    bpy.ops.object.select_all(action='DESELECT')
+    bpy.context.view_layer.objects.active = basemesh
+    basemesh.select_set(True)
+
+    # glTF admite un solo esqueleto por malla; "Armature PV" (preservar volumen) no se exporta.
+    for m in list(basemesh.modifiers):
+        if m.type == 'ARMATURE' and m.name != 'Armature':
+            basemesh.modifiers.remove(m)
+
+    # Hornear el fenotipo y los detalles (shape keys de MakeHuman) en la malla.
+    if basemesh.data.shape_keys:
+        bpy.ops.object.shape_key_remove(all=True, apply_mix=True)
+
+    # Aplicar máscaras: quitan la geometría auxiliar y el cuerpo oculto bajo la ropa.
+    for m in [m for m in basemesh.modifiers if m.type == 'MASK']:
+        bpy.ops.object.modifier_move_to_index(modifier=m.name, index=0)
+        bpy.ops.object.modifier_apply(modifier=m.name)
+
+    # Brazos en FK: así se posan con los controles *_fk (ver tools/blender/pose_helpers.py).
+    for side in ('L', 'R'):
+        rig.pose.bones[f'upper_arm_parent.{side}']['IK_FK'] = 1.0
+
+
+def _alpha_keys(cfg):
+    """Materiales/texturas con transparencia real: pelo, cejas y pestañas."""
+    keys = ['eyebrow', 'eyelashes']
+    keys += [os.path.basename(frag).split('.')[0] for kind, frag in cfg['bodyparts'] if kind == 'hair']
+    return keys
+
+
+def _prepare_materials(alpha_keys):
+    """Ajusta los materiales de MakeHuman para glTF / three.js.
+
+    MakeHuman conecta el alfa de la textura en todos los materiales, y el exportador
+    glTF los marca entonces como BLEND (transparentes). En three.js eso causa errores
+    de orden de dibujo (p. ej. ver el cuerpo a través de la camisa). Aquí:
+      - opacos (piel, ropa, zapatos, ojos, dientes): alfa desconectada -> OPAQUE, una cara;
+      - pelo/cejas/pestañas: alfa recortada 1 - (alfa < corte) -> MASK, sin ordenamiento.
+    """
+    for mat in bpy.data.materials:
+        if not mat.users or not mat.node_tree:
+            continue
+        nt = mat.node_tree
+        bsdf = next((n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED'), None)
+        if bsdf is None:
+            continue
+        alpha_in = bsdf.inputs['Alpha']
+        source = alpha_in.links[0].from_socket if alpha_in.is_linked else None
+        for link in list(alpha_in.links):
+            nt.links.remove(link)
+        alpha_in.default_value = 1.0
+
+        if any(key in mat.name for key in alpha_keys) and source is not None:
+            less = nt.nodes.new('ShaderNodeMath')
+            less.operation = 'LESS_THAN'
+            less.inputs[1].default_value = ALPHA_CUTOFF
+            one_minus = nt.nodes.new('ShaderNodeMath')
+            one_minus.operation = 'SUBTRACT'
+            one_minus.inputs[0].default_value = 1.0
+            nt.links.new(source, less.inputs[0])
+            nt.links.new(less.outputs[0], one_minus.inputs[1])
+            nt.links.new(one_minus.outputs[0], alpha_in)
+            mat.use_backface_culling = False
+        else:
+            mat.use_backface_culling = True
+            # Nodos de textura que solo alimentaban el alfa quedan huérfanos: se eliminan.
+            for node in [n for n in nt.nodes if n.type == 'TEX_IMAGE' and not any(o.is_linked for o in n.outputs)]:
+                nt.nodes.remove(node)
+
+
+def _texture_policy(stem, alpha_keys):
+    """(formato, tamaño máximo). Solo lo que tiene transparencia real va en PNG: el exportador
+    glTF guarda en PNG toda imagen con canal alfa aunque sea opaca, y eso triplica el peso."""
+    if 'skin_diffuse' in stem:
+        return 'JPEG', 2048
+    if any(key in stem for key in alpha_keys):
+        return 'PNG', 1024 if 'eyebrow' not in stem and 'eyelashes' not in stem else 512
+    for key, size in (('shoes', 512), ('_normal', 1024), ('_ao', 512), ('_eye', 512), ('teeth', 512)):
+        if key in stem:
+            return 'JPEG', size
+    return 'JPEG', 1024  # ropa
+
+
+RECOLORS = {}
+
+
+def recolor(name):
+    def register(fn):
+        RECOLORS[name] = fn
+        return fn
+    return register
+
+
+@recolor('casualsuit06_black_tee')
+def _casualsuit06_black_tee(px, w, h):
+    """male_casualsuit06: la camiseta blanca (franja superior del mapa UV, ~43 %) pasa a negro.
+
+    Se conservan las arrugas (luminancia) y se borra el logo de MakeHuman: los píxeles
+    saturados u oscuros de la camiseta se sustituyen por la luminancia típica de la tela.
+    Los jeans (resto del mapa) no se tocan.
+    """
+    img = px.reshape(h, w, 4)                 # Blender guarda las filas de abajo hacia arriba
+    shirt = img[int(h * (1 - 0.43)):, :, :3]
+    lum = shirt @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
+    mx, mn = shirt.max(axis=2), shirt.min(axis=2)
+    sat = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1e-6), 0)
+    typical = float(np.median(lum))
+    lum = np.where((sat > 0.12) | (lum < typical - 0.12), typical, lum)  # logo y texto -> tela lisa
+    shade = np.clip(lum / max(typical, 1e-6), 0.6, 1.15)
+    shirt[:] = (shade * 0.11)[..., None]      # negro con un poco de volumen
+    return px
+
+
+@recolor('iris_dark_brown')
+def _iris_dark_brown(px, w, h):
+    """El iris "brown" de MakeHuman es café rojizo; se lleva a café oscuro conservando el detalle."""
+    img = px.reshape(-1, 4)
+    rgb = img[:, :3]
+    mx, mn = rgb.max(axis=1), rgb.min(axis=1)
+    sat = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1e-6), 0)
+    iris = sat > 0.3                                   # la esclerótica es casi gris
+    lum = rgb[iris] @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
+    rgb[iris] = np.clip(lum[:, None] * np.array([1.9, 1.25, 0.8], dtype=np.float32), 0, 1)
+    return px
+
+
+def _localize_textures(tex_dir, alpha_keys, recolor_cfg):
+    """Copia cada textura a ./textures, reducida y en el formato adecuado para web."""
+    leftovers = set()
+    for img in bpy.data.images:
+        if img.source != 'FILE' or not img.filepath:
+            continue
+        src = os.path.abspath(bpy.path.abspath(img.filepath))
+        stem = os.path.splitext(os.path.basename(src))[0]
+        fmt, max_size = _texture_policy(stem, alpha_keys)
+        dest = os.path.join(tex_dir, stem + ('.jpg' if fmt == 'JPEG' else '.png'))
+        if os.path.normcase(src) != os.path.normcase(dest):
+            w, h = img.size
+            if max(w, h) > max_size:
+                f = max_size / max(w, h)
+                img.scale(int(w * f), int(h * f))
+            for key, name in recolor_cfg.items():
+                if key in stem:
+                    w, h = img.size
+                    px = np.empty(w * h * 4, dtype=np.float32)
+                    img.pixels.foreach_get(px)
+                    img.pixels.foreach_set(RECOLORS[name](px, w, h).ravel())
+            img.filepath_raw = dest
+            img.file_format = fmt
+            img.save(quality=88)
+            if os.path.dirname(src) == tex_dir:
+                leftovers.add(src)  # p. ej. skin_diffuse.png generada por _build_skin
+        # Ruta absoluta por ahora: el .blend aún no está guardado; se hace relativa al guardar.
+        img.filepath = dest
+        img.reload()  # recargar sin canal alfa si pasó a JPEG
+    for path in leftovers:
+        os.remove(path)
+```
+
+## `tools/blender/bake_letters.py`
+
+```python
+"""
+Aplica las letras del alfabeto (definidas como DATOS, independientes del avatar)
+a cualquier avatar con rig Rigify y crea una Action por letra.
+
+Uso:
+  blender -b assets-src/avatars/<id>/avatar.blend --python tools/blender/bake_letters.py
+  blender -b <avatar.blend> --python tools/blender/bake_letters.py -- --poses assets-src/letters/alfabeto_lsc.json
+
+Crea/reemplaza las Actions: rest, sign_A … sign_Z, sign_ENYE y guarda el .blend.
+Después se exporta con tools/blender/export_avatar.py.
+
+Formato de cada letra (ángulos en grados, ejes LOCALES del rig Rigify, mano derecha):
+  fingers.<index|middle|ring|pinky> = [mcp, pip, dip, spread]   (X local; spread = Z local, + hacia el pulgar)
+  thumb = [cmc_x, cmc_z, cmc_y, mcp, ip]
+          cmc_x + hacia el índice · cmc_z + hacia la palma / − hacia afuera · cmc_y giro · mcp/ip flexión
+  arm   = {twist, flex, dev, swing, lift, tilt}   (ajustes sobre la postura base de señado)
+          twist: giro del antebrazo (orientación de la palma) · flex/dev: muñeca
+          swing/lift: desplazan la mano rotando el hombro (+ derecha del espectador / + arriba)
+          tilt: inclina el antebrazo en el plano frontal
+          hand_dir: [x, y, z] dirección (mundo) a la que apuntan los dedos; por defecto hacia arriba
+          forearm_dir: [x, y, z] dirección (mundo) del antebrazo, si la postura base no sirve (P)
+          Ejes del mundo: +X izquierda del avatar (derecha del espectador), −Y hacia el espectador, +Z arriba
+  motion = [{t, ...mismos campos que arm, fingers/thumb opcionales}]  (solo letras dinámicas)
+"""
+import json
+import math
+import os
+import sys
+
+import bpy
+from mathutils import Quaternion, Vector
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+sys.path.insert(0, HERE)
+import pose_helpers as P  # noqa: E402
+
+FPS = 24
+FINGERS = ('index', 'middle', 'ring', 'pinky')
+BONE = {'index': 'f_index', 'middle': 'f_middle', 'ring': 'f_ring', 'pinky': 'f_pinky'}
+
+
+def load_poses():
+    argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
+    path = argv[argv.index('--poses') + 1] if '--poses' in argv else os.path.join(ROOT, 'assets-src', 'letters', 'alfabeto_lsc.json')
+    with open(path, encoding='utf-8') as fh:
+        return json.load(fh)
+
+
+def local(bone, axis, deg):
+    if deg:
+        P._post_multiply(P.pb[bone], Quaternion(Vector(axis), math.radians(deg)))
+
+
+def apply_hand(fingers, thumb, side='R'):
+    for name in FINGERS:
+        mcp, pip, dip, spread = fingers.get(name, [0, 0, 0, 0])
+        b = BONE[name]
+        local(f'{b}.01.{side}', (0, 0, 1), spread)
+        local(f'{b}.01.{side}', (1, 0, 0), mcp)
+        local(f'{b}.02.{side}', (1, 0, 0), pip)
+        local(f'{b}.03.{side}', (1, 0, 0), dip)
+    cmc_x, cmc_z, cmc_y, mcp, ip = thumb
+    local(f'thumb.01.{side}', (0, 0, 1), cmc_z)
+    local(f'thumb.01.{side}', (1, 0, 0), cmc_x)
+    local(f'thumb.01.{side}', (0, 1, 0), cmc_y)
+    local(f'thumb.02.{side}', (1, 0, 0), mcp)
+    local(f'thumb.03.{side}', (1, 0, 0), ip)
+
+
+def apply_arm(arm):
+    """Ajustes sobre la postura de señado. swing/lift rotan el hombro alrededor de ejes del mundo."""
+    swing, lift = arm.get('swing', 0), arm.get('lift', 0)
+    if swing:
+        P.rot_world('upper_arm_fk.R', (0, 0, 1), swing)
+    if lift:
+        P.rot_world('upper_arm_fk.R', (1, 0, 0), -lift)
+    P.upd()
+    if 'forearm_dir' in arm:  # p. ej. antebrazo hacia adelante para que la mano apunte abajo (P)
+        P.aim('forearm_fk.R', arm['forearm_dir'])
+    tilt = arm.get('tilt', 0)
+    if tilt:  # inclina el antebrazo en el plano frontal (p. ej. dedos horizontales en la H)
+        P.rot_world('forearm_fk.R', (0, 1, 0), tilt)
+        P.upd()
+    twist = arm.get('twist', 0)
+    if twist:
+        fk = P.pb['forearm_fk.R']
+        P.rot_world('forearm_fk.R', fk.matrix.to_3x3() @ Vector((0, 1, 0)), twist)
+    # Tras girar el antebrazo, se vuelve a orientar la mano: el giro cambia hacia dónde mira
+    # la palma, pero los dedos siguen apuntando a hand_dir (por defecto, hacia arriba).
+    P.aim('hand_fk.R', arm.get('hand_dir', DEFAULT_HAND_DIR))
+    local('hand_fk.R', (1, 0, 0), arm.get('flex', 0))
+    local('hand_fk.R', (0, 0, 1), arm.get('dev', 0))
+    P.upd()
+
+
+ARM_KEYS = ('twist', 'flex', 'dev', 'swing', 'lift', 'tilt')
+DEFAULT_HAND_DIR = (0.0, -0.1, 1.0)  # dedos hacia arriba, levemente hacia adelante
+
+
+def pose_letter(base, override=None, defaults=None):
+    """Postura completa: base de señado + mano + brazo.
+
+    Los valores de brazo se SUMAN: defaults (p. ej. palma al frente) + letra + fotograma de movimiento.
+    """
+    override = override or {}
+    P.reset()
+    P.arm_signing_space()
+    arm = {}
+    for layer in ((defaults or {}).get('arm', {}), base.get('arm', {}), override):
+        for key in ARM_KEYS:
+            if key in layer:
+                arm[key] = arm.get(key, 0) + layer[key]
+        for key in ('hand_dir', 'forearm_dir'):  # direcciones absolutas: la última capa gana
+            if key in layer:
+                arm[key] = layer[key]
+    apply_arm(arm)
+    fingers = dict(base['fingers'])
+    fingers.update(override.get('fingers', {}))
+    apply_hand(fingers, override.get('thumb', base['thumb']))
+    P.upd()
+
+
+def pose_rest():
+    P.reset()
+    P.aim('upper_arm_fk.R', (-0.15, 0.05, -1)); P.aim('forearm_fk.R', (-0.05, -0.1, -1))
+    P.aim('upper_arm_fk.L', (0.15, 0.05, -1)); P.aim('forearm_fk.L', (0.05, -0.1, -1))
+
+
+def key_pose(action, frame):
+    for b in P.pb:
+        path = 'rotation_quaternion' if b.rotation_mode == 'QUATERNION' else 'rotation_euler'
+        b.keyframe_insert(path, frame=frame, group=b.name)
+        b.keyframe_insert('location', frame=frame, group=b.name)
+
+
+def new_action(name):
+    old = bpy.data.actions.get(name)
+    if old:
+        bpy.data.actions.remove(old)
+    act = bpy.data.actions.new(name)
+    act.use_fake_user = True
+    P.rig.animation_data_create()
+    P.rig.animation_data.action = act
+    return act
+
+
+def clip_name(letter):
+    return 'sign_ENYE' if letter == 'Ñ' else f'sign_{letter}'
+
+
+def main():
+    data = load_poses()
+    # rest
+    pose_rest()
+    new_action('rest'); key_pose(None, 1)
+
+    for letter, spec in data['letters'].items():
+        motion = spec.get('motion')
+        # new_action antes de posar: reset() desasigna la Action anterior (evita que se sumen)
+        P.reset()
+        act = new_action(clip_name(letter))
+        defaults = data.get('defaults', {})
+        if not motion:
+            pose_letter(spec, defaults=defaults)
+            P.rig.animation_data.action = act
+            key_pose(act, 1)
+        else:
+            frames = max(2, round(spec.get('duration_s', 0.95) * FPS))
+            for kf in motion:
+                pose_letter(spec, kf, defaults)
+                P.rig.animation_data.action = act
+                key_pose(act, 1 + round(kf['t'] * (frames - 1)))
+        P.rig.animation_data.action = None
+    P.reset()
+    bpy.ops.wm.save_mainfile()
+    print('[ok] Actions:', sorted(a.name for a in bpy.data.actions if a.name == 'rest' or a.name.startswith('sign_')))
+
+
+if __name__ == '__main__':
+    main()
+```
+
 ## `tools/blender/export_avatar.py`
 
 ```python
@@ -1554,7 +2271,7 @@ body { margin: 0; background: var(--bg); }
 Prepara y exporta el avatar de NexoLSC a GLB con un AnimationClip por seña.
 
 Uso (sin abrir la interfaz de Blender):
-  blender -b assets-src/avatar/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatar.glb
+  blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
 
 Qué hace:
   1. Deja UNA sola armadura deformando la malla (quita modificadores Armature extra).
@@ -1647,7 +2364,13 @@ def upd():
 
 
 def reset():
-    """Vuelve todos los huesos a la pose de descanso del rig."""
+    """Vuelve todos los huesos a la pose de descanso del rig.
+
+    También desasigna la Action activa: si no, al actualizar la escena Blender
+    vuelve a aplicar sus fotogramas clave y la pose anterior se suma a la nueva.
+    """
+    if rig.animation_data:
+        rig.animation_data.action = None
     for b in pb:
         b.location = (0, 0, 0)
         if b.rotation_mode == 'QUATERNION':
@@ -1657,16 +2380,26 @@ def reset():
     upd()
 
 
+def _post_multiply(b, q):
+    """Aplica una rotación local sin importar el modo de rotación del hueso (cuaternión o Euler).
+
+    Ojo: en el Rigify actual los dedos usan Euler XYZ y los brazos cuaterniones.
+    Escribir solo rotation_quaternion en un hueso Euler no tiene efecto.
+    """
+    if b.rotation_mode == 'QUATERNION':
+        b.rotation_quaternion = b.rotation_quaternion @ q
+    elif b.rotation_mode == 'AXIS_ANGLE':
+        raise ValueError(f'{b.name}: modo AXIS_ANGLE no soportado')
+    else:
+        b.rotation_euler = (b.rotation_euler.to_quaternion() @ q).to_euler(b.rotation_mode, b.rotation_euler)
+
+
 def rot_world(name, axis, deg):
     """Rota el hueso alrededor de un eje en espacio de armadura, respetando la pose actual."""
     b = pb[name]
     upd()
     axis_local = (b.matrix.to_3x3().inverted() @ Vector(axis)).normalized()
-    q = Quaternion(axis_local, math.radians(deg))
-    if b.rotation_mode == 'QUATERNION':
-        b.rotation_quaternion = b.rotation_quaternion @ q
-    else:
-        b.rotation_euler = (b.rotation_euler.to_quaternion() @ q).to_euler(b.rotation_mode)
+    _post_multiply(b, Quaternion(axis_local, math.radians(deg)))
     upd()
 
 
@@ -1685,7 +2418,7 @@ def curl(finger, deg, side='R'):
     """Flexiona las 3 falanges de un dedo (X local positivo = cerrar)."""
     for i, k in enumerate(['01', '02', '03']):
         b = pb[f'{finger}.{k}.{side}']
-        b.rotation_quaternion = b.rotation_quaternion @ Quaternion((1, 0, 0), math.radians(deg * (0.8 if i == 0 else 1.0)))
+        _post_multiply(b, Quaternion((1, 0, 0), math.radians(deg * (0.8 if i == 0 else 1.0))))
     upd()
 
 
@@ -1708,4 +2441,128 @@ def key_action(action_name, frame=1):
         b.keyframe_insert('rotation_quaternion' if b.rotation_mode == 'QUATERNION' else 'rotation_euler', frame=frame)
         b.keyframe_insert('location', frame=frame)
     return act
+```
+
+## `assets-src/avatars/mpfb2/build_avatar.py`
+
+```python
+"""
+Candidato "mpfb2": hombre joven adulto, realista (MPFB 2 + Rigify, recursos CC0).
+
+  blender -b --python assets-src/avatars/mpfb2/build_avatar.py
+  blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/bake_letters.py
+  blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
+
+Ver tools/blender/mpfb_builder.py y LICENSE.md.
+"""
+import os
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'tools', 'blender'))
+from mpfb_builder import build_candidate  # noqa: E402
+
+CONFIG = {
+    'name': 'nexolsc_mpfb2',
+    'macro': {
+        'gender': 1.0,        # 0 = mujer, 1 = hombre
+        'age': 0.5,           # 0.5 ≈ 25 años en MakeHuman
+        'muscle': 0.55,
+        'weight': 0.5,
+        'proportions': 0.6,
+        'height': 0.6,        # ≈ 1,71 m (0.5 → 1,59 m; 0.8 → 1,97 m)
+        'cupsize': 0.5,
+        'firmness': 0.5,
+        'race': {'african': 0.45, 'caucasian': 0.35, 'asian': 0.20},
+    },
+    'targets': [],
+    'skin_mix': [('young_african_male', 0.5), ('young_caucasian_male', 0.5)],
+    'eyes_material': 'brown',
+    'bodyparts': [
+        ('eyebrows', 'eyebrow001/eyebrow001.mhclo'),
+        ('eyelashes', 'eyelashes01/eyelashes01.mhclo'),
+        ('teeth', 'teeth_base/teeth_base.mhclo'),
+        ('hair', 'short02/short02.mhclo'),
+    ],
+    'clothes': ['male_casualsuit01/male_casualsuit01.mhclo', 'shoes01/shoes01.mhclo'],
+}
+
+if __name__ == '__main__':
+    build_candidate(CONFIG, HERE)
+```
+
+## `assets-src/avatars/mpfb2-caricatura/build_avatar.py`
+
+```python
+"""
+Candidato "mpfb2-caricatura": versión caricaturesca inspirada en los rasgos del autor
+del proyecto (MPFB 2 + Rigify, recursos CC0).
+
+Rasgos buscados (de sus fotos): hombre de unos 20 años, piel trigueña clara, cara
+redonda y llena, cejas negras gruesas y rectas, ojos cafés, nariz ancha, labios
+llenos, pelo negro peinado hacia arriba y atrás con los lados cortos, camiseta
+negra. Rasgo caricaturesco: cabeza, ojos y manos algo más grandes (las manos
+grandes además ayudan a leer las señas).
+
+  blender -b --python assets-src/avatars/mpfb2-caricatura/build_avatar.py
+  blender -b assets-src/avatars/mpfb2-caricatura/avatar.blend --python tools/blender/bake_letters.py
+  blender -b assets-src/avatars/mpfb2-caricatura/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2-caricatura.glb
+"""
+import os
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'tools', 'blender'))
+from mpfb_builder import build_candidate  # noqa: E402
+
+
+def t(name, value):
+    return {'target': name, 'value': value}
+
+
+CONFIG = {
+    'name': 'nexolsc_caricatura',
+    'macro': {
+        'gender': 1.0,
+        'age': 0.44,          # principios de los 20
+        'muscle': 0.45,
+        'weight': 0.68,       # complexión llena
+        'proportions': 0.35,  # menos "ideal", más caricatura
+        'height': 0.63,       # ≈ 1,65 m
+        'cupsize': 0.5,
+        'firmness': 0.5,
+        'race': {'caucasian': 0.55, 'asian': 0.25, 'african': 0.20},
+    },
+    'targets': [
+        # Cabeza más grande y redonda (rasgo caricaturesco + cara llena)
+        t('head-round', 0.7), t('head-fat-incr', 0.5),
+        t('head-scale-horiz-incr', 0.6), t('head-scale-vert-incr', 0.55), t('head-scale-depth-incr', 0.5),
+        t('l-cheek-volume-incr', 0.5), t('r-cheek-volume-incr', 0.5),
+        t('chin-width-incr', 0.3), t('neck-double-incr', 0.15),
+        # Ojos más grandes
+        t('l-eye-scale-incr', 0.8), t('r-eye-scale-incr', 0.8),
+        # Nariz ancha y labios llenos
+        t('nose-scale-horiz-incr', 0.4), t('nose-volume-incr', 0.35), t('nose-point-width-incr', 0.35),
+        t('mouth-upperlip-volume-incr', 0.25), t('mouth-lowerlip-volume-incr', 0.35),
+        # Cejas un poco más bajas y rectas (mirada seria)
+        t('eyebrows-angle-down', 0.2),
+        # Manos más grandes y dedos algo más gruesos: se leen mejor las configuraciones
+        t('l-hand-scale-incr', 0.5), t('r-hand-scale-incr', 0.5),
+        t('l-hand-fingers-diameter-incr', 0.2), t('r-hand-fingers-diameter-incr', 0.2),
+    ],
+    'skin_mix': [('young_caucasian_male', 0.55), ('young_asian_male', 0.25), ('young_african_male', 0.20)],
+    'eyes_material': 'brown',
+    'bodyparts': [
+        ('eyebrows', 'eyebrow009/eyebrow009.mhclo'),   # gruesas y rectas
+        ('eyelashes', 'eyelashes01/eyelashes01.mhclo'),
+        ('teeth', 'teeth_base/teeth_base.mhclo'),
+        ('hair', 'short04/short04.mhclo'),             # negro, peinado hacia arriba/atrás
+    ],
+    'clothes': ['male_casualsuit06/male_casualsuit06.mhclo', 'shoes02/shoes02.mhclo'],
+    # La camiseta de casualsuit06 es blanca: se pasa a negro sin tocar los jeans.
+    'recolor': {'male_casualsuit06_diffuse': 'casualsuit06_black_tee', 'brown_eye': 'iris_dark_brown'},
+}
+
+if __name__ == '__main__':
+    build_candidate(CONFIG, HERE)
 ```
