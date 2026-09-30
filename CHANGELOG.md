@@ -7,6 +7,15 @@ Todos los cambios relevantes del proyecto. Formato basado en
 Mientras la versión sea `0.x`, el MVP no se considera estable: una versión menor (`0.2.0`, `0.3.0`)
 puede cambiar formatos de datos o la estructura del proyecto.
 
+## [0.2.1] - 2026-09-29
+
+### Añadido
+- Foto de fondo del escenario: sede del SENA, nuevo Centro de la Amazonía (Florencia, Caquetá),
+  en `public/backgrounds/sena.jpg`. Se muestra desenfocada y con velo claro detrás del avatar.
+
+### Cambiado
+- Enlaces del changelog actualizados al nombre actual del repositorio (`NexoLSC`).
+
 ## [0.2.0] - 2026-09-29
 
 ### Añadido
@@ -47,5 +56,6 @@ puede cambiar formatos de datos o la estructura del proyecto.
 - Scripts de Blender para limpiar y exportar avatares a GLB.
 - 15 pruebas con Vitest.
 
-[0.2.0]: https://github.com/JhonatanC4STRO/NexoLSc/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/JhonatanC4STRO/NexoLSc/releases/tag/v0.1.0
+[0.2.1]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/JhonatanC4STRO/NexoLSC/releases/tag/v0.1.0

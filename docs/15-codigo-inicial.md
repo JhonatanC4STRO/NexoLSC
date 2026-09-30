@@ -58,7 +58,7 @@ blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_a
 {
   "name": "nexolsc",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
