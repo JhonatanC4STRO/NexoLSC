@@ -1,22 +1,20 @@
 # 14 · Plan de trabajo
 
 > **En pocas palabras:** el trabajo está dividido en **9 épicas** (grandes bloques). Las cuatro primeras ya
-> están hechas; ahora lo más importante es que **personas sordas validen las 27 letras**. Este plan se
-> lleva en **Jira**; aquí queda el resumen y el archivo para importarlo.
+> están hechas; ahora lo más importante es que **personas sordas validen las 27 letras**. Este documento
+> es **el** plan: aquí se marca lo que se termina y se añade lo nuevo.
 
 Una **épica** es un bloque grande de trabajo; dentro tiene **tareas** pequeñas que se pueden terminar en
 uno o pocos días. Cada épica termina con algo que se puede probar.
 
-## Dónde se lleva el plan
+## Cómo usar este plan
 
-- **En Jira:** cada épica y cada tarea de este documento es un elemento de Jira.
-- **Archivo para importar:** [`jira/plan-nexolsc.csv`](jira/plan-nexolsc.csv). En Jira: *Configuración del
-  proyecto → Importar elementos (CSV)*, o *Filtros → Importar desde CSV*. Al importar, une la columna
-  **Parent** con la columna **Issue ID** para que cada tarea quede dentro de su épica, y la columna
-  **Status** con los estados de tu tablero (*Por hacer*, *En curso*, *Listo*).
-- **Este documento** es el resumen. Si Jira y este archivo no coinciden, manda Jira.
+- Cuando termines una tarea, cambia `- [ ]` por `- [x]`. Si se termina una épica completa, actualiza
+  también la tabla «Cómo va».
+- Si aparece trabajo nuevo, añádelo como tarea dentro de su épica (o crea una épica nueva, NX-10…).
+- Al publicar una versión, anota en el `CHANGELOG.md` qué tareas se terminaron.
 
-## Cómo va (v0.4.0, 2026-10-08)
+## Cómo va (v0.4.1, 2026-10-08)
 
 | # | Épica | Estado |
 |---|---|---|
@@ -28,7 +26,7 @@ uno o pocos días. Cada épica termina con algo que se puede probar.
 | NX-6 | Validación con la comunidad sorda | ⏳ Por hacer — **es lo siguiente más importante** |
 | NX-7 | Pantalla y marca | 🟡 En curso |
 | NX-8 | Publicar la página | ⏳ Por hacer |
-| NX-9 | Documentación | 🟡 En curso |
+| NX-9 | Documentación | ✅ Hecha |
 
 ## Las épicas y sus tareas
 
@@ -102,13 +100,13 @@ uno o pocos días. Cada épica termina con algo que se puede probar.
 - [ ] Política de privacidad (en Chrome, la voz pasa por servidores de Google).
 - [ ] Publicar en un servicio de páginas estáticas con HTTPS.
 
-### NX-9 · Documentación — 🟡
+### NX-9 · Documentación — ✅
 
 - [x] Documentos 01 a 13 y README en lenguaje sencillo, con glosario.
 - [x] Diagramas en Mermaid y en español.
 - [x] Doc 15 generado automáticamente desde el código (`npm run docs:codigo`).
-- [x] Este plan, listo para Jira.
-- [ ] Doc 16 (palabras y frases) en lenguaje sencillo.
+- [x] Este plan de trabajo, organizado en épicas.
+- [x] Doc 16 (palabras y frases) en lenguaje sencillo.
 
 ## Riesgos
 

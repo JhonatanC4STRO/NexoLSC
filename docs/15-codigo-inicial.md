@@ -4,7 +4,7 @@
 > documento se **genera solo** a partir de los archivos reales (`npm run docs:codigo`); si alguna vez no
 > coincide con el código, manda el código.
 
-Generado el 2026-10-08 desde la versión 0.4.0.
+Generado el 2026-10-08 desde la versión 0.4.1.
 
 ## Cómo ejecutarlo
 
@@ -70,7 +70,7 @@ Luego abre http://localhost:5173. Para crear o cambiar avatares, mira `assets-sr
 {
   "name": "nexolsc",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.4.1",
   "type": "module",
   "scripts": {
     "dev": "vite",

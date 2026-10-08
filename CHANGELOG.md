@@ -7,6 +7,16 @@ Todos los cambios relevantes del proyecto. Formato basado en
 Mientras la versión sea `0.x`, el MVP no se considera estable: una versión menor (`0.2.0`, `0.3.0`)
 puede cambiar formatos de datos o la estructura del proyecto.
 
+## [0.4.1] - 2026-10-08
+
+### Cambiado
+- Doc 16 (de deletrear a señar palabras y frases) reescrito en lenguaje sencillo, con una tabla de las
+  cinco fases y ejemplos. Con esto, toda la documentación queda en lenguaje sencillo.
+- El plan de trabajo se lleva solo en el doc 14 (sin Jira), con instrucciones para marcar tareas.
+
+### Eliminado
+- `docs/jira/plan-nexolsc.csv`: el plan ya no se importa en Jira.
+
 ## [0.4.0] - 2026-10-08
 
 ### Añadido
@@ -120,6 +130,7 @@ puede cambiar formatos de datos o la estructura del proyecto.
 - Scripts de Blender para limpiar y exportar avatares a GLB.
 - 15 pruebas con Vitest.
 
+[0.4.1]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.1...v0.2.2

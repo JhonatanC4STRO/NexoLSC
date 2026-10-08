@@ -12,7 +12,6 @@ NexoLSC/
 ├── CHANGELOG.md                   ← qué cambió en cada versión
 ├── .gitattributes                 ← le dice a git qué archivos son binarios (.blend, .glb, imágenes)
 ├── docs/                          ← esta documentación (01 a 17)
-│   └── jira/plan-nexolsc.csv      ← el plan de trabajo, para importarlo en Jira
 ├── assets-src/                    ← archivos de trabajo de los avatares (la página no los usa)
 │   ├── README.md                  ← cómo crear un avatar, aplicarle las letras y exportarlo
 │   ├── letters/
