@@ -15,18 +15,19 @@
 
 ## Fase 2 · Texto → palabras → señas
 
-```text
-"Mi casa es grande"
-   │ normalizeText (conserva los límites de palabra)
-   ▼
-[MI] [CASA] [ES] [GRANDE]
-   │ lematizar (formas → lema): "casas" → CASA, "quiero" → QUERER
-   ▼
-buildQueue:
-   ¿hay seña para la palabra/lema?  ── sí ──► QueueItem(word_CASA)
-                │ no
-                ▼
-         deletrear letra por letra (el MVP actual)
+```mermaid
+flowchart TB
+  T["Escribes: «Mi casa es grande»"]
+  W["<b>Palabras limpias</b><br/>MI · CASA · ES · GRANDE"]
+  L["<b>Forma base de cada palabra</b><br/>casas → CASA · quiero → QUERER"]
+  D{"¿Hay seña para esa<br/>palabra?"}
+  S["Usar la seña<br/>de la palabra (CASA)"]
+  F["Deletrear letra por letra<br/>(lo que hace hoy la app)"]
+  P["Reproductor"]
+  T -- "limpiar el texto<br/>(sin perder dónde empieza<br/>cada palabra)" --> W
+  W -- "buscar la forma base" --> L --> D
+  D -- sí --> S --> P
+  D -- no --> F --> P
 ```
 
 Cambios concretos:
@@ -68,12 +69,12 @@ DBLSC lo muestra con glosas: *"Mi abuelo cumplió años el 15 de marzo"* →
 
 Arquitectura propuesta:
 
-```text
-Español ──► Traductor ──► Representación intermedia (glosas + marcas) ──► buildQueue ──► SignPlayer
-             (reglas + modelo de lenguaje,              │
-              revisado por personas sordas)              ▼
-                                   [{gloss:'PRO1POS'}, {gloss:'ABUELO'}, …,
-                                    {nonmanual:'cejas_arriba', span:[3,5]}]
+```mermaid
+flowchart LR
+  ES["Frase en español"] --> TR["<b>Traductor</b><br/>reglas + inteligencia artificial,<br/>revisado por personas sordas"]
+  TR --> RI["<b>Frase en orden de la LSC</b><br/>glosas + gestos de la cara"]
+  RI --> BQ["Armar la lista de señas"] --> SP["Reproductor"]
+  RI -.- EX["Ejemplo:<br/>PRO1POS · ABUELO · …<br/>cejas arriba durante las señas 3 a 5"]
 ```
 
 - La **representación intermedia en glosas** es el contrato entre el traductor y el reproductor. Permite

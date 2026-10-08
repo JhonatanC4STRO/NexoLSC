@@ -7,6 +7,36 @@ Todos los cambios relevantes del proyecto. Formato basado en
 Mientras la versión sea `0.x`, el MVP no se considera estable: una versión menor (`0.2.0`, `0.3.0`)
 puede cambiar formatos de datos o la estructura del proyecto.
 
+## [0.4.0] - 2026-10-08
+
+### Añadido
+- Pantalla «Escenario» (opción A de los mockups, <https://claude.ai/artifact/4baJA1Goh6NToKhGvrnGKD>): el
+  avatar ocupa toda la pantalla y lo demás flota encima. Tarjeta de la letra actual con su descripción
+  (`src/ui/CurrentLetter.tsx`), barra inferior con letras, velocidad, campo de texto, voz y controles, y
+  cabecera con el logo, el estado de validación y el selector de avatar. En el celular la barra pasa a ser
+  un panel inferior y la velocidad, un solo botón.
+- Botones de vista de la cámara: Frente, Perfil y Mano (`src/ui/CameraViews.tsx`). La vista Mano sigue la
+  posición de la mano en ese momento; con «menos movimiento» la cámara cambia sin animación.
+- Glosario de palabras técnicas (`docs/17-glosario.md`).
+- Plan de trabajo listo para Jira: 9 épicas con sus tareas en `docs/jira/plan-nexolsc.csv` (para importar
+  con el importador CSV de Jira).
+- Comando `npm run docs:codigo` (`tools/docs/gen_doc15.mjs`), que vuelve a generar el doc 15 desde el código.
+
+### Cambiado
+- Documentación reescrita en lenguaje sencillo (01 a 13, README y `assets-src/README.md`), con un resumen
+  «En pocas palabras» al inicio de cada documento. El README explica paso a paso cómo ejecutar el proyecto.
+- Diagramas de la documentación en Mermaid y en español (se ven como gráficos en GitHub y en VS Code):
+  capas de la app, taller de contenido y recorrido del texto (01), esqueletos (05), tipos de letra (06),
+  estados del reproductor (07), recorrido texto → avatar (09), voz (10) y fases 2 y 3 (16).
+- Doc 14 (plan de trabajo) reescrito en lenguaje sencillo y organizado en épicas (NX-1 a NX-9) como en Jira.
+- Doc 15 regenerado con el código actual (antes mostraba código de la v0.2).
+- El avatar por defecto ahora es **MPFB2 · hombre joven** (`mpfb2`).
+- Cámara del escenario más abierta, para que la cabeza y las manos queden entre la cabecera y la barra.
+
+### Eliminado
+- Avatar `mpfb2-caricatura`: su `.glb`, su carpeta en `assets-src/avatars/`, su registro en la app y sus
+  imágenes en el sistema de diseño (grupo «Personaje»). Sigue en el historial de git.
+
 ## [0.3.0] - 2026-09-30
 
 ### Añadido
@@ -90,6 +120,7 @@ puede cambiar formatos de datos o la estructura del proyecto.
 - Scripts de Blender para limpiar y exportar avatares a GLB.
 - 15 pruebas con Vitest.
 
+[0.4.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.0...v0.2.1

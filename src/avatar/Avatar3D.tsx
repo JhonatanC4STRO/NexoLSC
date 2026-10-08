@@ -1,7 +1,8 @@
 import { Component, Suspense, useEffect, useMemo, useRef, type ReactNode } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { ContactShadows, OrbitControls, useGLTF } from '@react-three/drei';
 import { Box3, Vector3, type Object3D } from 'three';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import type { SignPlayer } from '../core/player/SignPlayer';
 import { signRepository } from '../core/signs/SignRepository';
 import { ClipDriver } from './ClipDriver';
@@ -14,9 +15,13 @@ interface Props {
   /** undefined = todavía comprobando; null = no hay ningún GLB disponible. */
   avatar: AvatarOption | null | undefined;
   onMissingClips?: (letters: string[]) => void;
+  /** Punto de vista de la cámara (botones Frente / Perfil / Mano). */
+  view?: CameraView;
 }
 
-export function Avatar3D({ player, avatar, onMissingClips }: Props) {
+export type CameraView = 'frente' | 'perfil' | 'mano';
+
+export function Avatar3D({ player, avatar, onMissingClips, view = 'frente' }: Props) {
   if (avatar === undefined) return <div className="stage stage--loading">Cargando avatar…</div>;
   if (avatar === null) {
     return <AvatarPlaceholder player={player} reason="No hay ningún avatar en public/models/avatars/" />;
@@ -28,7 +33,7 @@ export function Avatar3D({ player, avatar, onMissingClips }: Props) {
       {/* key: al cambiar de avatar se reinicia el manejo de errores */}
       <ModelErrorBoundary key={avatar.url} fallback={<AvatarPlaceholder player={player} reason={`Error al cargar ${avatar.name}`} />}>
         {/* Lienzo transparente: el fondo lo pone StageBackground (CSS) */}
-        <Canvas camera={{ position: [0, 1.42, 1.6], fov: 30 }} dpr={[1, 2]} gl={{ alpha: true }}>
+        <Canvas camera={{ position: [0, 1.36, 2.55], fov: 30 }} dpr={[1, 2]} gl={{ alpha: true }}>
           <hemisphereLight args={['#ffffff', '#8a8f98', 1.2]} />
           <directionalLight position={[1.5, 2.5, 2]} intensity={1.6} />
           <directionalLight position={[-2, 2, -1]} intensity={0.6} />
@@ -36,11 +41,62 @@ export function Avatar3D({ player, avatar, onMissingClips }: Props) {
             <AvatarModel key={avatar.url} url={avatar.url} player={player} onMissingClips={onMissingClips} />
             <ContactShadows position={[0, 0, 0]} opacity={0.35} blur={2.5} far={2} />
           </Suspense>
-          <OrbitControls target={[0, 1.33, 0]} enablePan={false} minDistance={0.8} maxDistance={3} />
+          <OrbitControls makeDefault target={[0, 1.3, 0]} enablePan={false} minDistance={0.5} maxDistance={3.5} />
+          <CameraRig view={view} />
         </Canvas>
       </ModelErrorBoundary>
     </div>
   );
+}
+
+// Plano medio un poco abierto: la cabeza y las manos quedan entre la cabecera y la barra inferior.
+const FRONT = { position: new Vector3(0, 1.36, 2.55), target: new Vector3(0, 1.3, 0) };
+// El avatar mira hacia +Z y seña con la mano derecha, que queda del lado −X.
+const PROFILE = { position: new Vector3(-2.3, 1.36, 0.6), target: new Vector3(0, 1.3, 0.1) };
+const HAND_BONES = ['DEF-handR', 'DEF-hand.R'];
+
+/**
+ * Lleva la cámara al punto de vista elegido con un movimiento corto (o de golpe si la
+ * persona pidió menos movimiento). Después la persona puede seguir girando la cámara.
+ */
+function CameraRig({ view }: { view: CameraView }) {
+  const camera = useThree((s) => s.camera);
+  const scene = useThree((s) => s.scene);
+  const controls = useThree((s) => s.controls) as OrbitControlsImpl | null;
+  const anim = useRef<{ fromPos: Vector3; fromTarget: Vector3; toPos: Vector3; toTarget: Vector3; t: number } | null>(null);
+
+  useEffect(() => {
+    if (!controls) return;
+    let goal = view === 'perfil' ? PROFILE : FRONT;
+    if (view === 'mano') {
+      const hand = HAND_BONES.map((n) => scene.getObjectByName(n)).find(Boolean);
+      if (hand) {
+        const p = hand.getWorldPosition(new Vector3());
+        goal = { position: p.clone().add(new Vector3(0.05, 0.04, 0.7)), target: p };
+      }
+    }
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    anim.current = {
+      fromPos: camera.position.clone(),
+      fromTarget: controls.target.clone(),
+      toPos: goal.position.clone(),
+      toTarget: goal.target.clone(),
+      t: reduce ? 1 : 0,
+    };
+  }, [view, controls, camera, scene]);
+
+  useFrame((_, dt) => {
+    const a = anim.current;
+    if (!a || !controls) return;
+    a.t = Math.min(1, a.t + dt / 0.7);
+    const k = 1 - (1 - a.t) ** 3; // suave al llegar
+    camera.position.lerpVectors(a.fromPos, a.toPos, k);
+    controls.target.lerpVectors(a.fromTarget, a.toTarget, k);
+    controls.update();
+    if (a.t >= 1) anim.current = null;
+  });
+
+  return null;
 }
 
 /** Foto de fondo desenfocada y con un velo claro, para dar contexto sin restar legibilidad a las manos. */

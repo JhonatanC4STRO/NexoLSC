@@ -1,95 +1,128 @@
-# 14 · Plan de implementación paso a paso
+# 14 · Plan de trabajo
 
-Plan pensado para una persona trabajando a tiempo parcial. Cada etapa termina con algo que se puede
-probar.
+> **En pocas palabras:** el trabajo está dividido en **9 épicas** (grandes bloques). Las cuatro primeras ya
+> están hechas; ahora lo más importante es que **personas sordas validen las 27 letras**. Este plan se
+> lleva en **Jira**; aquí queda el resumen y el archivo para importarlo.
 
-## Estado actual (v0.2.1, 2026-09-30)
+Una **épica** es un bloque grande de trabajo; dentro tiene **tareas** pequeñas que se pueden terminar en
+uno o pocos días. Cada épica termina con algo que se puede probar.
 
-| Etapa | Estado |
-|---|---|
-| 0 · Proyecto base | ✅ Hecha |
-| 1 · Núcleo sin 3D | ✅ Hecha |
-| 2 · Pipeline Blender → GLB → navegador | ✅ Hecha |
-| 3 · Avatar | 🟡 Dos candidatos CC0 listos; falta elegir definitivo y medir en móvil |
-| 4 · Las 27 letras | 🟡 Animadas en borrador en los dos avatares; falta contrastarlas con video |
-| 5 · Validación con la comunidad sorda | ⏳ Pendiente (es el siguiente paso importante) |
-| 6 · Pulido y publicación | 🟡 Fondo, git y versionado hechos; falta optimizar, accesibilidad y desplegar |
+## Dónde se lleva el plan
 
-## Etapa 0 · Proyecto base — ✅
+- **En Jira:** cada épica y cada tarea de este documento es un elemento de Jira.
+- **Archivo para importar:** [`jira/plan-nexolsc.csv`](jira/plan-nexolsc.csv). En Jira: *Configuración del
+  proyecto → Importar elementos (CSV)*, o *Filtros → Importar desde CSV*. Al importar, une la columna
+  **Parent** con la columna **Issue ID** para que cada tarea quede dentro de su épica, y la columna
+  **Status** con los estados de tu tablero (*Por hacer*, *En curso*, *Listo*).
+- **Este documento** es el resumen. Si Jira y este archivo no coinciden, manda Jira.
 
-- [x] Proyecto Vite + React + TypeScript (ver [15-codigo-inicial.md](15-codigo-inicial.md)).
-- [x] `npm install`, `npm test` (15 pruebas en verde), `npm run dev`.
-- [x] Repositorio git en GitHub (`JhonatanC4STRO/NexoLSC`) con versionado semántico y `CHANGELOG.md`.
+## Cómo va (v0.4.0, 2026-10-08)
 
-## Etapa 1 · Núcleo sin 3D — ✅
+| # | Épica | Estado |
+|---|---|---|
+| NX-1 | Proyecto base | ✅ Hecha |
+| NX-2 | Núcleo sin 3D | ✅ Hecha |
+| NX-3 | Camino Blender → archivo .glb → navegador | ✅ Hecha |
+| NX-4 | El avatar | 🟡 En curso |
+| NX-5 | Las 27 letras | 🟡 En curso |
+| NX-6 | Validación con la comunidad sorda | ⏳ Por hacer — **es lo siguiente más importante** |
+| NX-7 | Pantalla y marca | 🟡 En curso |
+| NX-8 | Publicar la página | ⏳ Por hacer |
+| NX-9 | Documentación | 🟡 En curso |
 
-- [x] Normalizador de texto, cola, reproductor, controles, línea de tiempo, voz.
-- [x] Vista de respaldo: letra grande + descripción de la configuración.
+## Las épicas y sus tareas
 
-**Listo cuando:** escribes "¿Cómo estás?", ves `COMO ESTAS` y la línea de tiempo avanza con todos los controles.
+### NX-1 · Proyecto base — ✅
 
-## Etapa 2 · Pipeline Blender → GLB → navegador — ✅
+- [x] Crear el proyecto con Vite, React y TypeScript.
+- [x] Pruebas automáticas (`npm test`, 15 en verde) y arranque local (`npm run dev`).
+- [x] Repositorio en GitHub (`JhonatanC4STRO/NexoLSC`) con versiones y `CHANGELOG.md`.
 
-- [x] Validado primero con un avatar de prueba (solo local) y luego con los candidatos MPFB.
-- [x] `export_avatar.py`: solo huesos `DEF-*`, un clip por Action, limpieza automática.
+### NX-2 · Núcleo sin 3D — ✅
 
-## Etapa 3 · Avatar — 🟡
+- [x] Limpiar el texto, armar la lista de señas y el reproductor con su reloj.
+- [x] Controles, línea de letras y botón de voz.
+- [x] Vista sin 3D (letra grande con la descripción de la mano).
 
-- [x] Selector de avatar en la app para comparar candidatos.
-- [x] `mpfb2` (CC0, realista, 1,71 m) y `mpfb2-caricatura` (CC0, rasgos del autor, 1,66 m, por defecto).
-  Ver [04](04-diseno-avatar.md#1-candidatos-de-avatar).
-- [x] Generador reproducible (`tools/blender/mpfb_builder.py`).
-- [ ] Elegir el avatar definitivo (o encargar uno estilizado a un artista 3D y aplicarle las mismas letras).
-- [ ] Medir rendimiento en un móvil de gama media (181 huesos de deformación).
-- [ ] Clip `idle` opcional (respiración/parpadeo).
+**Terminada cuando:** escribes «¿Cómo estás?», ves `COMO ESTAS` y las letras avanzan con todos los controles.
 
-## Etapa 4 · Las 27 letras — 🟡
+### NX-3 · Camino Blender → archivo .glb → navegador — ✅
 
-- [x] Las 27 letras definidas como datos (`assets-src/letters/alfabeto_lsc.json`) a partir de la
-  ilustración del DBLSC (p. 573).
-- [x] Horneadas en los dos avatares con `bake_letters.py`; 6 con movimiento (G, H, J, Ñ, S, Z).
-- [x] Primera revisión visual de frente y de perfil; corregidas C, O, Q, A, X, H, P, L e Y.
-- [ ] Contrastar cada letra con el video de INSOR Educativo, sobre todo las marcadas con ⚠️ en
-  [12](12-fuentes-alfabeto-lsc.md) (F, G, P, Q, S, T, U).
-- [ ] Afinar los contactos del pulgar (O, D, F, T) y probar todas a 0.5x y 1x en la app.
+- [x] Probar el camino completo con un avatar de prueba (solo local).
+- [x] Programa de exportación (`export_avatar.py`) que deja solo lo que el navegador necesita.
 
-**Listo cuando:** las 27 letras están listas para la validación (etapa 5).
+### NX-4 · El avatar — 🟡
 
-## Etapa 5 · Validación con la comunidad sorda (1–2 semanas, iterativa) — ⏳
+- [x] Selector de avatar en la app.
+- [x] Avatar `mpfb2` (licencia libre, realista, 1,71 m), creado por programa (`mpfb_builder.py`).
+- [x] Eliminar el avatar caricaturesco (2026-10-08).
+- [ ] Decidir el avatar definitivo: quedarse con `mpfb2` o encargar uno estilizado a un artista 3D y
+  aplicarle las mismas letras.
+- [ ] Medir si un celular de gama media mueve bien el avatar (181 huesos, ~5 MB).
+- [ ] (Opcional) Animación de espera: respirar y parpadear.
 
-- [ ] Contactar a FENASCOL, INSOR o una asociación local (o aprendices sordos del SENA); acordar la
-  participación y remunerarla.
-- [ ] Sesiones con al menos dos personas sordas señantes nativas y un intérprete.
-- [ ] Registrar resultados en `status`/`validation` de cada letra (`approved` / `rejected` + notas), en el
-  JSON de poses y en `alphabet.lsc.ts`.
-- [ ] Resolver las preguntas abiertas: dígrafos (CH, LL, RR), letras repetidas, seña APARTE, ritmo.
-- [ ] Prueba de comprensión: palabras deletreadas por el avatar que la persona debe reconocer (meta: ≥ 90 %).
+### NX-5 · Las 27 letras — 🟡
 
-**Listo cuando:** las 27 letras están en `approved`.
+- [x] Las 27 letras escritas como datos a partir del dibujo del diccionario DBLSC (pág. 573).
+- [x] Aplicadas al avatar; 6 con movimiento (G, H, J, Ñ, S, Z).
+- [x] Primera revisión de frente y de lado; corregidas C, O, Q, A, X, H, P, L e Y.
+- [ ] Compararlas con los videos de INSOR Educativo, sobre todo F, G, P, Q, S, T y U (ver [12](12-fuentes-alfabeto-lsc.md)).
+- [ ] Afinar el pulgar cuando toca otro dedo (O, D, F, T).
+- [ ] Probar todas a velocidad 0,5x y 1x en la app.
 
-## Etapa 6 · Pulido y publicación (3–5 días) — 🟡
+**Terminada cuando:** las 27 letras están listas para mostrarlas a personas sordas (NX-6).
 
-- [x] Fondo del escenario con la sede del SENA, desenfocado.
-- [ ] Reducir el peso de los GLB (~5 MB): eliminar pistas de huesos que no se mueven, comprimir con
-  `gltf-transform`; pantalla de carga.
-- [ ] Vistas rápidas de cámara (frente/perfil/mano) y modo espejo.
-- [ ] Revisión de accesibilidad (teclado, lector de pantalla, contraste).
-- [ ] Política de privacidad (voz en Chrome = servidores de Google).
-- [ ] Publicar en hosting estático con HTTPS.
+### NX-6 · Validación con la comunidad sorda — ⏳
+
+- [ ] Contactar a FENASCOL, INSOR, una asociación local o aprendices sordos del SENA; acordar cómo
+  participan y pagarles su tiempo.
+- [ ] Sesiones con al menos dos personas sordas que usen la LSC desde pequeñas y un intérprete.
+- [ ] Anotar el resultado de cada letra (aprobada o rechazada, con notas) en los dos archivos de datos.
+- [ ] Resolver las preguntas abiertas: CH, LL y RR, letras repetidas, la seña APARTE y el ritmo.
+- [ ] Prueba de comprensión: palabras deletreadas por el avatar que la persona debe reconocer (meta: 9 de
+  cada 10 o más).
+
+**Terminada cuando:** las 27 letras están **aprobadas**.
+
+### NX-7 · Pantalla y marca — 🟡
+
+- [x] Marca visual NexoLSC (v0.3.0).
+- [x] Foto de la sede del SENA de fondo, desenfocada.
+- [x] Mockups con tres opciones y elección de la opción A «Escenario».
+- [x] Pantalla «Escenario» en escritorio y celular (v0.4.0).
+- [x] Botones de vista de la cámara: Frente, Perfil y Mano (v0.4.0).
+- [ ] Ficha de la letra (idea de la opción B): descripción completa, fuente y estado.
+- [ ] Modo espejo para practicar.
+- [ ] Revisión de accesibilidad con teclado y lector de pantalla.
+
+### NX-8 · Publicar la página — ⏳
+
+- [ ] Hacer más livianos los archivos del avatar (quitar animaciones de huesos que no se mueven y comprimir).
+- [ ] Pantalla de carga mientras baja el avatar.
+- [ ] Política de privacidad (en Chrome, la voz pasa por servidores de Google).
+- [ ] Publicar en un servicio de páginas estáticas con HTTPS.
+
+### NX-9 · Documentación — 🟡
+
+- [x] Documentos 01 a 13 y README en lenguaje sencillo, con glosario.
+- [x] Diagramas en Mermaid y en español.
+- [x] Doc 15 generado automáticamente desde el código (`npm run docs:codigo`).
+- [x] Este plan, listo para Jira.
+- [ ] Doc 16 (palabras y frases) en lenguaje sencillo.
 
 ## Riesgos
 
-| Riesgo | Probabilidad | Mitigación |
+| Riesgo | ¿Qué tan probable? | Qué se hace |
 |---|---|---|
-| Configuraciones mal interpretadas | Media | Estado `draft` por defecto + etapa 5 |
-| Deformación de los dedos en poses extremas | Media | Revisión de frente y de perfil; ajustar datos o pesos |
-| Rendimiento en móviles (181 huesos, GLB de 5 MB) | Media | Medir; recortar pistas de animación y huesos faciales si hace falta |
-| La voz no funciona en Firefox | Segura | Mensaje claro; Whisper en el navegador como siguiente paso |
-| Intentar traducir frases antes de tiempo | Media | Mantener el alcance: solo deletreo en el MVP |
-| Falta de acceso a personas sordas para validar | Media | Contactar pronto a FENASCOL/INSOR/SENA; presupuesto para compensar su tiempo |
-| Publicar recursos con derechos de terceros | Baja | El avatar de prueba está en `.gitignore`; cada candidato lleva `LICENSE.md` |
+| Que una letra esté mal interpretada | Media | Todas empiezan en borrador y pasan por la validación (NX-6) |
+| Que los dedos se deformen en poses difíciles | Media | Revisarlas de frente y de lado; corregir los datos |
+| Que el avatar vaya lento en celulares | Media | Medirlo y, si hace falta, quitar huesos de la cara y animaciones que sobran |
+| Que la voz no funcione en Firefox | Segura | Mensaje claro; después, reconocimiento de voz dentro del navegador |
+| Querer traducir frases antes de tiempo | Media | Mantener el alcance: solo deletrear en el MVP |
+| No conseguir personas sordas para validar | Media | Contactar pronto a FENASCOL, INSOR y el SENA; tener presupuesto para pagar su tiempo |
+| Publicar algo con derechos de autor de otros | Baja | El avatar de prueba no se sube a git; cada avatar tiene su `LICENSE.md` |
 
-## Criterio de éxito del MVP
+## Cuándo está listo el MVP
 
-> "Escribo (o digo) una palabra → el avatar realiza correctamente la seña de cada letra, una por una,
-> y una persona sorda usuaria de LSC reconoce la palabra."
+> «Escribo (o digo) una palabra → el avatar hace bien la seña de cada letra, una por una, y una persona
+> sorda que usa la LSC reconoce la palabra.»

@@ -1,41 +1,45 @@
-# 08 · Modelo de datos para las letras
+# 08 · Cómo se describe una seña (modelo de datos)
 
-## De la propuesta inicial al modelo recomendado
+> **En pocas palabras:** cada letra se guarda como una **ficha** con varios datos: qué letra es, cómo se
+> llama, qué animación usa, cuánto dura, cómo se pone la mano, de qué libro sale y si ya la revisó una
+> persona sorda. Las palabras y los números usarán la misma ficha en el futuro.
 
-Propuesta inicial:
+## De la idea inicial a la ficha completa
+
+La idea inicial era:
 
 ```js
 { letter: "A", animation: "sign_A", duration: 1200 }
 ```
 
-Funciona para el MVP, pero se queda corta en cuanto haya palabras, números, variantes regionales o
-validación. El modelo recomendado trata la letra como **un tipo de seña**:
+Sirve para empezar, pero se queda corta cuando haya palabras, números, variantes por región o revisión por
+personas sordas. Por eso la letra se guarda como **un tipo de seña** (`SignEntry`):
 
 ```ts
 interface SignEntry {
-  id: string;                 // "lsc.letter.A" — estable y único
-  kind: 'letter' | 'number' | 'word' | 'phrase' | 'nonmanual';
-  gloss: string;              // "A" (glosa en mayúsculas; para palabras: "CASA")
+  id: string;                 // "lsc.letter.A" — identificador único que no cambia
+  kind: 'letter' | 'number' | 'word' | 'phrase' | 'nonmanual';   // letra, número, palabra, frase o gesto
+  gloss: string;              // "A" (para palabras: "CASA")
   name: string;               // "a", "eñe", "uve doble" — para mostrar y para lectores de pantalla
   language: 'LSC';
   animation: {
-    clip: string;             // "sign_A"
+    clip: string;             // "sign_A" — nombre de la animación
     pack: string;             // "avatar" (fase 2: "saludos", "familia"…)
-    durationMs: number;       // tramo principal a 1x
-    transitionMs: number;     // transición desde la seña anterior a 1x
+    durationMs: number;       // cuánto dura la seña a velocidad normal
+    transitionMs: number;     // cuánto tarda en llegar desde la seña anterior
   };
   handConfiguration: {
-    handshape: string;        // etiqueta de configuración del DBLSC ("A", "5", "Bb"…)
-    fingers: string;          // descripción legible, tomada de la fuente
+    handshape: string;        // forma de la mano según el diccionario DBLSC ("A", "5", "Bb"…)
+    fingers: string;          // descripción en palabras, tomada de la fuente
     palmOrientation?: 'forward' | 'backward' | 'inward' | 'outward' | 'up' | 'down' | 'side';
-    location?: string;
-    hand: 'dominant' | 'non_dominant' | 'both';
+    location?: string;        // dónde se hace (frente al pecho, en la barbilla…)
+    hand: 'dominant' | 'non_dominant' | 'both';   // mano principal, la otra o las dos
   };
-  movement: { dynamic: boolean; description?: string };
+  movement: { dynamic: boolean; description?: string };   // ¿tiene movimiento? ¿cuál?
   description: string;
-  sources: { id: string; locator: string }[];   // de dónde sale la configuración
+  sources: { id: string; locator: string }[];   // de qué libro y página sale
   validation: {
-    status: 'draft' | 'in_review' | 'approved' | 'rejected';
+    status: 'draft' | 'in_review' | 'approved' | 'rejected';   // borrador, en revisión, aprobada, rechazada
     reviewedBy?: string;
     reviewedAt?: string;
     notes?: string;
@@ -44,26 +48,23 @@ interface SignEntry {
 }
 ```
 
-Cubre todos los campos que pediste (`letter`, `name`, `animation`, `duration`, `description`,
-`hand_configuration`, `source`) y añade `validation`, `movement`, `pack` y `kind`.
+## Para qué sirve cada dato
 
-## Por qué cada campo añadido
-
-| Campo | Motivo |
+| Dato | Para qué |
 |---|---|
-| `id` | Referencias estables (analítica, revisiones, traducciones) aunque cambie el nombre del clip |
-| `kind` | Un solo modelo para letras, números, palabras y no manuales |
-| `gloss` | Convención de la lingüística de lenguas de señas; el DBLSC usa glosas en mayúsculas |
-| `animation.pack` | Permite cargar paquetes de animación bajo demanda en la fase 2 sin cambiar el modelo |
-| `durationMs` + `transitionMs` | El motor necesita ambos; permiten ajustar el ritmo por seña |
-| `handConfiguration.handshape` | Enlaza con la tabla de configuraciones del DBLSC (pp. LI–LII) y con el buscador por configuración de INSOR Educativo |
-| `movement.dynamic` | Separa letras con trayectoria (G, H, J, Ñ, S, Z) de las estáticas |
-| `sources` | Trazabilidad: nada sin fuente (requisito del proyecto) |
-| `validation` | Nada llega a `approved` sin revisión de una persona sorda usuaria de LSC |
+| `id` | Un nombre fijo para referirse a la seña siempre, aunque cambie su animación |
+| `kind` | Una sola ficha para letras, números, palabras y gestos de la cara |
+| `gloss` | La **glosa**: la palabra en mayúsculas con la que se escribe una seña. Así lo hace el diccionario DBLSC |
+| `animation.pack` | Permite, en la fase 2, descargar paquetes de animaciones solo cuando se usan |
+| `durationMs` y `transitionMs` | El reproductor los necesita, y permiten ajustar el ritmo de cada seña |
+| `handConfiguration.handshape` | Enlaza con la tabla de formas de mano del diccionario DBLSC |
+| `movement.dynamic` | Separa las letras con movimiento (G, H, J, Ñ, S, Z) de las quietas |
+| `sources` | Nada sin fuente: siempre se sabe de dónde salió cada seña |
+| `validation` | Ninguna seña pasa a «aprobada» sin la revisión de una persona sorda que use la LSC |
 
 ## Ejemplos
 
-Letra estática:
+Una letra quieta, la L:
 
 ```json
 {
@@ -86,7 +87,7 @@ Letra estática:
 }
 ```
 
-Letra dinámica:
+Una letra con movimiento, la J:
 
 ```json
 {
@@ -99,7 +100,7 @@ Letra dinámica:
 }
 ```
 
-Palabra (fase 2, mismo modelo):
+Una palabra (fase 2, con la misma ficha):
 
 ```json
 {
@@ -115,15 +116,15 @@ Palabra (fase 2, mismo modelo):
 }
 ```
 
-## Dónde se guarda
+## Dónde se guardan las fichas
 
-| Fase | Almacenamiento |
+| Etapa | Dónde |
 |---|---|
-| MVP | `src/core/signs/alphabet.lsc.ts` (versionado en git, tipado) |
-| Fase 2 | JSON por campo temático en `public/lexicon/*.json` o una API |
-| Fase 2–3 | PostgreSQL (tabla `signs` + `sign_sources` + `sign_reviews` + `sign_variants` por región) |
+| Hoy | En el código: `src/core/signs/alphabet.lsc.ts` |
+| Fase 2 | En archivos de datos por tema (`public/lexicon/*.json`) o en un servicio en internet |
+| Fase 2–3 | En una base de datos (PostgreSQL), con tablas para las señas, sus fuentes, sus revisiones y sus variantes por región |
 
-Esquema SQL orientativo para cuando llegue el momento:
+Así podría verse esa base de datos cuando llegue el momento (es solo una guía):
 
 ```sql
 create table signs (
@@ -139,29 +140,29 @@ create table signs (
   movement jsonb not null,
   description text,
   validation_status text not null default 'draft',
-  region text,                          -- variantes regionales (Bogotá, Valle…)
+  region text,                          -- variantes por región (Bogotá, Valle…)
   updated_at timestamptz default now()
 );
 create table sign_sources (sign_id text references signs(id), source_id text, locator text);
 create table sign_reviews (sign_id text references signs(id), reviewer text, status text, notes text, reviewed_at timestamptz);
 ```
 
-## Dos archivos de datos por letra
+## Cada letra está en dos archivos
 
-Cada letra vive en dos lugares, con responsabilidades distintas:
+Cada archivo responde una pregunta distinta:
 
-| Archivo | Qué describe | Quién lo usa |
+| Archivo | Responde | Quién lo usa |
 |---|---|---|
-| `src/core/signs/alphabet.lsc.ts` (`SignEntry`) | **Qué** es la seña: glosa, nombre, clip, duraciones, descripción legible, fuente, validación | La app web (cola, línea de tiempo, vista de respaldo) |
-| `assets-src/letters/alfabeto_lsc.json` | **Cómo** la hace el avatar: ángulos de dedos y pulgar, orientación de la mano, trayectoria | `tools/blender/bake_letters.py` al generar los clips de cada avatar |
+| `src/core/signs/alphabet.lsc.ts` (la ficha `SignEntry`) | **¿Qué** es la seña? Nombre, animación, duración, descripción, fuente y revisión | La página web |
+| `assets-src/letters/alfabeto_lsc.json` | **¿Cómo** la hace el avatar? Ángulos de los dedos y del pulgar, hacia dónde mira la mano, recorrido | El programa de Blender que crea las animaciones (`bake_letters.py`) |
 
-El vínculo entre ambos es el nombre del clip: la entrada `"L"` del JSON produce la Action `sign_L`, que es
-el `animation.clip` de `lsc.letter.L` (la Ñ usa `sign_ENYE`). El formato del JSON está en
+Los une el nombre de la animación: la letra `"L"` del archivo de datos crea la animación `sign_L`, que es la
+que pide la ficha `lsc.letter.L`. La Ñ usa `sign_ENYE`. El formato del archivo de datos está explicado en
 [06-animation-clips.md](06-animation-clips.md).
 
-## Estado actual de los datos
+## Cómo están hoy los datos
 
-Las 27 letras están cargadas con `validation.status = "draft"` en los dos archivos. Las descripciones
-`fingers` y los ángulos del JSON son una **lectura de la ilustración** del DBLSC (p. 573); donde la
-ilustración deja dudas se marca "(Verificar.)". Ver la tabla completa en
+Las 27 letras están cargadas en los dos archivos y todas están en **borrador** (`draft`). Las descripciones
+de la mano y los ángulos salen de **mirar la ilustración** del diccionario DBLSC (pág. 573). Donde la
+ilustración deja dudas, la descripción dice «(Verificar.)». La tabla completa está en
 [12-fuentes-alfabeto-lsc.md](12-fuentes-alfabeto-lsc.md).

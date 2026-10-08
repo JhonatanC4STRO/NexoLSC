@@ -3,22 +3,30 @@ import { SignPlayer } from './core/player/SignPlayer';
 import { buildQueue } from './core/player/queue';
 import { signRepository } from './core/signs/SignRepository';
 import { normalizeText } from './core/text/normalize';
-import { Avatar3D } from './avatar/Avatar3D';
+import { Avatar3D, type CameraView } from './avatar/Avatar3D';
 import { usePlayerClock } from './hooks/usePlayer';
 import { useAvatarChoice } from './hooks/useAvatarChoice';
 import { AvatarSelector } from './ui/AvatarSelector';
-import { PlayerControls } from './ui/PlayerControls';
+import { CameraViews } from './ui/CameraViews';
+import { CurrentLetter } from './ui/CurrentLetter';
+import { PlayerControls, SpeedControl } from './ui/PlayerControls';
 import { LetterTimeline } from './ui/LetterTimeline';
 import { SpeechButton } from './ui/SpeechButton';
 import { Logo } from './ui/Logo';
 import { PlayIcon } from './ui/icons';
 
+/**
+ * Pantalla «Escenario»: el avatar ocupa toda la pantalla y lo demás flota encima.
+ * Arriba el logo y el avatar elegido; a la izquierda la letra actual; a la derecha la vista
+ * de la cámara; abajo la barra para escribir, ver las letras y controlar la reproducción.
+ */
 export default function App() {
   const player = useMemo(() => new SignPlayer(), []);
   const [text, setText] = useState('');
   const [display, setDisplay] = useState('');
   const [skipped, setSkipped] = useState<string[]>([]);
   const [missing, setMissing] = useState<string[]>([]);
+  const [view, setView] = useState<CameraView>('frente');
   const avatarChoice = useAvatarChoice();
   usePlayerClock(player);
 
@@ -48,56 +56,81 @@ export default function App() {
 
   return (
     <main className="app">
-      <header className="app__header">
-        <h1>
-          <Logo size={40} />
-        </h1>
-        <p>Deletrea en Lengua de Señas Colombiana</p>
-      </header>
+      <section className="scene" aria-label="Escenario del avatar">
+        <Avatar3D
+          player={player}
+          avatar={avatarChoice.available ? avatarChoice.selected : undefined}
+          onMissingClips={setMissing}
+          view={view}
+        />
 
-      <form className="input" onSubmit={onSubmit}>
-        <label htmlFor="text">Escribe una palabra o frase</label>
-        <div className="input__row">
-          <input
-            id="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Escribe una palabra o frase…"
-            maxLength={200}
-            autoComplete="off"
-          />
-          <button type="submit" className="btn btn--primary" disabled={!text.trim()}>
-            <PlayIcon /> Reproducir
-          </button>
+        <header className="scene__top">
+          <h1 className="plate plate--logo">
+            <Logo size={36} />
+          </h1>
+          <div className="plate plate--group">
+            <ValidationBadge />
+            <AvatarSelector choice={avatarChoice} />
+          </div>
+        </header>
+
+        <CurrentLetter player={player} />
+        <CameraViews value={view} onChange={setView} />
+
+        <div className="dock-wrap">
+          <section className="dock" aria-label="Deletrear">
+            <div className="dock__row">
+              <LetterTimeline player={player} missing={missing} />
+              <SpeedControl player={player} />
+            </div>
+
+            <form className="entry" onSubmit={onSubmit}>
+              <label htmlFor="text" className="sr-only">
+                Escribe una palabra o frase
+              </label>
+              <input
+                id="text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Escribe una palabra o frase…"
+                maxLength={200}
+                autoComplete="off"
+              />
+              <SpeechButton onResult={onSpeech} />
+              <button type="submit" className="btn btn--primary entry__submit" disabled={!text.trim()} aria-label="Reproducir">
+                <PlayIcon /> <span className="btn__label">Reproducir</span>
+              </button>
+              {display && (
+                <p className="entry__note">
+                  Se deletreará: <strong>{display}</strong>
+                </p>
+              )}
+              {skipped.length > 0 && (
+                <p className="entry__note entry__note--warn" role="status">
+                  Omitidos (sin seña en el MVP): {skipped.join(' ')}
+                </p>
+              )}
+            </form>
+
+            <PlayerControls player={player} />
+            {/* En el celular el estado de validación baja aquí; en pantallas anchas va en la cabecera. */}
+            <div className="dock__badge">
+              <ValidationBadge />
+            </div>
+          </section>
         </div>
-        <SpeechButton onResult={onSpeech} />
-        {display && (
-          <p className="input__normalized">
-            Se deletreará: <strong>{display}</strong>
-          </p>
-        )}
-        {skipped.length > 0 && (
-          <p className="input__warning" role="status">
-            Omitidos (sin seña en el MVP): {skipped.join(' ')}
-          </p>
-        )}
-      </form>
-
-      <AvatarSelector choice={avatarChoice} />
-      <Avatar3D
-        player={player}
-        avatar={avatarChoice.available ? avatarChoice.selected : undefined}
-        onMissingClips={setMissing}
-      />
-      <LetterTimeline player={player} missing={missing} />
-      <PlayerControls player={player} />
+      </section>
 
       <footer className="app__footer">
-        <ValidationBadge />
         <p>
-          Configuraciones basadas en el Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006).
-          Animaciones en validación con la comunidad sorda.
+          Letras basadas en el Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006). Animaciones en
+          validación con la comunidad sorda.
         </p>
+        {avatarChoice.selected && (
+          <p>
+            Avatar: {avatarChoice.selected.name} · Licencia {avatarChoice.selected.license}
+          </p>
+        )}
       </footer>
     </main>
   );
@@ -110,7 +143,8 @@ function ValidationBadge() {
   const done = approved === letters.length;
   return (
     <span className={`status-badge ${done ? 'status-badge--approved' : 'status-badge--draft'}`}>
-      {done ? 'Aprobado' : 'Borrador'} · {approved} de {letters.length} letras validadas por personas sordas
+      {done ? 'Aprobado' : 'Borrador'} · {approved} de {letters.length}
+      <span className="status-badge__more">{' '}letras validadas</span>
     </span>
   );
 }
@@ -118,7 +152,8 @@ function ValidationBadge() {
 function useKeyboardShortcuts(player: SignPlayer) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLButtonElement) return;
+      const t = e.target;
+      if (t instanceof HTMLInputElement || t instanceof HTMLButtonElement || t instanceof HTMLSelectElement) return;
       if (e.key === ' ') {
         e.preventDefault();
         player.togglePlay();

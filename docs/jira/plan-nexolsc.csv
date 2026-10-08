@@ -1,0 +1,52 @@
+Issue ID,Parent,Issue Type,Summary,Status,Labels,Description
+1,,Epic,NX-1 · Proyecto base,Listo,nexolsc,Ver docs/14-plan-implementacion.md
+101,1,Task,"Crear el proyecto con Vite, React y TypeScript",Listo,nexolsc,Épica NX-1 · Proyecto base
+102,1,Task,Pruebas automáticas (npm test) y arranque local (npm run dev),Listo,nexolsc,Épica NX-1 · Proyecto base
+103,1,Task,Repositorio en GitHub con versiones y CHANGELOG,Listo,nexolsc,Épica NX-1 · Proyecto base
+2,,Epic,NX-2 · Núcleo sin 3D,Listo,nexolsc,Ver docs/14-plan-implementacion.md
+201,2,Task,"Limpiar el texto, armar la lista de señas y reproductor con reloj",Listo,nexolsc,Épica NX-2 · Núcleo sin 3D
+202,2,Task,"Controles, línea de letras y botón de voz",Listo,nexolsc,Épica NX-2 · Núcleo sin 3D
+203,2,Task,Vista sin 3D (letra grande con la descripción de la mano),Listo,nexolsc,Épica NX-2 · Núcleo sin 3D
+3,,Epic,NX-3 · Camino Blender → archivo .glb → navegador,Listo,nexolsc,Ver docs/14-plan-implementacion.md
+301,3,Task,Probar el camino completo con un avatar de prueba (solo local),Listo,nexolsc,Épica NX-3 · Camino Blender → archivo .glb → navegador
+302,3,Task,Programa de exportación export_avatar.py,Listo,nexolsc,Épica NX-3 · Camino Blender → archivo .glb → navegador
+4,,Epic,NX-4 · El avatar,En curso,nexolsc,Ver docs/14-plan-implementacion.md
+401,4,Task,Selector de avatar en la app,Listo,nexolsc,Épica NX-4 · El avatar
+402,4,Task,"Avatar mpfb2 (CC0, realista) creado por programa",Listo,nexolsc,Épica NX-4 · El avatar
+403,4,Task,Eliminar el avatar caricaturesco,Listo,nexolsc,Épica NX-4 · El avatar
+404,4,Task,Decidir el avatar definitivo (mpfb2 o encargar uno estilizado a un artista 3D),Por hacer,nexolsc,Épica NX-4 · El avatar
+405,4,Task,Medir el rendimiento del avatar en un celular de gama media,Por hacer,nexolsc,Épica NX-4 · El avatar
+406,4,Task,(Opcional) Animación de espera: respirar y parpadear,Por hacer,nexolsc,Épica NX-4 · El avatar
+5,,Epic,NX-5 · Las 27 letras,En curso,nexolsc,Ver docs/14-plan-implementacion.md
+501,5,Task,Escribir las 27 letras como datos desde el DBLSC (pág. 573),Listo,nexolsc,Épica NX-5 · Las 27 letras
+502,5,Task,Aplicar las letras al avatar (6 con movimiento),Listo,nexolsc,Épica NX-5 · Las 27 letras
+503,5,Task,"Primera revisión de frente y de lado (C, O, Q, A, X, H, P, L, Y corregidas)",Listo,nexolsc,Épica NX-5 · Las 27 letras
+504,5,Task,"Comparar con los videos de INSOR Educativo, sobre todo F, G, P, Q, S, T y U",Por hacer,nexolsc,Épica NX-5 · Las 27 letras
+505,5,Task,"Afinar el pulgar cuando toca otro dedo (O, D, F, T)",Por hacer,nexolsc,Épica NX-5 · Las 27 letras
+506,5,Task,"Probar todas las letras a 0,5x y 1x en la app",Por hacer,nexolsc,Épica NX-5 · Las 27 letras
+6,,Epic,NX-6 · Validación con la comunidad sorda,Por hacer,nexolsc,Ver docs/14-plan-implementacion.md
+601,6,Task,"Contactar a FENASCOL, INSOR, una asociación local o aprendices sordos del SENA y acordar el pago",Por hacer,nexolsc,Épica NX-6 · Validación con la comunidad sorda
+602,6,Task,Sesiones con al menos dos personas sordas señantes y un intérprete,Por hacer,nexolsc,Épica NX-6 · Validación con la comunidad sorda
+603,6,Task,"Anotar el resultado de cada letra (aprobada o rechazada, con notas)",Por hacer,nexolsc,Épica NX-6 · Validación con la comunidad sorda
+604,6,Task,"Resolver preguntas abiertas: CH/LL/RR, letras repetidas, seña APARTE, ritmo",Por hacer,nexolsc,Épica NX-6 · Validación con la comunidad sorda
+605,6,Task,Prueba de comprensión de palabras deletreadas (meta: 9 de 10),Por hacer,nexolsc,Épica NX-6 · Validación con la comunidad sorda
+7,,Epic,NX-7 · Pantalla y marca,En curso,nexolsc,Ver docs/14-plan-implementacion.md
+701,7,Task,Marca visual NexoLSC,Listo,nexolsc,Épica NX-7 · Pantalla y marca
+702,7,Task,Foto de la sede del SENA de fondo,Listo,nexolsc,Épica NX-7 · Pantalla y marca
+703,7,Task,Mockups con tres opciones y elección de la opción A «Escenario»,Listo,nexolsc,Épica NX-7 · Pantalla y marca
+704,7,Task,Pantalla «Escenario» en escritorio y celular,Listo,nexolsc,Épica NX-7 · Pantalla y marca
+705,7,Task,"Botones de vista de la cámara: Frente, Perfil y Mano",Listo,nexolsc,Épica NX-7 · Pantalla y marca
+706,7,Task,"Ficha de la letra (descripción completa, fuente y estado)",Por hacer,nexolsc,Épica NX-7 · Pantalla y marca
+707,7,Task,Modo espejo para practicar,Por hacer,nexolsc,Épica NX-7 · Pantalla y marca
+708,7,Task,Revisión de accesibilidad con teclado y lector de pantalla,Por hacer,nexolsc,Épica NX-7 · Pantalla y marca
+8,,Epic,NX-8 · Publicar la página,Por hacer,nexolsc,Ver docs/14-plan-implementacion.md
+801,8,Task,Hacer más livianos los archivos del avatar,Por hacer,nexolsc,Épica NX-8 · Publicar la página
+802,8,Task,Pantalla de carga mientras baja el avatar,Por hacer,nexolsc,Épica NX-8 · Publicar la página
+803,8,Task,Política de privacidad (voz en Chrome pasa por Google),Por hacer,nexolsc,Épica NX-8 · Publicar la página
+804,8,Task,Publicar en un servicio de páginas estáticas con HTTPS,Por hacer,nexolsc,Épica NX-8 · Publicar la página
+9,,Epic,NX-9 · Documentación,En curso,nexolsc,Ver docs/14-plan-implementacion.md
+901,9,Task,"Documentos 01 a 13 y README en lenguaje sencillo, con glosario",Listo,nexolsc,Épica NX-9 · Documentación
+902,9,Task,Diagramas en Mermaid y en español,Listo,nexolsc,Épica NX-9 · Documentación
+903,9,Task,Doc 15 generado desde el código (npm run docs:codigo),Listo,nexolsc,Épica NX-9 · Documentación
+904,9,Task,Plan de trabajo listo para Jira,Listo,nexolsc,Épica NX-9 · Documentación
+905,9,Task,Doc 16 (palabras y frases) en lenguaje sencillo,Por hacer,nexolsc,Épica NX-9 · Documentación

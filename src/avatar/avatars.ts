@@ -14,13 +14,6 @@ export interface AvatarOption {
 
 export const AVATARS: AvatarOption[] = [
   {
-    id: 'mpfb2-caricatura',
-    name: 'MPFB2 · caricatura',
-    url: '/models/avatars/mpfb2-caricatura.glb',
-    license: 'CC0 (MakeHuman / MPFB2)',
-    publishable: true,
-  },
-  {
     id: 'mpfb2',
     name: 'MPFB2 · hombre joven',
     url: '/models/avatars/mpfb2.glb',
@@ -36,7 +29,7 @@ export const AVATARS: AvatarOption[] = [
   },
 ];
 
-export const DEFAULT_AVATAR_ID = 'mpfb2-caricatura';
+export const DEFAULT_AVATAR_ID = 'mpfb2';
 
 /**
  * ¿Existe el GLB? Vite (y muchos hostings SPA) responden index.html con 200 para

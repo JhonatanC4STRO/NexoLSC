@@ -1,74 +1,69 @@
-# 10 · Flujo Voz → texto → letras → avatar
+# 10 · De lo que dices a lo que seña el avatar
 
-## Idea
+> **En pocas palabras:** la voz es **solo otra forma de escribir**. Pulsas «Hablar», dices la palabra, el
+> navegador la convierte en texto y ese texto sigue exactamente el mismo camino que si lo hubieras escrito
+> (ver [09](09-flujo-texto-letras-avatar.md)).
 
-La voz es **solo otra forma de escribir**. Tras el reconocimiento, el texto entra exactamente por el
-mismo camino que si se hubiera tecleado (ver [09](09-flujo-texto-letras-avatar.md)).
-
-```text
-🎤 Hablar
-   │
-   ▼
-SpeechToTextProvider.start('es-CO')      ← Web Speech API (MVP)
-   │  onInterim("ho…")  → se muestra en gris mientras hablas
-   │  onFinal("Hola")
-   ▼
-setText("Hola") + spell("Hola")          ← el mismo spell() del botón Reproducir
-   │
-   ▼
-H → O → L → A → avatar
+```mermaid
+flowchart TB
+  B["Pulsas el botón <b>Hablar</b>"] --> S["<b>El navegador escucha</b><br/>en español de Colombia"]
+  S -- "mientras hablas: «ho…»" --> I["Se muestra el texto provisional<br/>en gris"]
+  S -- "cuando terminas: «Hola»" --> T["<b>El texto aparece en el campo</b><br/>y se reproduce solo,<br/>como si hubieras pulsado Reproducir"]
+  T --> L["H → O → L → A"] --> AV["El avatar seña"]
 ```
 
-## Interfaz de proveedor
+## Se puede cambiar el motor de voz
+
+Hoy se usa el reconocimiento de voz que trae el navegador. El código lo usa a través de un «enchufe» común
+(una interfaz), así que se puede cambiar por otro motor sin tocar el resto:
 
 ```ts
 interface SpeechToTextProvider {
   readonly name: string;
-  isSupported(): boolean;
+  isSupported(): boolean;            // ¿funciona en este navegador?
   start(lang: string, callbacks: {
-    onInterim?: (text: string) => void;
-    onFinal: (text: string) => void;
-    onError?: (code: string) => void;
-    onEnd?: () => void;
-  }): () => void;          // devuelve "stop"
+    onInterim?: (text: string) => void;   // texto provisional mientras hablas
+    onFinal: (text: string) => void;      // texto final
+    onError?: (code: string) => void;     // si algo falla
+    onEnd?: () => void;                   // cuando deja de escuchar
+  }): () => void;                    // devuelve una función para detener
 }
 ```
 
-El MVP trae `webSpeechProvider`. Cambiar de motor = implementar esta interfaz y pasarla a
-`<SpeechButton provider={…} />`.
+Para usar otro motor, se escribe uno que cumpla esta interfaz y se le pasa al botón
+(`<SpeechButton provider={…} />`).
 
-## Web Speech API: lo que hay que saber
+## Lo que hay que saber del reconocimiento del navegador
 
 | Tema | Detalle |
 |---|---|
-| Idioma | `es-CO` (español de Colombia). Si un navegador no lo tiene, suele caer a `es` |
-| Soporte | Chrome y Edge: sí. Safari: sí, con prefijo `webkit`. **Firefox estable: no** |
-| Privacidad | En Chrome el audio se procesa en servidores de Google. Hay que decirlo en la política de privacidad |
-| Requisitos | HTTPS (o `localhost`) y permiso de micrófono |
-| Errores manejados | `not-allowed` (permiso denegado), `no-speech`, `network`, `not-supported` → mensaje en español |
-| Modo | `continuous = false`, `interimResults = true`: una frase por pulsación, con vista previa |
+| Idioma | Español de Colombia (`es-CO`). Si el navegador no lo tiene, usa español general |
+| Navegadores | Chrome y Edge: sí. Safari: sí. **Firefox: no** |
+| Privacidad | En Chrome, el audio se envía a servidores de Google para reconocerlo. Hay que decirlo en la política de privacidad |
+| Requisitos | La página debe tener HTTPS (o ser `localhost`), y hay que dar permiso al micrófono |
+| Errores | Permiso negado, no se oyó nada, sin internet o navegador sin soporte: todos muestran un mensaje en español |
+| Forma de uso | Una frase cada vez que pulsas el botón, viendo el texto mientras hablas |
 
-## Firefox y privacidad: alternativas
+## Firefox y privacidad: otras opciones
 
-| Opción | Cómo | Ventajas | Costos |
+| Opción | Cómo funciona | A favor | En contra |
 |---|---|---|---|
-| **Whisper en el navegador** (`@huggingface/transformers`, modelo `whisper-tiny`/`base` multilingüe) | Grabar con `MediaRecorder` → transcribir en un Web Worker (WebGPU o WASM) | Funciona en Firefox, sin servidor, el audio no sale del equipo | Descarga inicial de decenas a cientos de MB; más lento en equipos modestos |
-| **API de voz en la nube** (Google, Azure, Deepgram, OpenAI…) | Función serverless que recibe el audio | Precisión alta, cualquier navegador | Requiere backend mínimo (para no exponer la clave), costo por minuto, política de datos |
+| **Whisper dentro del navegador** | Se graba el audio y un modelo de IA lo convierte en texto en tu propio equipo | Funciona en Firefox, no necesita servidor y el audio no sale de tu equipo | Hay que descargar el modelo (de decenas a cientos de MB) y es más lento en equipos sencillos |
+| **Servicio de voz en la nube** (Google, Azure, Deepgram, OpenAI…) | El audio se envía a un servicio que devuelve el texto | Muy preciso y funciona en cualquier navegador | Necesita un pequeño servidor para guardar la clave, cuesta por minuto y hay que cuidar los datos |
 
-**Recomendación:** MVP con Web Speech API + mensaje claro en navegadores sin soporte ("Usa Chrome o
-Edge, o escribe el texto"). Como primera mejora, añadir Whisper en el navegador como proveedor
-alternativo cuando `webSpeechProvider.isSupported()` sea falso.
+**Qué se hace hoy:** usar el reconocimiento del navegador y, donde no funcione, mostrar un mensaje claro
+(«Usa Chrome o Edge, o escribe el texto»). **Primera mejora:** añadir Whisper dentro del navegador para
+cuando el reconocimiento normal no esté disponible.
 
-## Decisiones de UX
+## Decisiones sobre la experiencia
 
-- Al terminar de hablar, el texto aparece en el campo (el usuario puede ver y corregir errores de
-  reconocimiento) y **se reproduce automáticamente**. Si en pruebas con usuarios molesta, cambiar a
-  "confirmar antes de reproducir".
-- Mientras escucha, el botón cambia a rojo: "⏺ Escuchando… (toca para detener)".
-- El reconocimiento puede escribir números como dígitos ("tengo 3 gatos" → "tengo 3 gatos"). En el MVP
-  los números se omiten y se avisa; ver [11](11-manejo-caracteres-especiales.md).
+- Al terminar de hablar, el texto aparece en el campo (así puedes ver y corregir errores) y **se reproduce
+  solo**. Si en las pruebas con personas eso molesta, se cambiará a «confirmar antes de reproducir».
+- Mientras escucha, el botón se pone rojo y dice «Escuchando… (toca para detener)».
+- El reconocimiento puede escribir los números con cifras («tengo 3 gatos»). Hoy los números no se señan y
+  se avisa; ver [11](11-manejo-caracteres-especiales.md).
 
-## Fase 4 (futuro)
+## En el futuro (fase 4)
 
-En la fase 4 (voz → texto → LSC → avatar), el proveedor de voz no cambia: solo cambia lo que ocurre
-después de `onFinal` (el texto pasa por el traductor de la fase 3 en vez del deletreador).
+Cuando el proyecto traduzca frases completas a LSC, la parte de la voz no cambia. Solo cambia lo que pasa
+después de tener el texto: en vez de deletrearlo, pasará por el traductor de la fase 3.

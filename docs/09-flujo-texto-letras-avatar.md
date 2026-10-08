@@ -1,88 +1,106 @@
-# 09 · Flujo Texto → letras → avatar
+# 09 · De lo que escribes a lo que seña el avatar
 
-## Secuencia
+> **En pocas palabras:** escribes una palabra y pulsas Reproducir. La página limpia el texto (mayúsculas,
+> sin tildes), busca la seña de cada letra, arma la lista y el reproductor la recorre. En cada cuadro de la
+> pantalla, el avatar pregunta qué pose mostrar.
 
-```text
-Usuario            App.tsx            normalizeText       buildQueue          SignPlayer          ClipDriver / Avatar
-   │ escribe "Casa"   │                     │                  │                   │                      │
-   │ ▶ Reproducir ───►│ spell("Casa") ─────►│                  │                   │                      │
-   │                  │◄── tokens C,A,S,A ──│                  │                   │                      │
-   │                  │──────────── tokens ───────────────────►│                   │                      │
-   │                  │◄─────────── QueueItem[4] ──────────────│ (SignRepository)  │                      │
-   │                  │──────────────────── load(items); play() ──────────────────►│                      │
-   │                  │                                                            │                      │
-   │                  │  cada frame: usePlayerClock → player.update(dt)            │                      │
-   │                  │              useFrame       → driver.apply(player.getFrame()) ───────────────────►│
-   │◄── UI: "Letra actual: A · 2 / 4" (snapshot solo cuando cambia la letra) ──────│                      │
+## El recorrido completo
+
+```mermaid
+sequenceDiagram
+  actor U as Persona
+  participant App as Pantalla
+  participant N as Limpiar el texto
+  participant Q as Armar la lista
+  participant R as Diccionario de señas
+  participant P as Reproductor
+  participant A as Avatar
+  U->>App: escribe «Casa» y pulsa Reproducir
+  App->>N: limpia «Casa»
+  N-->>App: letras C, A, S, A
+  App->>Q: arma la lista con estas letras
+  Q->>R: busca la seña de cada letra
+  R-->>Q: ficha de la seña (con su animación)
+  Q-->>App: lista de 4 señas
+  App->>P: carga la lista y reproduce
+  loop en cada cuadro de la pantalla (60 por segundo)
+    App->>P: avanza el reloj
+    A->>P: ¿qué pose muestro?
+    P-->>A: de qué letra vengo, a cuál voy y cuánto avancé
+    A->>A: mezcla las animaciones
+  end
+  P-->>App: aviso solo cuando cambia la letra
+  App-->>U: «Letra actual: A · 2 / 4»
 ```
 
-## Paso a paso (con el código inicial)
+## Paso a paso
 
-| # | Paso que pediste | Dónde ocurre |
-|---|---|---|
-| 1 | Leer el texto | `App.tsx` → `spell(text)` al enviar el formulario (botón o Enter) |
-| 2 | Convertirlo a mayúsculas | `normalizeText` → `toLetter()` usa `toLocaleLowerCase('es')` y luego `toUpperCase()` |
-| 3 | Separarlo carácter por carácter | `Array.from(input)` (respeta caracteres Unicode completos) |
-| 4 | Espacios como pausas | Espacios/guiones → token `pause: 'word'`; varias seguidas se colapsan |
-| 5 | Buscar la animación de cada letra | `buildQueue` → `SignRepository.findLetter()` → `sign.animation.clip` |
-| 6 | Reproducir en orden | `SignPlayer.update(dt)` recorre la cola |
-| 7 | Pasar a la siguiente al terminar | Cuando `elapsedMs` supera `transitionMs + durationMs`, `index++` |
+| # | Paso | Qué pasa | Dónde está en el código |
+|---|---|---|---|
+| 1 | Leer el texto | Al pulsar Reproducir o Enter, la página toma lo que escribiste | `App.tsx` → `spell(text)` |
+| 2 | Pasar a mayúsculas | «Casa» se vuelve «CASA» | `normalizeText` |
+| 3 | Separar letra por letra | Se toma cada carácter por separado, incluidos los especiales como la Ñ | `normalizeText` |
+| 4 | Los espacios son pausas | Un espacio o un guion se vuelve una pausa corta. Varios seguidos cuentan como uno | `normalizeText` |
+| 5 | Buscar la animación de cada letra | Para cada letra se busca su ficha en el diccionario | `buildQueue` → `SignRepository` |
+| 6 | Reproducir en orden | El reproductor recorre la lista con su reloj | `SignPlayer` |
+| 7 | Pasar a la siguiente | Cuando se acaba el tiempo de una letra, sigue la próxima | `SignPlayer.update` |
 
 ## Ejemplos
 
-### `HOLA`
+### HOLA
 
 ```text
-tokens:  H  O  L  A
-cola:    [H 850ms] [O 850ms] [L 850ms] [A 850ms]      total ≈ 3,4 s a 1x
-avatar:  rest→H, H→O, O→L, L→A, (fin: se mantiene A; Detener vuelve a rest)
-UI:      H → O → L → A    Letra actual: L    3 / 4
+letras:   H  O  L  A
+lista:    [H 850 ms] [O 850 ms] [L 850 ms] [A 850 ms]     en total ≈ 3,4 segundos a velocidad normal
+avatar:   reposo→H, H→O, O→L, L→A  (al final se queda en la A; Detener lo vuelve al reposo)
+pantalla: H → O → L → A    Letra actual: L    3 / 4
 ```
 
-### `CASA`
+### CASA
 
 ```text
 C → A → S → A
-S es dinámica (traza una "S"): 250 ms de transición + 950 ms de clip
+La S tiene movimiento (dibuja una «S»): 250 ms para llegar + 950 ms de movimiento
 ```
 
-### `¿Cómo estás?`
+### ¿Cómo estás?
 
 ```text
-entrada:      ¿Cómo estás?
-normalizado:  COMO ESTAS
-tokens:       C O M O (pausa palabra) E S T A S
-UI:           C → O → M → O   E → S → T → A → S
+escribes:     ¿Cómo estás?
+queda:        COMO ESTAS
+letras:       C O M O (pausa entre palabras) E S T A S
+pantalla:     C → O → M → O   E → S → T → A → S
 ```
 
-Los signos `¿` y `?` no se señan: `¿` se ignora y `?` al final no genera pausa porque no hay nada después.
+Los signos `¿` y `?` no se señan. El `¿` se ignora, y el `?` del final no agrega pausa porque no hay nada
+después.
 
-### `Hola, Ana 5`
+### Hola, Ana 5
 
 ```text
-normalizado:  HOLA ANA 5
-cola:         H O L A (pausa coma 550 ms) A N A
-aviso en UI:  "Omitidos (sin seña en el MVP): 5"
+queda:        HOLA ANA 5
+lista:        H O L A (pausa por la coma: 550 ms) A N A
+aviso:        «Omitidos (sin seña en el MVP): 5»
 ```
 
-## Qué ve el usuario
+## Qué ve la persona
 
-1. Debajo del campo: **"Se deletreará: COMO ESTAS"**. Así sabe de antemano qué se va a señar y ve el
-   efecto de quitar tildes y signos.
-2. El avatar empieza de inmediato.
-3. La línea de tiempo resalta la letra actual; las ya señadas se atenúan; las que no tienen animación
-   aparecen con borde discontinuo.
-4. Clic en cualquier letra = saltar a ella.
+1. Debajo del campo aparece **«Se deletreará: COMO ESTAS»**. Así sabe qué se va a señar y ve que se quitaron
+   las tildes y los signos.
+2. El avatar empieza enseguida.
+3. En la línea de letras, la letra actual se resalta en amarillo, las que ya pasaron quedan en verde claro
+   y las que no tienen animación aparecen con borde punteado.
+4. Tocar cualquier letra salta a ella.
 
 ## Probado en el navegador
 
-Con el avatar `mpfb2-caricatura` y las 27 letras:
+Con las 27 letras (prueba hecha con el avatar caricaturesco, ya eliminado; el realista se comporta igual):
 
-- `Hola Nexo` → `HOLA NEXO`: todas las letras tienen clip (ninguna aparece como "animación
-  pendiente"); al pausar y saltar a la L, el avatar muestra la L con el pulgar horizontal.
-- `Allá` → `ALLA`: A → L → L → A, con la "re-articulación" en la L repetida y el contador `2 / 4`.
-- `¿Hola, Ana 5?` → `HOLA ANA`, con el aviso "Omitidos: 5", el hueco entre palabras en la línea de
-  tiempo y `4 / 7`.
-- Fondo del escenario con la foto del SENA desenfocada; la mano se sigue leyendo bien.
+- «Hola Nexo» → `HOLA NEXO`: todas las letras tienen animación. Al pausar y saltar a la L, el avatar
+  muestra la L con el pulgar horizontal.
+- «Allá» → `ALLA`: A → L → L → A, con el pequeño regreso al reposo en la L repetida, y el contador `2 / 4`.
+- «¿Hola, Ana 5?» → `HOLA ANA`, con el aviso «Omitidos: 5», el espacio entre palabras en la línea de letras
+  y el contador `4 / 7`.
+- Con la foto del SENA de fondo, la mano se sigue viendo bien.
 
-Sin errores en consola.
+Sin errores en la consola del navegador.

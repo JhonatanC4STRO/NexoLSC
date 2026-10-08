@@ -1,65 +1,74 @@
-# 06 · Sistema de Animation Clips
+# 06 · Las animaciones de las letras
 
-## 1. ¿Un GLB por letra o un GLB con muchos clips?
+> **En pocas palabras:** cada letra es una **animación** (en inglés, *clip*) guardada dentro del
+> archivo del avatar. Las letras no se animan a mano: están escritas como números (ángulos de los dedos y
+> de la mano) en un archivo de datos, y un programa de Blender las convierte en animaciones para cualquier
+> avatar. El paso de una letra a la siguiente lo calcula la página sola.
 
-| Criterio | A) `A.glb … Z.glb` (cada uno con malla) | B) `avatar.glb` con clips `sign_*` | C) `avatar.glb` + paquetes de animación sin malla |
+## 1. ¿Un archivo por letra o uno con todas?
+
+| Qué se compara | A) Un archivo por letra (cada uno con el cuerpo) | B) Un archivo por avatar con todas las letras | C) El avatar + paquetes de animaciones sin cuerpo |
 |---|---|---|---|
-| Descargas | 27 archivos; la malla se repite 27 veces (~3,5 MB × 27) | 1 archivo | 1 avatar + N paquetes pequeños |
-| Memoria | 27 esqueletos/mallas o recargas | 1 esqueleto | 1 esqueleto |
-| Transiciones entre letras | Hay que cambiar de modelo o re-dirigir clips | Nativas: mismo `AnimationMixer` | Nativas si los nombres de huesos coinciden |
-| Añadir una letra | Exportar un archivo | Re-exportar el avatar | Exportar un paquete |
-| Escala a miles de señas (fase 2) | ❌ | ⚠️ el archivo crece sin límite | ✅ carga bajo demanda |
-| Complejidad | Media | **Baja** | Media |
+| Descargas | 27 archivos; el cuerpo se repite 27 veces | 1 archivo | El avatar + paquetes pequeños |
+| Memoria | 27 cuerpos y esqueletos | 1 esqueleto | 1 esqueleto |
+| Pasar de una letra a otra | Difícil: hay que cambiar de modelo | Fácil: todo está en el mismo avatar | Fácil, si los huesos se llaman igual |
+| Añadir una letra | Exportar un archivo | Volver a exportar el avatar | Exportar un paquete |
+| Sirve para miles de señas | ❌ | ⚠️ el archivo crece sin parar | ✅ se descarga solo lo que se usa |
+| Dificultad | Media | **Baja** | Media |
 
-### Recomendación
+### Qué se eligió
 
-- **MVP: opción B (implementada).** Un único GLB por avatar (`public/models/avatars/<id>.glb`) con los
-  clips `rest` + 27 letras. Hoy los clips suman ~1,5 MB porque cada uno guarda los 181 huesos, incluidos
-  cara y piernas que no se mueven; eliminar esas pistas es una optimización pendiente.
-- **Fase 2: opción C.** El modelo de datos ya incluye `animation.pack` (hoy siempre `"avatar"`). Cuando
-  haya cientos de palabras, se exportan paquetes **solo con esqueleto + animaciones** (sin malla), se
-  cargan con `GLTFLoader` y sus clips se añaden al mismo `AnimationMixer`: three.js vincula las pistas
-  por **nombre de hueso**. Como los clips exportados incluyen también la posición de cada hueso (que
-  depende de las proporciones del avatar), los paquetes se hornean por avatar con `bake_letters.py`, o se
-  exportan solo con rotaciones.
+- **Hoy: opción B (ya funciona).** Un solo archivo por avatar (`public/models/avatars/<id>.glb`) con la
+  pose de reposo y las 27 letras. Las animaciones ocupan ~1,5 MB porque cada una guarda los 181 huesos,
+  incluidos la cara y las piernas, que no se mueven. Quitar eso queda pendiente.
+- **Fase 2: opción C.** Cuando haya cientos de palabras, se crearán **paquetes de animaciones sin cuerpo**
+  (por ejemplo, «saludos» o «familia») que se descargan solo cuando se necesitan. three.js los conecta al
+  avatar por el **nombre de cada hueso**. El formato de datos ya está preparado para esto (campo
+  `animation.pack`).
 - La opción A se descarta.
 
-## 2. Convención de nombres
+## 2. Cómo se llaman las animaciones
 
-| Clip | Contenido |
+| Nombre | Qué es |
 |---|---|
-| `rest` | Pose neutra (inicio, fin, fallback). **Obligatorio** |
-| `idle` | (Opcional) respiración/parpadeo en bucle para cuando no se seña |
+| `rest` | Pose de reposo (al empezar, al terminar o si falta una letra). **Obligatoria** |
+| `idle` | (Opcional) respirar o parpadear mientras no seña |
 | `sign_A` … `sign_Z` | Una por letra |
-| `sign_ENYE` | Ñ (nombres solo ASCII para evitar problemas de codificación) |
-| `num_0` … `num_9` | Fase 1.1 |
-| `word_CASA`, `word_GRACIAS` | Fase 2 (la glosa en mayúsculas) |
+| `sign_ENYE` | La Ñ (se escribe sin «ñ» para evitar problemas con los caracteres especiales) |
+| `num_0` … `num_9` | Los números (fase 1.1) |
+| `word_CASA`, `word_GRACIAS` | Palabras (fase 2) |
 
-El nombre del clip lo decide el dato (`SignEntry.animation.clip`), no el código.
+El nombre de la animación de cada seña está escrito en sus datos, no en el código.
 
-## 3. Tipos de clip
+## 3. Dos tipos de letra
 
-```text
-Letra estática (A, B, C, D, E, F, I, K, L, M, N, O, P, Q, R, T, U, V, W, X, Y)
-  clip de 1 fotograma = la pose
-  el motor genera:  [transición 250 ms desde la pose anterior] → [sostener 600 ms]
-
-Letra dinámica (G, H, J, Ñ, S, Z — tienen flechas en la ilustración de la fuente)
-  clip de ~24–30 fotogramas: pose inicial → trayectoria → pose final
-  el motor genera:  [transición 250 ms hacia el fotograma 0] → [reproducir el clip ~950 ms]
+```mermaid
+flowchart LR
+  subgraph EST["Letra quieta · su animación es una sola pose"]
+    direction LR
+    E0["Pose anterior"] -- "pasar a la letra<br/>250 ms" --> E1["<b>Pose de la letra</b><br/>A B C D E F I K L M N<br/>O P Q R T U V W X Y"] -- "mantenerla<br/>600 ms" --> E2["Siguiente letra"]
+  end
+  subgraph DIN["Letra con movimiento · su animación dibuja un recorrido"]
+    direction LR
+    D0["Pose anterior"] -- "pasar a la letra<br/>250 ms" --> D1["<b>Pose inicial</b><br/>G H J Ñ S Z"] -- "hacer el movimiento<br/>950 ms" --> D2["Pose final"]
+  end
 ```
 
-Las **transiciones no se animan a mano**: el `ClipDriver` mezcla (blending) la pose anterior con la
-siguiente con una curva suave. Así no hay que producir 27 × 27 transiciones.
+**El paso de una letra a otra no se anima a mano.** La página mezcla suavemente la pose anterior con la
+nueva. Así no hay que hacer 27 × 27 = 729 transiciones.
 
-Duraciones iniciales (a velocidad 1x): transición 250 ms, sostener 600 ms, dinámicas 950 ms.
-Son valores de partida para ajustar con usuarios sordos; están en los datos, no en el código.
+Tiempos de partida (a velocidad normal): pasar a la letra 250 ms, mantenerla 600 ms, letras con
+movimiento 950 ms. Son valores para ajustar con personas sordas; están en los datos, no en el código.
+(1000 ms = 1 segundo.)
 
-## 4. Las letras como datos (independientes del avatar) — implementado
+## 4. Las letras como datos
 
-Las 27 letras **no** se animan a mano en cada avatar. Se describen una vez en
-`assets-src/letters/alfabeto_lsc.json` y `tools/blender/bake_letters.py` las aplica al rig de cualquier
-avatar Rigify, creando `rest` + `sign_A` … `sign_Z` + `sign_ENYE`.
+Las 27 letras **no** se animan a mano en cada avatar. Se describen una sola vez en
+`assets-src/letters/alfabeto_lsc.json`, y el programa `tools/blender/bake_letters.py` las aplica al
+esqueleto de cualquier avatar Rigify. A este paso se le llama **hornear** (*bake*): convertir los datos en
+animaciones guardadas dentro del avatar.
+
+Así se ven dos letras en el archivo de datos:
 
 ```json
 "L": {
@@ -74,38 +83,39 @@ avatar Rigify, creando `rest` + `sign_A` … `sign_Z` + `sign_ENYE`.
 }
 ```
 
-| Campo | Significado (ejes locales del rig Rigify, mano derecha) |
+Qué significa cada campo (todos los ángulos en grados, mano derecha):
+
+| Campo | Qué describe |
 |---|---|
-| `fingers.<dedo>` | `[mcp, pip, dip, spread]` en grados: flexión de cada falange (X local, + cierra) y separación (Z local, + hacia el pulgar) |
-| `thumb` | `[cmc_x, cmc_z, cmc_y, mcp, ip]`: base del pulgar hacia el índice (+X), hacia la palma (+Z) o afuera (−Z), giro, y flexión de las dos falanges |
-| `arm.twist` | Giro del antebrazo, es decir, hacia dónde mira la palma. `defaults.arm.twist = −60` deja la palma al frente |
-| `arm.hand_dir` / `arm.forearm_dir` | Dirección (mundo) de los dedos / del antebrazo. Ej.: P apunta hacia abajo |
-| `arm.swing` / `arm.lift` / `arm.tilt` | Desplazan la mano (derecha del espectador / arriba) o inclinan el antebrazo |
-| `motion` | Fotogramas clave `t` (0..1) con ajustes que se suman: trayectorias de G, H, J, Ñ, S, Z |
+| `status` | Estado de revisión: `draft` = borrador, `approved` = aprobada por personas sordas |
+| `fingers.<dedo>` | Cuatro números por dedo: cuánto se dobla cada una de sus tres partes (positivo = cerrar) y cuánto se separa (positivo = hacia el pulgar). `0` = dedo estirado |
+| `thumb` | Cinco números para el pulgar: hacia el índice, hacia la palma o afuera, su giro, y cuánto se doblan sus dos partes |
+| `arm.twist` | Hacia dónde mira la palma (giro del antebrazo). Con −60 la palma mira al frente; es el valor por defecto |
+| `arm.hand_dir` / `arm.forearm_dir` | Hacia dónde apuntan los dedos o el antebrazo. Por ejemplo, en la P apuntan hacia abajo |
+| `arm.swing` / `arm.lift` / `arm.tilt` | Mover la mano a un lado, subirla o bajarla, o inclinar el antebrazo |
+| `motion` | El recorrido de las letras con movimiento (G, H, J, Ñ, S, Z): una lista de momentos, de `t: 0` (inicio) a `t: 1` (fin), con lo que cambia en cada uno |
 
-**Probado:** las mismas definiciones producen las 27 letras en el avatar caricaturesco y en el
-realista, sin cambiar ningún dato (ver [04-diseno-avatar.md](04-diseno-avatar.md#1-candidatos-de-avatar)).
-Lo que puede requerir ajuste por avatar son los **contactos** (pulgar tocando dedos en O, D, F, T)
-cuando las proporciones de la mano cambian mucho.
+**Comprobado:** los mismos datos produjeron las 27 letras en dos avatares distintos (el realista y uno
+caricaturesco que luego se eliminó), sin cambiar nada (ver [04-diseno-avatar.md](04-diseno-avatar.md)). Lo único que puede necesitar ajustes en
+un avatar con manos muy distintas son los **contactos**: el pulgar tocando otro dedo en O, D, F y T.
 
-Flujo para corregir una letra:
-1. Editar su entrada en el JSON (por ejemplo, el pulgar de la L).
-2. `bake_letters.py` en cada avatar y exportar el GLB.
-3. Revisar de frente y de perfil. Cambiar `status` a `approved` solo tras la validación con personas sordas.
+### Cómo corregir una letra
 
-```bash
-blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/bake_letters.py
-```
+1. Cambia sus números en el archivo `alfabeto_lsc.json` (por ejemplo, el pulgar de la L).
+2. Hornea las letras en cada avatar y expórtalo:
 
-```bash
-blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
-```
+   ```bash
+   blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/bake_letters.py
+   ```
 
-Alternativa manual (para retoques finos): posar en Blender con la ilustración del DBLSC como imagen de
-referencia, guardar la pose en la *Pose Library* y trasladar los ángulos resultantes al JSON para que la
-corrección valga en todos los avatares.
+   ```bash
+   blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
+   ```
 
-Salida esperada del horneado y la exportación:
+3. Revisa la letra de frente y de lado. Cambia `status` a `approved` **solo** después de que la validen
+   personas sordas.
+
+Si todo sale bien, verás algo así:
 
 ```text
 [ok] Actions: ['rest', 'sign_A', 'sign_B', …, 'sign_ENYE', …, 'sign_Z']
@@ -113,34 +123,42 @@ Salida esperada del horneado y la exportación:
 [clips] ['rest', 'sign_A', …, 'sign_Z']
 ```
 
+Para retoques muy finos también se puede posar la mano a mano en Blender, usando la ilustración del
+diccionario como referencia, y luego copiar los ángulos al archivo de datos para que la corrección sirva en
+todos los avatares.
+
 ### Cómo se revisó la primera versión
 
-Las 27 letras se renderizaron de frente y de perfil en los dos avatares y se corrigieron las que se veían
-mal: C, O, Q, A y X (la mano quedaba "acostada" al girar el antebrazo; ahora se reorienta la mano después
-del giro), P (muñeca imposible; ahora el antebrazo va hacia adelante con `forearm_dir`), H (dedos hacia
-afuera y arriba, como en la ilustración) y el pulgar de L e Y (apuntaba hacia el espectador; ahora queda
-horizontal en el plano de la palma). Todas siguen en `draft` hasta la validación con personas sordas.
+Se sacaron imágenes de las 27 letras, de frente y de lado, en los dos avatares, y se corrigieron las que se
+veían mal:
 
-Los scripts completos están en [15-codigo-inicial.md](15-codigo-inicial.md).
+- **C, O, Q, A y X:** la mano quedaba «acostada» al girar el antebrazo. Ahora se endereza después del giro.
+- **P:** la muñeca quedaba en una posición imposible. Ahora el antebrazo apunta hacia adelante.
+- **H:** ahora los dedos apuntan hacia afuera y arriba, como en la ilustración.
+- **L e Y:** el pulgar apuntaba hacia quien mira. Ahora queda horizontal, en el mismo plano de la palma.
 
-## 5. Funciones de pose (`pose_helpers.py`)
+Todas siguen en **borrador** hasta que las validen personas sordas.
 
-`bake_letters.py` se apoya en `tools/blender/pose_helpers.py` (probado en los dos rigs), que también
-sirve para experimentar poses a mano:
+El código completo de los programas está en [15-codigo-inicial.md](15-codigo-inicial.md).
+
+## 5. Funciones para posar con código (`pose_helpers.py`)
+
+`bake_letters.py` usa las funciones de `tools/blender/pose_helpers.py`. También sirven para probar poses
+a mano:
 
 | Función | Qué hace |
 |---|---|
-| `reset()` | Vuelve a la pose de descanso **y desasigna la Action activa** |
-| `rot_world(hueso, eje, grados)` | Rota un hueso alrededor de un eje del espacio de la armadura |
-| `aim(hueso, dirección)` | Apunta el hueso (su eje Y) hacia una dirección |
-| `curl(dedo, grados)` | Flexiona las 3 falanges de un dedo (X local positivo = cerrar) |
-| `arm_signing_space()` | Mano derecha a la altura del hombro, palma al frente |
-| `key_action(nombre)` | Crea una Action con *Fake User* y guarda la pose actual |
+| `reset()` | Vuelve a la pose de reposo y quita la animación activa |
+| `rot_world(hueso, eje, grados)` | Gira un hueso alrededor de un eje |
+| `aim(hueso, dirección)` | Hace que un hueso apunte hacia una dirección |
+| `curl(dedo, grados)` | Dobla las tres partes de un dedo |
+| `arm_signing_space()` | Pone la mano derecha a la altura del hombro, con la palma al frente |
+| `key_action(nombre)` | Guarda la pose actual como una animación con ese nombre |
 
 ```python
-import pose_helpers as P   # con tools/blender en sys.path
+import pose_helpers as P   # con tools/blender en la ruta de Python
 
-# Ejemplo: tres dedos cerrados (prueba de pipeline, NO es una letra validada)
+# Ejemplo: tres dedos cerrados (solo una prueba, NO es una letra validada)
 P.reset()
 P.arm_signing_space()
 for f in ['f_middle', 'f_ring', 'f_pinky']:
@@ -149,30 +167,33 @@ P.key_action('sign_L')
 ```
 
 Dos trampas que ya están resueltas en el archivo:
-- En el Rigify actual los **dedos usan Euler** y los brazos cuaterniones: escribir solo
-  `rotation_quaternion` en un dedo no tiene ningún efecto.
-- Si queda una Action asignada al rig, Blender vuelve a aplicar sus fotogramas al actualizar la escena y
-  las poses **se suman**; por eso `reset()` la desasigna.
 
-> El script sirve para acelerar el trabajo, **no** reemplaza la revisión visual contra la fuente ni la
-> validación con usuarios de LSC.
+- **Los dedos y los brazos giran con sistemas distintos.** Si a un dedo se le da el giro con el sistema de
+  los brazos, no se mueve.
+- **Las poses se sumaban.** Si queda una animación activa, Blender la vuelve a aplicar y se suma a la nueva
+  pose. Por eso `reset()` la quita.
 
-## 6. Cómo se reproducen los clips en three.js
+> Estas funciones ahorran trabajo, pero **no** reemplazan la revisión contra la fuente ni la validación con
+> personas que usan la LSC.
 
-- Todos los clips se registran una vez en un `AnimationMixer`, en pausa y con peso 0.
-- En cada frame, `ClipDriver.apply(frame)`:
-  - asigna peso `1 − t` al clip de la letra anterior (fijado en su último fotograma);
-  - asigna peso `t` al clip de la letra actual (en el tiempo que indica el progreso);
-  - si es la **misma letra repetida** (LL, RR, SS), pasa brevemente cerca de `rest` para que se vea
-    que hay dos letras (a validar con la comunidad);
-  - llama a `mixer.update(0)`: aplica la mezcla sin avanzar tiempo (el tiempo lo lleva el `SignPlayer`).
-- La suma de pesos siempre es 1, así three.js no mezcla con la pose de enlace (*bind pose*).
+## 6. Cómo se reproducen en el navegador
 
-## 7. Verificación de un GLB exportado
+- Al cargar el avatar, todas sus animaciones se preparan en pausa y apagadas.
+- En cada cuadro de la pantalla, el mezclador (`ClipDriver`):
+  - va apagando la letra anterior y encendiendo la nueva, poco a poco, según cuánto ha avanzado el paso;
+  - si la letra se **repite** (LL, RR, SS), pasa un momento cerca del reposo para que se vea que son dos
+    letras (esto hay que validarlo con la comunidad sorda);
+  - aplica la mezcla sin adelantar el tiempo, porque el reloj lo lleva el reproductor.
+- La suma de lo «encendido» siempre es 100 %. Así el avatar nunca cae en la pose de fábrica con los brazos
+  abiertos.
+
+## 7. Cómo comprobar un archivo exportado
+
+Este comando muestra cuántos huesos y qué animaciones tiene un `.glb`:
 
 ```bash
 node -e "const b=require('fs').readFileSync('public/models/avatars/mpfb2.glb');const l=b.readUInt32LE(12);const j=JSON.parse(b.slice(20,20+l));console.log('joints',j.skins.map(s=>s.joints.length),'clips',j.animations.map(a=>a.name))"
 ```
 
-Además, la app marca con borde discontinuo en la línea de tiempo las letras cuyo clip todavía no está
-en el GLB.
+Además, si a un avatar le falta la animación de una letra, la línea de letras de la página la muestra con
+borde punteado.

@@ -1,61 +1,75 @@
-# assets-src
+# assets-src — archivos de trabajo de los avatares y las letras
 
-Archivos fuente de los avatares y de las letras. La app no los carga directamente: usa los `.glb`
-de `public/models/avatars/`.
+> **En pocas palabras:** aquí están los archivos con los que se **crean** los avatares y sus letras. La
+> página web no los usa directamente: usa el archivo `.glb` que sale de aquí y se guarda en
+> `public/models/avatars/`.
 
 ```text
 assets-src/
 ├── letters/
-│   └── alfabeto_lsc.json   ← las 27 letras como DATOS (independientes del avatar)
+│   └── alfabeto_lsc.json   ← las 27 letras como DATOS (sirven para cualquier avatar)
 └── avatars/
-    ├── mpfb2-caricatura/   ← CC0 · por defecto en la app · se versiona
-    ├── mpfb2/              ← CC0 · realista · se versiona
-    └── miles-prueba/       ← derechos de terceros · SOLO local (en .gitignore)
+    ├── mpfb2/              ← licencia libre (CC0) · el que usa la app · se guarda en git
+    └── miles-prueba/       ← derechos de autor de otros · SOLO en tu equipo (en .gitignore)
 ```
 
-Cada candidato de avatar tiene `build_avatar.py` (su configuración), `avatar.blend`, `textures/` y
-`LICENSE.md`. Todos cumplen el mismo contrato: armadura Rigify llamada `rig` y clips `rest` + `sign_*`.
+Cada avatar tiene su ficha (`build_avatar.py`), su archivo de Blender (`avatar.blend`), sus imágenes
+(`textures/`) y su licencia (`LICENSE.md`). Todos cumplen las mismas reglas: un esqueleto Rigify llamado
+`rig` y las animaciones `rest` (reposo) y `sign_*` (una por letra).
+
+> El avatar caricaturesco `mpfb2-caricatura` se eliminó el 2026-10-08. Sigue en el historial de git por si
+> se quiere recuperar.
 
 ## Las letras NO dependen del avatar
 
-Las 27 letras se describen una sola vez en `letters/alfabeto_lsc.json`: ángulos de cada dedo y del
-pulgar, orientación de la mano y, en las letras dinámicas, la trayectoria. `tools/blender/bake_letters.py`
-aplica esos datos al rig de **cualquier** avatar y crea sus Actions. Cambiar de avatar = volver a ejecutar
-el script; corregir una letra = editar el JSON y volver a ejecutarlo en todos los avatares.
+Las 27 letras se escriben una sola vez en `letters/alfabeto_lsc.json`: los ángulos de cada dedo y del
+pulgar, hacia dónde mira la mano y, en las letras con movimiento, el recorrido. El programa
+`tools/blender/bake_letters.py` aplica esos datos al esqueleto de **cualquier** avatar y crea sus
+animaciones.
 
-> Todas las letras están en estado `draft`: son una lectura de la ilustración del DBLSC (p. 573) y deben
-> validarse con personas sordas usuarias de LSC.
+- **Cambiar de avatar** = volver a correr el programa en el avatar nuevo.
+- **Corregir una letra** = cambiar sus números en el archivo de datos y volver a correr el programa en
+  todos los avatares.
 
-## Flujo completo (por candidato)
+> Todas las letras están en **borrador**: salen de mirar el dibujo del diccionario DBLSC (pág. 573) y
+> tienen que validarlas personas sordas que usan la LSC.
 
-Requisitos (una sola vez): extensión **MPFB** en Blender (Preferencias → Get Extensions → "MPFB") y el
-paquete `makehuman_system_assets_cc0.zip` cargado en MPFB (Apply assets → Library settings → Load pack
-from zip file).
+## Paso a paso para un avatar
 
-1. Generar el personaje (solo candidatos MPFB):
+**Lo que necesitas una sola vez:**
 
-```bash
-blender -b --python assets-src/avatars/mpfb2-caricatura/build_avatar.py
-```
+- Blender 5.2 o más nuevo.
+- La extensión **MPFB** en Blender (*Preferencias → Get Extensions →* buscar «MPFB»).
+- El paquete de recursos `makehuman_system_assets_cc0.zip` cargado en MPFB (*Apply assets → Library
+  settings → Load pack from zip file*).
 
-2. Hornear las letras en el avatar:
+En los comandos, `blender` es el programa de Blender. En Windows suele estar en
+`"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe"`.
 
-```bash
-blender -b assets-src/avatars/mpfb2-caricatura/avatar.blend --python tools/blender/bake_letters.py
-```
+1. **Crear el personaje** (solo para avatares MPFB):
 
-3. Exportar el GLB que usa la app:
+   ```bash
+   blender -b --python assets-src/avatars/mpfb2/build_avatar.py
+   ```
 
-```bash
-blender -b assets-src/avatars/mpfb2-caricatura/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2-caricatura.glb
-```
+2. **Aplicar las letras al avatar** («hornear»):
 
-Después de editar `letters/alfabeto_lsc.json`, repetir los pasos 2 y 3 en cada avatar.
+   ```bash
+   blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/bake_letters.py
+   ```
 
-## Añadir un nuevo candidato
+3. **Exportar el archivo que usa la página:**
 
-1. MPFB: copiar una carpeta existente, cambiar `CONFIG` en `build_avatar.py` (fenotipo, ajustes de cara,
-   pieles, ropa) y ejecutar los tres pasos. Generador compartido: `tools/blender/mpfb_builder.py`.
-2. Otro origen: su `.blend` debe tener una armadura Rigify llamada `rig`; ejecutar los pasos 2 y 3.
-3. Registrarlo en `src/avatar/avatars.ts` (con `publishable: false` y en `.gitignore` si no tiene licencia
-   libre) y añadir su `LICENSE.md`.
+   ```bash
+   blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
+   ```
+
+Cada vez que cambies `letters/alfabeto_lsc.json`, repite los pasos 2 y 3 en cada avatar.
+
+## Añadir un avatar nuevo
+
+1. **Con MPFB:** copia la carpeta `mpfb2`, cambia los ajustes de `CONFIG` en `build_avatar.py` (cuerpo,
+   cara, piel, ropa) y haz los tres pasos. El generador común está en `tools/blender/mpfb_builder.py`.
+2. **De otro origen:** su archivo `.blend` debe tener un esqueleto Rigify llamado `rig`. Haz los pasos 2 y 3.
+3. **Regístralo en la app**, en `src/avatar/avatars.ts`, y guarda su `LICENSE.md`. Si su licencia no es
+   libre, márcalo con `publishable: false` y añádelo a `.gitignore` para que no se suba.

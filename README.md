@@ -1,96 +1,133 @@
-# NexoLSC — MVP deletreador en Lengua de Señas Colombiana
+# NexoLSC — deletreador en Lengua de Señas Colombiana
 
-> **Objetivo del MVP:** escribo (o digo) una palabra → un avatar 3D hace la seña de cada letra del
-> alfabeto manual LSC, una por una, con controles para aprender (pausa, velocidad, saltar, repetir).
+> **En pocas palabras:** escribes (o dices) una palabra y un avatar 3D la deletrea con el alfabeto manual
+> de la Lengua de Señas Colombiana (LSC), letra por letra. Puedes pausar, cambiar la velocidad, saltar a
+> una letra, repetir y mirar la mano de frente, de lado o de cerca.
 
-## Documentos
+Proyecto del SENA, Centro de la Amazonía (Florencia, Caquetá).
 
-| # | Documento | Contenido |
+## Cómo ejecutarlo en tu computador
+
+**Lo que necesitas instalar una sola vez:** [Node.js](https://nodejs.org/) versión 20 o más nueva (trae
+`npm`). Para saber si ya lo tienes, abre una terminal y escribe `node -v`: debe mostrar un número como
+`v20…` o mayor.
+
+1. **Abre una terminal en la carpeta del proyecto.** En VS Code: menú *Terminal → Nueva terminal*. O en
+   Windows, abre la carpeta `NexoLSC` en el Explorador, escribe `cmd` en la barra de direcciones y pulsa
+   Enter.
+2. **Instala las librerías** (solo la primera vez, o cuando cambie `package.json`):
+
+   ```bash
+   npm install
+   ```
+
+3. **Arranca la página:**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Ábrela en el navegador:** entra a <http://localhost:5173>. Escribe una palabra, por ejemplo «Hola», y
+   pulsa **Reproducir** (o Enter).
+5. **Para detenerla:** vuelve a la terminal y pulsa `Ctrl + C`.
+
+Mientras la página está arrancada, cada vez que guardas un cambio en el código el navegador se actualiza
+solo.
+
+### Otros comandos útiles
+
+| Comando | Para qué |
+|---|---|
+| `npm test` | Corre las pruebas automáticas (deben salir 15 en verde) |
+| `npm run build` | Prepara la versión para publicar, en la carpeta `dist/` |
+| `npm run preview` | Abre esa versión de publicación para revisarla antes de subirla |
+
+### Si algo no funciona
+
+- **«npm no se reconoce como un comando»:** falta instalar Node.js, o hay que cerrar y abrir la terminal
+  después de instalarlo.
+- **El puerto 5173 está ocupado:** Vite usará otro (5174, 5175…). Mira en la terminal qué dirección muestra.
+- **El avatar no aparece:** revisa que exista `public/models/avatars/mpfb2.glb`. Si no hay ningún avatar, la
+  página muestra la letra en grande con su descripción.
+- **El botón de voz no funciona:** el reconocimiento de voz solo existe en Chrome, Edge y Safari, no en
+  Firefox.
+
+## Documentación
+
+Todo está escrito en lenguaje sencillo. Si una palabra técnica no te queda clara, búscala en el
+[glosario](docs/17-glosario.md).
+
+| # | Documento | De qué trata |
 |---|---|---|
-| 01 | [Arquitectura del MVP](docs/01-arquitectura-mvp.md) | App web + producción de contenido (avatares y letras); ¿hace falta backend? (no) |
-| 02 | [Tecnologías](docs/02-tecnologias-recomendadas.md) | Stack con versiones probadas (incluye MPFB y Rigify) y alternativas descartadas |
-| 03 | [Estructura de carpetas](docs/03-estructura-carpetas.md) | Árbol del proyecto y reglas |
-| 04 | [Diseño del avatar](docs/04-diseno-avatar.md) | Candidatos (MPFB2 caricatura y realista), requisitos, encuadre |
-| 05 | [Sistema de rigging](docs/05-sistema-rigging.md) | Rig Rigify, esqueleto exportado (181 huesos) y ejes verificados |
-| 06 | [Animation Clips y letras como datos](docs/06-animation-clips.md) | Formato de `alfabeto_lsc.json`, horneado por avatar, exportación, reproducción |
-| 07 | [Sistema AnimationQueue](docs/07-animation-queue.md) | Cola, estados, reloj, velocidad, saltos |
-| 08 | [Modelo de datos para las letras](docs/08-modelo-datos-letras.md) | `SignEntry`, datos de pose y su evolución |
-| 09 | [Flujo Texto → letras → avatar](docs/09-flujo-texto-letras-avatar.md) | Paso a paso con ejemplos |
-| 10 | [Flujo Voz → texto → letras → avatar](docs/10-flujo-voz-texto-avatar.md) | Web Speech API, límites, alternativas |
-| 11 | [Tildes, espacios y caracteres especiales](docs/11-manejo-caracteres-especiales.md) | Reglas y decisiones abiertas |
-| 12 | [Fuentes reales del alfabeto LSC](docs/12-fuentes-alfabeto-lsc.md) | Fichas de fuentes, lectura letra por letra, protocolo de validación |
-| 13 | [Diseño de la interfaz](docs/13-diseno-interfaz.md) | Pantalla, marca visual, selector de avatar, fondo, estados, accesibilidad |
-| 14 | [Plan de implementación](docs/14-plan-implementacion.md) | Estado por etapas, siguientes pasos y riesgos |
-| 15 | [Código](docs/15-codigo-inicial.md) | Referencia legible del código y los scripts (generada desde el proyecto) |
-| 16 | [Palabras y frases completas](docs/16-estrategia-palabras-frases.md) | Cómo llegar de la fase 1 a la 5 sin rehacer |
+| 01 | [Cómo está construido](docs/01-arquitectura-mvp.md) | Las dos partes del proyecto (página web y taller de contenido) y por qué no hace falta servidor |
+| 02 | [Herramientas](docs/02-tecnologias-recomendadas.md) | Qué programas y librerías se usan, y qué se descartó |
+| 03 | [Carpetas](docs/03-estructura-carpetas.md) | Qué hay en cada carpeta |
+| 04 | [El avatar](docs/04-diseno-avatar.md) | El avatar actual y qué debe tener un buen avatar para LSC |
+| 05 | [El esqueleto](docs/05-sistema-rigging.md) | Cómo se mueve el avatar por dentro |
+| 06 | [Las animaciones de las letras](docs/06-animation-clips.md) | Las letras como datos y cómo se aplican a cualquier avatar |
+| 07 | [La lista de señas y el reproductor](docs/07-animation-queue.md) | Cómo se reproduce, pausa, salta y cambia de velocidad |
+| 08 | [Cómo se describe una seña](docs/08-modelo-datos-letras.md) | La ficha de cada letra |
+| 09 | [Del texto al avatar](docs/09-flujo-texto-letras-avatar.md) | Paso a paso, con ejemplos |
+| 10 | [De la voz al avatar](docs/10-flujo-voz-texto-avatar.md) | Cómo funciona el botón «Hablar» |
+| 11 | [Tildes y caracteres especiales](docs/11-manejo-caracteres-especiales.md) | Qué pasa con tildes, Ñ, números y signos |
+| 12 | [De dónde salen las letras](docs/12-fuentes-alfabeto-lsc.md) | Las fuentes reales del alfabeto LSC y cómo se validarán |
+| 13 | [La pantalla](docs/13-diseno-interfaz.md) | El diseño «Escenario», los mockups y la accesibilidad |
+| 14 | [Plan de trabajo](docs/14-plan-implementacion.md) | Qué está hecho y qué sigue |
+| 15 | [Código](docs/15-codigo-inicial.md) | El código del proyecto para leerlo con calma |
+| 16 | [Palabras y frases completas](docs/16-estrategia-palabras-frases.md) | Cómo pasar de deletrear a señar palabras |
+| 17 | [Glosario](docs/17-glosario.md) | Las palabras técnicas, explicadas |
 
-## Decisiones clave
+## Decisiones principales
 
-1. **Solo frontend** (Vite + React + TypeScript + three.js/R3F). Sin Node/Express/PostgreSQL en el MVP.
-2. **Un `avatar.glb` con un clip por letra** (`rest`, `sign_A` … `sign_Z`, `sign_ENYE`); paquetes de
-   animación bajo demanda en la fase 2.
-3. **El reproductor controla el tiempo** y el 3D solo lo muestrea: pausar, velocidad y saltos son triviales.
-4. **Fuente del alfabeto:** Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006), p. 573:
-   27 letras; G, H, J, Ñ, S y Z tienen movimiento. Todas las letras quedan en `draft` hasta que las
-   validen personas sordas usuarias de LSC.
-5. **Avatares como candidatos comparables** (selector en la app). Por defecto: **MPFB2 · caricatura**
-   (CC0, con los rasgos del autor); también **MPFB2** realista. El modelo de Miles Morales queda solo como
-   prueba local: tiene derechos de terceros, máscara sin cara y guantes negros con poco contraste.
-6. **Las letras son datos, no animaciones hechas a mano:** `assets-src/letters/alfabeto_lsc.json` se aplica
-   a cualquier avatar con `tools/blender/bake_letters.py`. Cambiar de avatar no obliga a reanimar.
-7. **Marca visual propia** (desde la v0.3.0): dos arcos en «C» enlazados, verde selva + amarillo mango,
-   tipografías *Baloo 2* y *Atkinson Hyperlegible*. Sistema de diseño:
-   <https://claude.ai/artifact/EVFLVxqZYXv6AC4Kj38ork>; tokens en `src/styles.css`.
+1. **Solo página web, sin servidor.** Todo funciona en el navegador (Vite + React + TypeScript + three.js).
+2. **Un archivo por avatar con todas las letras** (`public/models/avatars/<id>.glb`).
+3. **El reproductor lleva su propio reloj.** Por eso pausar, cambiar la velocidad y saltar son sencillos.
+4. **Las letras salen del Diccionario Básico de la LSC** (INSOR – Instituto Caro y Cuervo, 2006), página
+   573: 27 letras; G, H, J, Ñ, S y Z tienen movimiento. Todas están en **borrador** hasta que las validen
+   personas sordas que usan la LSC.
+5. **Las letras son datos, no animaciones hechas a mano.** El archivo
+   `assets-src/letters/alfabeto_lsc.json` se aplica a cualquier avatar con un programa de Blender. Cambiar
+   de avatar no obliga a animar otra vez.
+6. **Avatar actual: MPFB2 · hombre joven** (licencia libre CC0). El avatar caricaturesco se eliminó el
+   2026-10-08. El modelo de Miles Morales solo existe en el equipo local para pruebas: tiene derechos de
+   autor de otros.
+7. **Marca visual propia:** dos arcos en «C» enlazados, verde selva y amarillo mango. Sistema de diseño:
+   <https://claude.ai/artifact/EVFLVxqZYXv6AC4Kj38ork>.
+8. **Pantalla «Escenario»:** el avatar ocupa toda la pantalla y los controles flotan encima. Mockups:
+   <https://claude.ai/artifact/4baJA1Goh6NToKhGvrnGKD>.
 
-## Estado verificado (2026-09-30)
+## Cómo está hoy (2026-10-08)
 
-- Código: 15 pruebas en verde, build sin errores.
-- **27 letras** (6 con movimiento: G, H, J, Ñ, S, Z) horneadas en los dos avatares MPFB2 desde los mismos
-  datos, en estado `draft` hasta su validación con personas sordas.
-- Avatares: `mpfb2-caricatura` (1,66 m) y `mpfb2` (1,71 m), 181 huesos de deformación (dedos,
-  metacarpianos y cara), GLB de ~5 MB cada uno. Ver [assets-src/README.md](assets-src/README.md).
-- Fondo del escenario configurable (`public/backgrounds/sena.jpg`, desenfocado).
-- Interfaz con la marca NexoLSC en tema claro y oscuro (automático), íconos propios y favicon.
-- Voz: funciona en Chrome/Edge/Safari; **no en Firefox**.
+- 15 pruebas automáticas en verde y la versión de publicación se arma sin errores.
+- **27 letras** aplicadas al avatar `mpfb2` (1,71 m, ~5 MB), todas en borrador.
+- Pantalla «Escenario» en escritorio y celular, con tema claro y oscuro automático.
+- Botones de vista de la cámara: Frente, Perfil y Mano.
+- Fondo con la foto de la sede del SENA, desenfocada (`public/backgrounds/sena.jpg`).
+- Voz: funciona en Chrome, Edge y Safari; **no en Firefox**.
 
-## Cómo ejecutar el proyecto
-
-```bash
-npm install
-```
-
-```bash
-npm run dev
-```
-
-Abre http://localhost:5173 y escribe una palabra. Pruebas: `npm test`.
-
-Sobre el avatar aparece un **selector** para comparar candidatos. El repositorio incluye los candidatos
-**MPFB2 · caricatura** y **MPFB2** (CC0). El avatar de prueba con derechos de terceros solo existe en el
-equipo local y en el selector aparece como "no disponible" si falta. Para el fondo del escenario, guarda la
-foto como `public/backgrounds/sena.jpg`. Si no hay ningún GLB, la app muestra la **vista de
-respaldo** (letra grande + descripción de la configuración). Cómo generar o añadir avatares:
-[assets-src/README.md](assets-src/README.md).
+Cómo crear o añadir avatares: [assets-src/README.md](assets-src/README.md).
 
 ## Versiones
 
-El proyecto usa [versionado semántico](https://semver.org/lang/es/) y registra los cambios en
-[CHANGELOG.md](CHANGELOG.md). Cada versión publicada tiene una etiqueta de git `vX.Y.Z`.
+El proyecto usa [versionado semántico](https://semver.org/lang/es/) (números como `0.3.0`) y anota los
+cambios de cada versión en [CHANGELOG.md](CHANGELOG.md). Cada versión publicada tiene una etiqueta de git
+`vX.Y.Z`.
 
-Para publicar una versión nueva:
-1. Añadir la sección de la versión en `CHANGELOG.md`.
-2. Subir la versión sin crear etiqueta todavía:
+Para publicar una versión nueva (ejemplo con la `0.4.0`):
 
-```bash
-npm version 0.3.0 --no-git-tag-version
-```
+1. Anota los cambios en `CHANGELOG.md`.
+2. Sube el número de versión sin crear la etiqueta todavía:
 
-3. Hacer el commit, crear la etiqueta anotada y subir ambos:
+   ```bash
+   npm version 0.4.0 --no-git-tag-version
+   ```
 
-```bash
-git tag -a v0.3.0 -m "v0.3.0"
-```
+3. Haz el commit, crea la etiqueta y súbelos:
 
-```bash
-git push origin main --follow-tags
-```
+   ```bash
+   git tag -a v0.4.0 -m "v0.4.0"
+   ```
+
+   ```bash
+   git push origin main --follow-tags
+   ```

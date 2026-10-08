@@ -1,63 +1,69 @@
-# 02 · Tecnologías recomendadas
+# 02 · Herramientas que usa el proyecto
 
-Tu propuesta (Blender → GLB → Three.js + React + React Three Fiber) **es la correcta** para este MVP.
-Solo añado Vite, TypeScript y Vitest, y dejo fuera todo lo que no se necesita todavía.
+> **En pocas palabras:** los avatares se hacen en **Blender** y se guardan como archivos **.glb**. La
+> página se hace con **React** y muestra el 3D con **three.js**. Todas las versiones de esta lista se
+> probaron juntas y funcionan.
 
-Versiones verificadas en npm el 2026-09-28 y probadas juntas (compilación + pruebas + ejecución en navegador).
+La propuesta inicial (Blender → GLB → three.js + React + React Three Fiber) **es la adecuada** para
+este proyecto. Solo se añadieron Vite, TypeScript y Vitest, y se dejó fuera lo que todavía no hace falta.
 
-## Stack del MVP
+Versiones revisadas el 2026-09-28 y probadas juntas: compilan, pasan las pruebas y funcionan en el
+navegador.
 
-| Capa | Tecnología | Versión | Para qué |
+## Las herramientas
+
+| Para qué | Herramienta | Versión | En sencillo |
 |---|---|---|---|
-| Modelado / rig / animación | **Blender** | 5.2 (la que tienes instalada) | Generar avatares, hornear las letras, exportar GLB (todo por script) |
-| Generador de personajes | **MPFB** (MakeHuman para Blender) | 2.0.17 + `makehuman_system_assets` (CC0) | Avatares con licencia libre, dedos, metacarpianos y cara; ajustes finos de rasgos |
-| Rig de autoría | **Rigify** (incluido en Blender) | — | Controles cómodos para posar dedos; se exportan solo los huesos `DEF-*` |
-| Letras | **JSON + script de Blender** (`bake_letters.py`) | — | Las 27 letras como datos, aplicables a cualquier avatar |
-| Formato 3D | **glTF 2.0 binario (`.glb`)** | — | Estándar web: malla + esqueleto + clips en un archivo |
-| Bundler / dev server | **Vite** | 8.3 | Arranque instantáneo, build estático |
-| UI | **React** | 19.3 | Componentes de la interfaz |
-| Lenguaje | **TypeScript** | 7.0 | Tipos para el modelo de datos de señas (evita errores al crecer el léxico) |
-| 3D | **three.js** | 0.186 | Render, `AnimationMixer`, skinning |
-| 3D en React | **@react-three/fiber** | 9.8 | Escena declarativa, bucle `useFrame` |
-| Utilidades 3D | **@react-three/drei** | 10.7 | `useGLTF`, `OrbitControls`, `ContactShadows` |
-| Pruebas | **Vitest** | 5.0 | Pruebas del núcleo (normalizador, cola, reproductor) |
-| Voz → texto | **Web Speech API** (navegador) | — | Dictado en `es-CO` sin servidor |
-| Hosting | Cualquier hosting estático con HTTPS | — | Vercel / Netlify / GitHub Pages |
+| Crear y animar los avatares | **Blender** | 5.2 | Programa gratuito de 3D. Aquí se crean los avatares, se les aplican las letras y se exportan, todo con programas automáticos |
+| Generar los personajes | **MPFB** (MakeHuman para Blender) | 2.0.17 + paquete de recursos (licencia CC0) | Crea personas en 3D con dedos y cara, y permite ajustar los rasgos. Su licencia es libre |
+| Esqueleto para posar | **Rigify** (viene con Blender) | — | Añade controles cómodos para mover brazos y dedos |
+| Las letras | **Archivo de datos (JSON) + programa de Blender** | — | Las 27 letras guardadas como números, que se pueden aplicar a cualquier avatar |
+| Formato del avatar | **.glb** (glTF 2.0) | — | Formato estándar de 3D para la web: cuerpo, esqueleto y animaciones en un solo archivo |
+| Arrancar y compilar la página | **Vite** | 8.3 | Arranca la página al instante mientras se trabaja y la prepara para publicarla |
+| La pantalla | **React** | 19.3 | Construye la interfaz por piezas (botones, campo de texto, línea de letras) |
+| El lenguaje | **TypeScript** | 7.0 | JavaScript con «tipos»: avisa de errores antes de ejecutar, útil cuando haya miles de señas |
+| El 3D | **three.js** | 0.186 | Dibuja el avatar en el navegador y reproduce sus animaciones |
+| El 3D dentro de React | **React Three Fiber** | 9.8 | Permite usar three.js como si fuera una pieza más de React |
+| Ayudas para el 3D | **drei** | 10.7 | Funciones listas: cargar el avatar, girar la cámara, sombra en el piso |
+| Pruebas automáticas | **Vitest** | 5.0 | Revisa que el núcleo funcione bien (limpiar texto, lista de señas, reproductor) |
+| Voz a texto | **Reconocimiento de voz del navegador** (Web Speech API) | — | Convierte lo que dices en texto, en español de Colombia, sin servidor propio |
+| Publicar | Cualquier servicio de páginas estáticas con HTTPS | — | Vercel, Netlify o GitHub Pages |
 
-## Por qué React Three Fiber (y no Three.js "a pelo")
+## ¿Por qué React Three Fiber y no three.js solo?
 
-- La interfaz ya es React; R3F permite montar la escena como un componente más.
-- `useFrame` da un bucle por frame sin gestionar `requestAnimationFrame` a mano.
-- Importante: **la lógica de reproducción no depende de R3F** (vive en `src/core`). Si mañana se
-  necesita un widget embebible sin React, el núcleo se reutiliza tal cual con Three.js puro.
+- La pantalla ya está hecha con React. Con React Three Fiber, el avatar es una pieza más de la pantalla.
+- Trae un «bucle por cuadro» (`useFrame`) listo, sin tener que programarlo a mano.
+- Importante: **la lógica del reproductor no depende de React Three Fiber** (vive aparte, en
+  `src/core`). Si algún día se quiere un widget para otras páginas sin React, ese núcleo se reutiliza tal
+  cual.
 
-## Alternativas evaluadas
+## Otras opciones que se revisaron
 
-| Alternativa | Veredicto |
+| Opción | Qué se decidió |
 |---|---|
-| **Babylon.js** | Excelente motor, pero el ecosistema React + glTF de three/R3F es más grande y tu propuesta ya lo usa. Sin ventaja clara para este caso. |
-| **Unity WebGL / Godot Web** | Descargas de decenas de MB, arranque lento y peor integración con una página accesible. Descartado para web. |
-| **Next.js** | No hay SSR ni rutas de servidor que justificarlo. Vite es más simple. Reconsiderar si se añade un sitio con contenido/SEO. |
-| **Zustand / Redux** | No hace falta: el estado vive en la clase `SignPlayer` y se expone con `useSyncExternalStore`. |
-| **Síntesis procedural (SiGML/HamNoSys, p. ej. JASigning)** | Interesante para fases futuras (generar señas desde notación), pero complica el MVP. Ver [16-estrategia-palabras-frases.md](16-estrategia-palabras-frases.md). |
-| **Avatar generado con IA (imagen → malla 3D)** | Probado y descartado por ahora: el plan gratuito del servicio disponible no incluye el modelo de imagen necesario, la conversión a 3D cuesta 9–38 créditos y las mallas generadas suelen dar manos fusionadas, lo peor para LSC. |
-| **Modelos 3D descargados de internet** | Descartados para publicar: el primer avatar de prueba (Miles Morales) era un personaje con derechos de terceros. |
+| **Babylon.js** (otro motor 3D) | Es muy bueno, pero three.js tiene más ejemplos y herramientas con React, y ya estaba en la propuesta. No da ninguna ventaja aquí |
+| **Unity o Godot para web** | Pesan decenas de MB, tardan en arrancar y son menos accesibles. Descartados |
+| **Next.js** | Sirve para páginas con servidor, y este proyecto no lo tiene. Vite es más simple. Se puede reconsiderar si se crea un sitio con mucho contenido |
+| **Redux o Zustand** (librerías de estado) | No hacen falta: el estado vive dentro del reproductor |
+| **Generar señas desde notación escrita** (SiGML/HamNoSys, JASigning) | Interesante para el futuro, pero complica el MVP. Ver [16](16-estrategia-palabras-frases.md) |
+| **Avatar creado con IA** (de una foto a un modelo 3D) | Probado y descartado por ahora: el plan gratuito no incluía el modelo necesario, convertir a 3D cuesta créditos y las mallas generadas suelen pegar los dedos, lo peor para la lengua de señas |
+| **Modelos 3D descargados de internet** | Descartados para publicar: el primer avatar de prueba (Miles Morales) es un personaje con derechos de autor de otros |
 
-## Herramientas opcionales (después del MVP)
+## Herramientas para después
 
-| Herramienta | Uso |
+| Herramienta | Para qué |
 |---|---|
-| `@gltf-transform/cli` | Comprimir el GLB (Meshopt/Draco para malla, KTX2 para texturas) y eliminar las pistas de animación de huesos que no se mueven (cara, piernas). Los GLB actuales pesan ~5 MB. |
-| `@huggingface/transformers` (Whisper en el navegador) | Voz → texto en **Firefox** y sin enviar audio a terceros. Ver [10-flujo-voz-texto-avatar.md](10-flujo-voz-texto-avatar.md). |
-| Playwright | Pruebas de extremo a extremo de la interfaz. |
-| MediaPipe (Hands / Holistic) | Fase 5: reconocimiento de LSC por cámara; también sirve para captura de movimiento a partir de video. |
+| `@gltf-transform/cli` | Hacer más livianos los archivos del avatar (hoy pesan unos 5 MB) comprimiendo el cuerpo, las texturas y quitando animaciones de partes que no se mueven |
+| Whisper en el navegador (`@huggingface/transformers`) | Reconocer la voz en **Firefox** y sin enviar el audio a otras empresas. Ver [10](10-flujo-voz-texto-avatar.md) |
+| Playwright | Probar la pantalla automáticamente, como si fuera una persona |
+| MediaPipe | Más adelante: reconocer señas con la cámara, o grabar movimientos de personas reales desde un video |
 
-## Compatibilidad de navegadores
+## ¿Funciona en mi navegador?
 
 | Función | Chrome / Edge | Safari | Firefox |
 |---|---|---|---|
-| Avatar 3D (WebGL2) | ✅ | ✅ | ✅ |
-| Voz (Web Speech API) | ✅ (envía el audio a servidores de Google) | ✅ parcial (`webkitSpeechRecognition`) | ❌ **no disponible** en la versión estable |
+| Avatar 3D | ✅ | ✅ | ✅ |
+| Voz | ✅ (el audio se envía a servidores de Google para reconocerlo) | ✅ en parte | ❌ **no disponible** |
 
-> En **Firefox** el botón «Hablar» muestra "voz no disponible" hasta que se añada un proveedor alternativo
-> (Whisper en el navegador).
+> En **Firefox**, el botón «Hablar» muestra «voz no disponible» y te invita a escribir. Se podrá
+> resolver añadiendo Whisper en el navegador.

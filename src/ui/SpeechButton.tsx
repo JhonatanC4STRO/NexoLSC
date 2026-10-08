@@ -42,20 +42,31 @@ export function SpeechButton({ onResult, provider = webSpeechProvider }: Props) 
 
   if (!supported) {
     return (
-      <p className="speech__unsupported">
+      <p className="speech__note">
         Voz no disponible en este navegador (p. ej. Firefox). Usa Chrome o Edge, o escribe el texto.
       </p>
     );
   }
 
+  const label = listening ? 'Escuchando… toca para detener' : 'Hablar';
   return (
-    <div className="speech">
-      <button type="button" className={`btn ${listening ? 'btn--recording' : ''}`} onClick={toggle} aria-pressed={listening}>
+    <>
+      <button
+        type="button"
+        className={`btn btn--round ${listening ? 'btn--recording' : ''}`}
+        onClick={toggle}
+        aria-pressed={listening}
+        aria-label={label}
+        title={label}
+      >
         <MicIcon />
-        {listening ? 'Escuchando… (toca para detener)' : 'Hablar'}
       </button>
-      {interim && <span className="speech__interim">“{interim}”</span>}
-      {error && <span className="speech__error" role="alert">{error}</span>}
-    </div>
+      {interim && <span className="speech__note speech__note--interim">“{interim}”</span>}
+      {error && (
+        <span className="speech__note speech__note--error" role="alert">
+          {error}
+        </span>
+      )}
+    </>
   );
 }

@@ -1,55 +1,66 @@
 # 15 · Código
 
-> El proyecto ya está creado en la raíz de NexoLSC (`src/`, `public/`, `tools/`, `assets-src/`).
-> Este documento es la referencia legible de ese código; si difieren, manda el código.
+> **En pocas palabras:** aquí está el código del proyecto, archivo por archivo, para leerlo con calma. Este
+> documento se **genera solo** a partir de los archivos reales (`npm run docs:codigo`); si alguna vez no
+> coincide con el código, manda el código.
 
-Código **probado** el 2026-09-30 (v0.2.x):
-
-- `npm test` → 15 pruebas en verde (Vitest 5).
-- `npm run build` → compila sin errores (TypeScript 7 + Vite 8).
-- En el navegador: selector con los candidatos de avatar (`mpfb2-caricatura` por defecto, `mpfb2` y el
-  de prueba local), las 27 letras con clip, fondo del SENA desenfocado; al saltar a una letra en pausa se
-  muestra esa letra. Sin errores en consola.
-- Scripts de Blender (`mpfb_builder.py`, `bake_letters.py`, `export_avatar.py`) probados con Blender 5.2
-  y MPFB 2.0.17.
+Generado el 2026-10-08 desde la versión 0.4.0.
 
 ## Cómo ejecutarlo
 
-Requisitos: Node.js 20+ (probado con Node 24) y Blender 5.x para exportar avatares.
+Los pasos completos, explicados, están en el [README](../README.md#cómo-ejecutarlo-en-tu-computador). En
+resumen:
 
 ```bash
 npm install
 ```
 
 ```bash
-npm test
-```
-
-```bash
 npm run dev
 ```
 
-Abre http://localhost:5173. Para generar o añadir avatares, ver `assets-src/README.md`. Por ejemplo:
-
-```bash
-blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
-```
+Luego abre http://localhost:5173. Para crear o cambiar avatares, mira `assets-src/README.md`.
 
 ## Mapa de archivos
 
-| Archivo | Rol |
+| Archivo | Qué hace |
 |---|---|
-| `src/core/signs/*` | Modelo de datos y léxico (27 letras) |
-| `src/core/text/normalize.ts` | Texto → tokens (tildes, Ñ, pausas, números, no soportados) |
-| `src/core/player/queue.ts` | Tokens → cola de reproducción ("AnimationQueue") |
-| `src/core/player/SignPlayer.ts` | Motor: estados, reloj, velocidad, saltos, bucle |
-| `src/avatar/avatars.ts` + `src/hooks/useAvatarChoice.ts` | Candidatos de avatar y elección del usuario |
-| `src/avatar/ClipDriver.ts` | Estado del motor → mezcla de AnimationClips |
-| `src/avatar/Avatar3D.tsx` | Escena R3F y carga del GLB |
-| `src/speech/speechToText.ts` | Interfaz de voz + Web Speech API |
-| `src/ui/*` | Selector de avatar, controles, línea de tiempo, micrófono, logo e íconos de la marca |
-| `tools/blender/*` | Exportación del GLB y ayudas para posar por script |
-| `assets-src/avatars/mpfb2/build_avatar.py` | Genera el candidato MPFB2 (CC0) de forma reproducible |
+| `package.json` | Lista de librerías y comandos |
+| `tsconfig.json` | Ajustes de TypeScript |
+| `vite.config.ts` | Ajustes de Vite |
+| `index.html` | La página base: fuentes, ícono y punto de arranque |
+| `.gitignore` | Archivos que no se suben a git |
+| `src/core/signs/types.ts` | Cómo se describe una seña (la ficha) |
+| `src/core/signs/alphabet.lsc.ts` | Las 27 letras |
+| `src/core/signs/SignRepository.ts` | El diccionario de señas |
+| `src/core/text/normalize.ts` | Limpia el texto: mayúsculas, tildes, Ñ, pausas |
+| `src/core/player/queue.ts` | Arma la lista de señas |
+| `src/core/player/SignPlayer.ts` | El reproductor: reloj, estados, velocidad, saltos |
+| `src/core/core.test.ts` | Las 15 pruebas automáticas |
+| `src/hooks/usePlayer.ts` | Conecta el reproductor con la pantalla y mueve el reloj |
+| `src/hooks/useAvatarChoice.ts` | Recuerda qué avatar elegiste |
+| `src/avatar/avatars.ts` | Lista de avatares y su licencia |
+| `src/avatar/stage.ts` | Ajustes de la foto de fondo |
+| `src/avatar/ClipDriver.ts` | Mezcla las animaciones según el reproductor |
+| `src/avatar/Avatar3D.tsx` | Muestra el avatar 3D, la foto de fondo y mueve la cámara |
+| `src/avatar/AvatarPlaceholder.tsx` | Vista sin 3D (letra grande) si no hay avatar |
+| `src/speech/speechToText.ts` | Reconocimiento de voz |
+| `src/ui/SpeechButton.tsx` | Botón del micrófono |
+| `src/ui/PlayerControls.tsx` | Controles de reproducción y velocidad |
+| `src/ui/LetterTimeline.tsx` | Las letras de la palabra |
+| `src/ui/CurrentLetter.tsx` | Tarjeta de la letra actual |
+| `src/ui/CameraViews.tsx` | Botones Frente, Perfil y Mano |
+| `src/ui/AvatarSelector.tsx` | Selector de avatar |
+| `src/ui/Logo.tsx` | El logo «nexo LSC» |
+| `src/ui/icons.tsx` | Íconos de la marca |
+| `src/App.tsx` | La pantalla completa («Escenario») |
+| `src/main.tsx` | Punto de arranque |
+| `src/styles.css` | Colores, letras y estilos (tema claro y oscuro, escritorio y celular) |
+| `tools/blender/mpfb_builder.py` | Crea un avatar MPFB a partir de su ficha |
+| `tools/blender/bake_letters.py` | Aplica las 27 letras a cualquier avatar |
+| `tools/blender/export_avatar.py` | Limpia el avatar y lo exporta como .glb |
+| `tools/blender/pose_helpers.py` | Funciones para posar brazos y dedos |
+| `assets-src/avatars/mpfb2/build_avatar.py` | Ficha del avatar MPFB2 · hombre joven |
 
 ---
 
@@ -59,13 +70,14 @@ blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_a
 {
   "name": "nexolsc",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "docs:codigo": "node tools/docs/gen_doc15.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",
@@ -968,13 +980,6 @@ export interface AvatarOption {
 
 export const AVATARS: AvatarOption[] = [
   {
-    id: 'mpfb2-caricatura',
-    name: 'MPFB2 · caricatura',
-    url: '/models/avatars/mpfb2-caricatura.glb',
-    license: 'CC0 (MakeHuman / MPFB2)',
-    publishable: true,
-  },
-  {
     id: 'mpfb2',
     name: 'MPFB2 · hombre joven',
     url: '/models/avatars/mpfb2.glb',
@@ -990,7 +995,7 @@ export const AVATARS: AvatarOption[] = [
   },
 ];
 
-export const DEFAULT_AVATAR_ID = 'mpfb2-caricatura';
+export const DEFAULT_AVATAR_ID = 'mpfb2';
 
 /**
  * ¿Existe el GLB? Vite (y muchos hostings SPA) responden index.html con 200 para
@@ -1116,9 +1121,10 @@ function easeInOut(x: number) {
 
 ```tsx
 import { Component, Suspense, useEffect, useMemo, useRef, type ReactNode } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { ContactShadows, OrbitControls, useGLTF } from '@react-three/drei';
 import { Box3, Vector3, type Object3D } from 'three';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import type { SignPlayer } from '../core/player/SignPlayer';
 import { signRepository } from '../core/signs/SignRepository';
 import { ClipDriver } from './ClipDriver';
@@ -1131,9 +1137,13 @@ interface Props {
   /** undefined = todavía comprobando; null = no hay ningún GLB disponible. */
   avatar: AvatarOption | null | undefined;
   onMissingClips?: (letters: string[]) => void;
+  /** Punto de vista de la cámara (botones Frente / Perfil / Mano). */
+  view?: CameraView;
 }
 
-export function Avatar3D({ player, avatar, onMissingClips }: Props) {
+export type CameraView = 'frente' | 'perfil' | 'mano';
+
+export function Avatar3D({ player, avatar, onMissingClips, view = 'frente' }: Props) {
   if (avatar === undefined) return <div className="stage stage--loading">Cargando avatar…</div>;
   if (avatar === null) {
     return <AvatarPlaceholder player={player} reason="No hay ningún avatar en public/models/avatars/" />;
@@ -1145,7 +1155,7 @@ export function Avatar3D({ player, avatar, onMissingClips }: Props) {
       {/* key: al cambiar de avatar se reinicia el manejo de errores */}
       <ModelErrorBoundary key={avatar.url} fallback={<AvatarPlaceholder player={player} reason={`Error al cargar ${avatar.name}`} />}>
         {/* Lienzo transparente: el fondo lo pone StageBackground (CSS) */}
-        <Canvas camera={{ position: [0, 1.42, 1.6], fov: 30 }} dpr={[1, 2]} gl={{ alpha: true }}>
+        <Canvas camera={{ position: [0, 1.36, 2.55], fov: 30 }} dpr={[1, 2]} gl={{ alpha: true }}>
           <hemisphereLight args={['#ffffff', '#8a8f98', 1.2]} />
           <directionalLight position={[1.5, 2.5, 2]} intensity={1.6} />
           <directionalLight position={[-2, 2, -1]} intensity={0.6} />
@@ -1153,11 +1163,62 @@ export function Avatar3D({ player, avatar, onMissingClips }: Props) {
             <AvatarModel key={avatar.url} url={avatar.url} player={player} onMissingClips={onMissingClips} />
             <ContactShadows position={[0, 0, 0]} opacity={0.35} blur={2.5} far={2} />
           </Suspense>
-          <OrbitControls target={[0, 1.33, 0]} enablePan={false} minDistance={0.8} maxDistance={3} />
+          <OrbitControls makeDefault target={[0, 1.3, 0]} enablePan={false} minDistance={0.5} maxDistance={3.5} />
+          <CameraRig view={view} />
         </Canvas>
       </ModelErrorBoundary>
     </div>
   );
+}
+
+// Plano medio un poco abierto: la cabeza y las manos quedan entre la cabecera y la barra inferior.
+const FRONT = { position: new Vector3(0, 1.36, 2.55), target: new Vector3(0, 1.3, 0) };
+// El avatar mira hacia +Z y seña con la mano derecha, que queda del lado −X.
+const PROFILE = { position: new Vector3(-2.3, 1.36, 0.6), target: new Vector3(0, 1.3, 0.1) };
+const HAND_BONES = ['DEF-handR', 'DEF-hand.R'];
+
+/**
+ * Lleva la cámara al punto de vista elegido con un movimiento corto (o de golpe si la
+ * persona pidió menos movimiento). Después la persona puede seguir girando la cámara.
+ */
+function CameraRig({ view }: { view: CameraView }) {
+  const camera = useThree((s) => s.camera);
+  const scene = useThree((s) => s.scene);
+  const controls = useThree((s) => s.controls) as OrbitControlsImpl | null;
+  const anim = useRef<{ fromPos: Vector3; fromTarget: Vector3; toPos: Vector3; toTarget: Vector3; t: number } | null>(null);
+
+  useEffect(() => {
+    if (!controls) return;
+    let goal = view === 'perfil' ? PROFILE : FRONT;
+    if (view === 'mano') {
+      const hand = HAND_BONES.map((n) => scene.getObjectByName(n)).find(Boolean);
+      if (hand) {
+        const p = hand.getWorldPosition(new Vector3());
+        goal = { position: p.clone().add(new Vector3(0.05, 0.04, 0.7)), target: p };
+      }
+    }
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    anim.current = {
+      fromPos: camera.position.clone(),
+      fromTarget: controls.target.clone(),
+      toPos: goal.position.clone(),
+      toTarget: goal.target.clone(),
+      t: reduce ? 1 : 0,
+    };
+  }, [view, controls, camera, scene]);
+
+  useFrame((_, dt) => {
+    const a = anim.current;
+    if (!a || !controls) return;
+    a.t = Math.min(1, a.t + dt / 0.7);
+    const k = 1 - (1 - a.t) ** 3; // suave al llegar
+    camera.position.lerpVectors(a.fromPos, a.toPos, k);
+    controls.target.lerpVectors(a.fromTarget, a.toTarget, k);
+    controls.update();
+    if (a.t >= 1) anim.current = null;
+  });
+
+  return null;
 }
 
 /** Foto de fondo desenfocada y con un velo claro, para dar contexto sin restar legibilidad a las manos. */
@@ -1373,21 +1434,32 @@ export function SpeechButton({ onResult, provider = webSpeechProvider }: Props) 
 
   if (!supported) {
     return (
-      <p className="speech__unsupported">
+      <p className="speech__note">
         Voz no disponible en este navegador (p. ej. Firefox). Usa Chrome o Edge, o escribe el texto.
       </p>
     );
   }
 
+  const label = listening ? 'Escuchando… toca para detener' : 'Hablar';
   return (
-    <div className="speech">
-      <button type="button" className={`btn ${listening ? 'btn--recording' : ''}`} onClick={toggle} aria-pressed={listening}>
+    <>
+      <button
+        type="button"
+        className={`btn btn--round ${listening ? 'btn--recording' : ''}`}
+        onClick={toggle}
+        aria-pressed={listening}
+        aria-label={label}
+        title={label}
+      >
         <MicIcon />
-        {listening ? 'Escuchando… (toca para detener)' : 'Hablar'}
       </button>
-      {interim && <span className="speech__interim">“{interim}”</span>}
-      {error && <span className="speech__error" role="alert">{error}</span>}
-    </div>
+      {interim && <span className="speech__note speech__note--interim">“{interim}”</span>}
+      {error && (
+        <span className="speech__note speech__note--error" role="alert">
+          {error}
+        </span>
+      )}
+    </>
   );
 }
 ```
@@ -1399,52 +1471,72 @@ import { SPEEDS, type SignPlayer } from '../core/player/SignPlayer';
 import { usePlayer } from '../hooks/usePlayer';
 import { NextIcon, PauseIcon, PlayIcon, PrevIcon, RepeatIcon, RestartIcon, StopIcon } from './icons';
 
+/** Controles de reproducción: anterior · reproducir/pausar · siguiente, más reiniciar, detener y repetir. */
 export function PlayerControls({ player }: { player: SignPlayer }) {
-  const { status, items, speed, loop } = usePlayer(player);
+  const { status, items, loop } = usePlayer(player);
   const empty = items.length === 0;
   const playing = status === 'playing';
+  const playLabel = playing ? 'Pausar' : status === 'paused' ? 'Continuar' : 'Reproducir';
 
   return (
-    <div className="controls">
-      <div className="controls__main" role="group" aria-label="Controles de reproducción">
-        <button type="button" className="btn btn--icon" onClick={() => player.prev()} disabled={empty} title="Letra anterior (←)" aria-label="Letra anterior">
-          <PrevIcon />
-        </button>
-        <button type="button" className="btn btn--primary btn--play" onClick={() => player.togglePlay()} disabled={empty} title="Reproducir / Pausar (Espacio)">
-          {playing ? <PauseIcon /> : <PlayIcon />}
-          {playing ? 'Pausar' : status === 'paused' ? 'Continuar' : 'Reproducir'}
-        </button>
-        <button type="button" className="btn btn--icon" onClick={() => player.next()} disabled={empty} title="Letra siguiente (→)" aria-label="Letra siguiente">
-          <NextIcon />
-        </button>
-      </div>
-      <div className="controls__main" role="group" aria-label="Más controles">
-        <button type="button" className="btn" onClick={() => player.restart()} disabled={empty} title="Reiniciar (R)">
-          <RestartIcon /> Reiniciar
-        </button>
-        <button type="button" className="btn" onClick={() => player.stop()} disabled={empty || status === 'idle'} title="Detener">
-          <StopIcon /> Detener
-        </button>
-        <button type="button" className={`btn ${loop ? 'btn--active' : ''}`} onClick={() => player.setLoop(!loop)} aria-pressed={loop} title="Repetir la palabra">
-          <RepeatIcon /> Repetir
-        </button>
-      </div>
-      <div className="controls__speed" role="radiogroup" aria-label="Velocidad">
-        <span>Velocidad</span>
+    <div className="controls" role="group" aria-label="Controles de reproducción">
+      <button type="button" className="btn btn--quiet" onClick={() => player.restart()} disabled={empty} title="Reiniciar (R)" aria-label="Reiniciar">
+        <RestartIcon /> <span className="btn__label">Reiniciar</span>
+      </button>
+      <button type="button" className="btn btn--round" onClick={() => player.prev()} disabled={empty} title="Letra anterior (←)" aria-label="Letra anterior">
+        <PrevIcon />
+      </button>
+      <button type="button" className="btn btn--round btn--big" onClick={() => player.togglePlay()} disabled={empty} title={`${playLabel} (Espacio)`} aria-label={playLabel}>
+        {playing ? <PauseIcon /> : <PlayIcon />}
+      </button>
+      <button type="button" className="btn btn--round" onClick={() => player.next()} disabled={empty} title="Letra siguiente (→)" aria-label="Letra siguiente">
+        <NextIcon />
+      </button>
+      <button type="button" className={`btn btn--quiet ${loop ? 'btn--active' : ''}`} onClick={() => player.setLoop(!loop)} aria-pressed={loop} title="Repetir la palabra" aria-label="Repetir">
+        <RepeatIcon /> <span className="btn__label">Repetir</span>
+      </button>
+      <button type="button" className="btn btn--quiet" onClick={() => player.stop()} disabled={empty || status === 'idle'} title="Detener" aria-label="Detener">
+        <StopIcon /> <span className="btn__label">Detener</span>
+      </button>
+    </div>
+  );
+}
+
+/**
+ * Velocidad: en pantallas anchas, todas las opciones a la vista; en el celular, un solo
+ * botón que pasa a la siguiente velocidad en cada toque.
+ */
+export function SpeedControl({ player }: { player: SignPlayer }) {
+  const { speed } = usePlayer(player);
+  const next = SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length];
+  const fmt = (s: number) => `${String(s).replace('.', ',')}x`;
+
+  return (
+    <>
+      <div className="speed" role="radiogroup" aria-label="Velocidad">
+        <span className="speed__label">Velocidad</span>
         {SPEEDS.map((s) => (
           <button
             key={s}
             type="button"
             role="radio"
             aria-checked={s === speed}
-            className={`chip ${s === speed ? 'chip--active' : ''}`}
+            className={`speed__opt ${s === speed ? 'is-on' : ''}`}
             onClick={() => player.setSpeed(s)}
           >
-            {s}x
+            {fmt(s)}
           </button>
         ))}
       </div>
-    </div>
+      <button
+        type="button"
+        className="btn btn--quiet speed-cycle"
+        onClick={() => player.setSpeed(next)}
+        aria-label={`Velocidad ${fmt(speed)}. Cambiar a ${fmt(next)}`}
+      >
+        {fmt(speed)}
+      </button>
+    </>
   );
 }
 ```
@@ -1455,52 +1547,115 @@ export function PlayerControls({ player }: { player: SignPlayer }) {
 import type { SignPlayer } from '../core/player/SignPlayer';
 import { usePlayer } from '../hooks/usePlayer';
 
-/** Muestra H → O → L → A, resalta la letra actual y permite saltar a cualquiera. */
+/** Las letras de la palabra (H O L A): resalta la actual y permite saltar a cualquiera. */
 export function LetterTimeline({ player, missing }: { player: SignPlayer; missing: string[] }) {
   const { items, index, status } = usePlayer(player);
   if (items.length === 0) return null;
 
-  const signs = items.filter((i) => i.kind === 'sign');
-  const current = items[index];
-  const position = items.slice(0, index + 1).filter((i) => i.kind === 'sign').length;
   const active = status !== 'idle';
 
   return (
-    <section className="timeline" aria-label="Progreso del deletreo">
-      <div className="timeline__status" aria-live="polite">
-        <span>
-          Letra actual: <strong>{active && current.kind === 'sign' ? current.label : '—'}</strong>
-        </span>
-        <span>
-          {active ? position : 0} / {signs.length}
-        </span>
-      </div>
-      <ol className="timeline__chips">
-        {items.map((item, i) =>
-          item.kind === 'pause' ? (
-            <li key={item.id} className="timeline__gap" aria-hidden="true" />
-          ) : (
-            <li key={item.id}>
-              <button
-                type="button"
-                className={[
-                  'chip',
-                  'chip--letter',
-                  active && i === index ? 'chip--current' : '',
-                  active && i < index ? 'chip--done' : '',
-                  missing.includes(item.label) ? 'chip--missing' : '',
-                ].join(' ')}
-                onClick={() => player.seek(i)}
-                aria-current={active && i === index ? 'step' : undefined}
-                title={missing.includes(item.label) ? 'Animación pendiente' : `Ir a ${item.label}`}
-              >
-                {item.label}
-              </button>
-            </li>
-          ),
-        )}
-      </ol>
+    <ol className="timeline" aria-label="Progreso del deletreo">
+      {items.map((item, i) =>
+        item.kind === 'pause' ? (
+          <li key={item.id} className="timeline__gap" aria-hidden="true" />
+        ) : (
+          <li key={item.id}>
+            <button
+              type="button"
+              className={[
+                'chip',
+                active && i === index ? 'chip--current' : '',
+                active && i < index ? 'chip--done' : '',
+                missing.includes(item.label) ? 'chip--missing' : '',
+              ].join(' ')}
+              onClick={() => player.seek(i)}
+              aria-current={active && i === index ? 'step' : undefined}
+              title={missing.includes(item.label) ? 'Animación pendiente' : `Ir a ${item.label}`}
+            >
+              {item.label}
+            </button>
+          </li>
+        ),
+      )}
+    </ol>
+  );
+}
+```
+
+## `src/ui/CurrentLetter.tsx`
+
+```tsx
+import type { SignPlayer } from '../core/player/SignPlayer';
+import { usePlayer } from '../hooks/usePlayer';
+
+/**
+ * Tarjeta flotante con la letra que se está señando, su posición en la palabra y cómo se pone
+ * la mano. En pantallas estrechas se reduce a una píldora con la letra y el contador.
+ */
+export function CurrentLetter({ player }: { player: SignPlayer }) {
+  const { items, index, status } = usePlayer(player);
+  const signs = items.filter((i) => i.kind === 'sign');
+  const active = status !== 'idle' && items.length > 0;
+  const current = active ? items[index] : undefined;
+  const sign = current?.kind === 'sign' ? current : undefined;
+
+  if (signs.length === 0) {
+    return (
+      <section className="letter-card letter-card--empty" aria-label="Letra actual">
+        <span className="letter-card__label">Letra actual</span>
+        <span className="letter-card__letter" aria-hidden="true">·</span>
+        <p className="letter-card__desc">Escribe una palabra abajo y pulsa Reproducir.</p>
+      </section>
+    );
+  }
+
+  const position = active ? items.slice(0, index + 1).filter((i) => i.kind === 'sign').length : 0;
+  const word = sign
+    ? signs.filter((i) => i.wordIndex === sign.wordIndex).map((i) => i.label).join('')
+    : signs.map((i) => i.label).join('');
+
+  return (
+    <section className="letter-card" aria-label="Letra actual" aria-live="polite">
+      <span className="letter-card__label">Letra actual</span>
+      <span className="letter-card__letter">{sign?.label ?? '—'}</span>
+      <span className="letter-card__count">
+        {position} de {signs.length} · {word}
+      </span>
+      {sign && <p className="letter-card__desc">{sign.sign.handConfiguration.fingers}</p>}
     </section>
+  );
+}
+```
+
+## `src/ui/CameraViews.tsx`
+
+```tsx
+import type { CameraView } from '../avatar/Avatar3D';
+
+const VIEWS: { id: CameraView; label: string; hint: string }[] = [
+  { id: 'frente', label: 'Frente', hint: 'Ver al avatar de frente' },
+  { id: 'perfil', label: 'Perfil', hint: 'Ver la mano de lado' },
+  { id: 'mano', label: 'Mano', hint: 'Acercar la cámara a la mano' },
+];
+
+/** Botones para cambiar el punto de vista de la cámara. */
+export function CameraViews({ value, onChange }: { value: CameraView; onChange: (v: CameraView) => void }) {
+  return (
+    <nav className="views" aria-label="Vista de la cámara">
+      {VIEWS.map((v) => (
+        <button
+          key={v.id}
+          type="button"
+          className={`views__btn ${value === v.id ? 'is-on' : ''}`}
+          aria-pressed={value === v.id}
+          title={v.hint}
+          onClick={() => onChange(v.id)}
+        >
+          {v.label}
+        </button>
+      ))}
+    </nav>
   );
 }
 ```
@@ -1511,7 +1666,7 @@ export function LetterTimeline({ player, missing }: { player: SignPlayer; missin
 import { AVATARS } from '../avatar/avatars';
 import type { AvatarChoice } from '../hooks/useAvatarChoice';
 
-/** Permite comparar los candidatos de avatar. Los que no tienen GLB aparecen deshabilitados. */
+/** Elegir avatar. Los que no tienen GLB aparecen deshabilitados; la licencia va en el título. */
 export function AvatarSelector({ choice }: { choice: AvatarChoice }) {
   const { available, selected, select } = choice;
   if (!available) return null;
@@ -1519,7 +1674,13 @@ export function AvatarSelector({ choice }: { choice: AvatarChoice }) {
   return (
     <div className="avatar-selector">
       <label htmlFor="avatar">Avatar</label>
-      <select id="avatar" value={selected?.id ?? ''} onChange={(e) => select(e.target.value)} disabled={!selected}>
+      <select
+        id="avatar"
+        value={selected?.id ?? ''}
+        onChange={(e) => select(e.target.value)}
+        disabled={!selected}
+        title={selected ? `Licencia: ${selected.license}` : undefined}
+      >
         {AVATARS.map((a) => (
           <option key={a.id} value={a.id} disabled={!available[a.id]}>
             {a.name}
@@ -1527,11 +1688,7 @@ export function AvatarSelector({ choice }: { choice: AvatarChoice }) {
           </option>
         ))}
       </select>
-      {selected && (
-        <span className={`avatar-selector__license ${selected.publishable ? '' : 'avatar-selector__license--warn'}`}>
-          Licencia: {selected.license}
-        </span>
-      )}
+      {selected && !selected.publishable && <span className="avatar-selector__warn">No publicar: {selected.license}</span>}
     </div>
   );
 }
@@ -1667,22 +1824,30 @@ import { SignPlayer } from './core/player/SignPlayer';
 import { buildQueue } from './core/player/queue';
 import { signRepository } from './core/signs/SignRepository';
 import { normalizeText } from './core/text/normalize';
-import { Avatar3D } from './avatar/Avatar3D';
+import { Avatar3D, type CameraView } from './avatar/Avatar3D';
 import { usePlayerClock } from './hooks/usePlayer';
 import { useAvatarChoice } from './hooks/useAvatarChoice';
 import { AvatarSelector } from './ui/AvatarSelector';
-import { PlayerControls } from './ui/PlayerControls';
+import { CameraViews } from './ui/CameraViews';
+import { CurrentLetter } from './ui/CurrentLetter';
+import { PlayerControls, SpeedControl } from './ui/PlayerControls';
 import { LetterTimeline } from './ui/LetterTimeline';
 import { SpeechButton } from './ui/SpeechButton';
 import { Logo } from './ui/Logo';
 import { PlayIcon } from './ui/icons';
 
+/**
+ * Pantalla «Escenario»: el avatar ocupa toda la pantalla y lo demás flota encima.
+ * Arriba el logo y el avatar elegido; a la izquierda la letra actual; a la derecha la vista
+ * de la cámara; abajo la barra para escribir, ver las letras y controlar la reproducción.
+ */
 export default function App() {
   const player = useMemo(() => new SignPlayer(), []);
   const [text, setText] = useState('');
   const [display, setDisplay] = useState('');
   const [skipped, setSkipped] = useState<string[]>([]);
   const [missing, setMissing] = useState<string[]>([]);
+  const [view, setView] = useState<CameraView>('frente');
   const avatarChoice = useAvatarChoice();
   usePlayerClock(player);
 
@@ -1712,56 +1877,81 @@ export default function App() {
 
   return (
     <main className="app">
-      <header className="app__header">
-        <h1>
-          <Logo size={40} />
-        </h1>
-        <p>Deletrea en Lengua de Señas Colombiana</p>
-      </header>
+      <section className="scene" aria-label="Escenario del avatar">
+        <Avatar3D
+          player={player}
+          avatar={avatarChoice.available ? avatarChoice.selected : undefined}
+          onMissingClips={setMissing}
+          view={view}
+        />
 
-      <form className="input" onSubmit={onSubmit}>
-        <label htmlFor="text">Escribe una palabra o frase</label>
-        <div className="input__row">
-          <input
-            id="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Escribe una palabra o frase…"
-            maxLength={200}
-            autoComplete="off"
-          />
-          <button type="submit" className="btn btn--primary" disabled={!text.trim()}>
-            <PlayIcon /> Reproducir
-          </button>
+        <header className="scene__top">
+          <h1 className="plate plate--logo">
+            <Logo size={36} />
+          </h1>
+          <div className="plate plate--group">
+            <ValidationBadge />
+            <AvatarSelector choice={avatarChoice} />
+          </div>
+        </header>
+
+        <CurrentLetter player={player} />
+        <CameraViews value={view} onChange={setView} />
+
+        <div className="dock-wrap">
+          <section className="dock" aria-label="Deletrear">
+            <div className="dock__row">
+              <LetterTimeline player={player} missing={missing} />
+              <SpeedControl player={player} />
+            </div>
+
+            <form className="entry" onSubmit={onSubmit}>
+              <label htmlFor="text" className="sr-only">
+                Escribe una palabra o frase
+              </label>
+              <input
+                id="text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Escribe una palabra o frase…"
+                maxLength={200}
+                autoComplete="off"
+              />
+              <SpeechButton onResult={onSpeech} />
+              <button type="submit" className="btn btn--primary entry__submit" disabled={!text.trim()} aria-label="Reproducir">
+                <PlayIcon /> <span className="btn__label">Reproducir</span>
+              </button>
+              {display && (
+                <p className="entry__note">
+                  Se deletreará: <strong>{display}</strong>
+                </p>
+              )}
+              {skipped.length > 0 && (
+                <p className="entry__note entry__note--warn" role="status">
+                  Omitidos (sin seña en el MVP): {skipped.join(' ')}
+                </p>
+              )}
+            </form>
+
+            <PlayerControls player={player} />
+            {/* En el celular el estado de validación baja aquí; en pantallas anchas va en la cabecera. */}
+            <div className="dock__badge">
+              <ValidationBadge />
+            </div>
+          </section>
         </div>
-        <SpeechButton onResult={onSpeech} />
-        {display && (
-          <p className="input__normalized">
-            Se deletreará: <strong>{display}</strong>
-          </p>
-        )}
-        {skipped.length > 0 && (
-          <p className="input__warning" role="status">
-            Omitidos (sin seña en el MVP): {skipped.join(' ')}
-          </p>
-        )}
-      </form>
-
-      <AvatarSelector choice={avatarChoice} />
-      <Avatar3D
-        player={player}
-        avatar={avatarChoice.available ? avatarChoice.selected : undefined}
-        onMissingClips={setMissing}
-      />
-      <LetterTimeline player={player} missing={missing} />
-      <PlayerControls player={player} />
+      </section>
 
       <footer className="app__footer">
-        <ValidationBadge />
         <p>
-          Configuraciones basadas en el Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006).
-          Animaciones en validación con la comunidad sorda.
+          Letras basadas en el Diccionario Básico de la LSC (INSOR – Instituto Caro y Cuervo, 2006). Animaciones en
+          validación con la comunidad sorda.
         </p>
+        {avatarChoice.selected && (
+          <p>
+            Avatar: {avatarChoice.selected.name} · Licencia {avatarChoice.selected.license}
+          </p>
+        )}
       </footer>
     </main>
   );
@@ -1774,7 +1964,8 @@ function ValidationBadge() {
   const done = approved === letters.length;
   return (
     <span className={`status-badge ${done ? 'status-badge--approved' : 'status-badge--draft'}`}>
-      {done ? 'Aprobado' : 'Borrador'} · {approved} de {letters.length} letras validadas por personas sordas
+      {done ? 'Aprobado' : 'Borrador'} · {approved} de {letters.length}
+      <span className="status-badge__more">{' '}letras validadas</span>
     </span>
   );
 }
@@ -1782,7 +1973,8 @@ function ValidationBadge() {
 function useKeyboardShortcuts(player: SignPlayer) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLButtonElement) return;
+      const t = e.target;
+      if (t instanceof HTMLInputElement || t instanceof HTMLButtonElement || t instanceof HTMLSelectElement) return;
       if (e.key === ' ') {
         e.preventDefault();
         player.togglePlay();
@@ -1815,7 +2007,7 @@ createRoot(document.getElementById('root')!).render(
 
 ```css
 /*
- * Marca NexoLSC (v0.3.0). Tokens tomados del sistema de diseño:
+ * Marca NexoLSC — pantalla «Escenario» (v0.4.0). Tokens tomados del sistema de diseño:
  * https://claude.ai/artifact/EVFLVxqZYXv6AC4Kj38ork
  * Selva = acción y foco · mango = la letra actual · achiote = errores (siempre con palabra).
  */
@@ -1887,14 +2079,39 @@ createRoot(document.getElementById('root')!).render(
 
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--surface); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* ---------- Estructura ---------- */
-.app { max-width: 880px; margin: 0 auto; padding: var(--space-4); display: grid; gap: var(--space-6); }
-.app__header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-4); }
-.app__header h1 { margin: 0; line-height: 0; }
-.app__header p { margin: 0; color: var(--ink-muted); font-size: 14px; line-height: 20px; }
-.app__footer { font-size: 13px; line-height: 18px; color: var(--ink-muted); text-align: center; display: grid; gap: var(--space-2); justify-items: center; }
+/* ---------- Escenario: el avatar ocupa toda la pantalla y lo demás flota encima ---------- */
+.scene {
+  position: relative;
+  height: 100dvh;
+  min-height: 640px;
+  overflow: hidden;
+  background: var(--escenario);
+  color: #0f2a2e; /* el escenario es claro en ambos temas */
+}
+.app__footer { padding: var(--space-6) var(--space-4); font-size: 13px; line-height: 18px; color: var(--ink-muted); text-align: center; display: grid; gap: var(--space-1); }
 .app__footer p { margin: 0; }
+
+/* Placas: el logo y los controles nunca van directo sobre la foto. */
+.plate { background: var(--surface-raised); color: var(--ink); border-radius: var(--radius-pill); box-shadow: var(--shadow-card); }
+
+.scene__top {
+  position: absolute;
+  top: var(--space-6);
+  left: var(--space-6);
+  right: var(--space-6);
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  pointer-events: none;
+}
+.scene__top > * { pointer-events: auto; }
+.plate--logo { margin: 0; line-height: 0; padding: var(--space-2) 20px var(--space-2) var(--space-3); }
+.plate--group { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4); }
 
 /* ---------- Logo ---------- */
 .logo { display: inline-flex; align-items: center; gap: calc(var(--logo-size, 40px) * 0.2); }
@@ -1924,47 +2141,173 @@ body { margin: 0; background: var(--surface); }
 /* ---------- Íconos ---------- */
 .icon { width: 20px; height: 20px; flex: none; }
 
-/* ---------- Tarjeta de entrada ---------- */
-.input {
+/* ---------- Avatar 3D ---------- */
+.stage { position: absolute; inset: 0; }
+/* Fondo del escenario (src/avatar/stage.ts). inset negativo: oculta los bordes borrosos del desenfoque. */
+.stage__bg { position: absolute; inset: 0; pointer-events: none; }
+.stage__bg-image { position: absolute; inset: -16px; background-size: cover; background-repeat: no-repeat; }
+.stage__bg-veil { position: absolute; inset: 0; background: #eef4f0; }
+.stage--loading { display: grid; place-items: center; color: #4a6266; }
+.stage--placeholder { display: grid; place-content: center; justify-items: center; text-align: center; padding: 120px var(--space-4) 280px; gap: var(--space-2); }
+.placeholder__letter { font-family: var(--font-display); font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; line-height: 1; }
+.placeholder__desc { max-width: 46ch; margin: 0; }
+.placeholder__move { margin: 0; color: #0b6b4f; font-weight: 700; }
+.placeholder__note { margin: var(--space-2) 0 0; font-size: 13px; line-height: 18px; color: #4a6266; }
+
+/* ---------- Tarjeta de la letra actual (izquierda) ---------- */
+.letter-card {
+  position: absolute;
+  top: 120px;
+  left: var(--space-6);
+  z-index: 1;
+  width: 232px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  background: var(--surface-raised);
+  color: var(--ink);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.letter-card__label { font-size: 14px; line-height: 20px; font-weight: 700; color: var(--ink-muted); }
+.letter-card__letter { font-family: var(--font-display); font-weight: 800; font-size: 96px; line-height: 96px; }
+.letter-card__count { font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+.letter-card__desc { margin: 0; font-size: 15px; line-height: 22px; }
+.letter-card--empty .letter-card__letter { color: var(--line-strong); }
+
+/* ---------- Vista de la cámara (derecha) ---------- */
+.views {
+  position: absolute;
+  top: 120px;
+  right: var(--space-6);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2);
   background: var(--surface-raised);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: var(--space-6);
-  display: grid;
-  gap: var(--space-3);
 }
-.input label { font-weight: 700; font-size: 14px; line-height: 20px; }
-.input__row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.input__row input {
-  flex: 1 1 14rem;
+.views__btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.views__btn:hover { background: var(--surface); }
+.views__btn.is-on { background: var(--bruma); color: var(--selva); }
+.views__btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- Barra inferior ---------- */
+.dock-wrap {
+  position: absolute;
+  left: var(--space-6);
+  right: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.dock {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: 20px var(--space-6);
+  background: var(--surface-raised);
+  color: var(--ink);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.dock__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); }
+
+/* Letras de la palabra */
+.timeline { list-style: none; margin: 0; padding: var(--space-1); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.timeline__gap { width: var(--space-4); }
+.chip {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms, border-color 160ms;
+}
+.chip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.chip--done { background: var(--bruma); color: var(--selva); border-color: var(--bruma); }
+.chip--current { background: var(--mango); border-color: var(--mango-ink); color: var(--on-mango); transform: scale(1.12); }
+.chip--missing { border-style: dashed; color: var(--ink-muted); }
+
+/* Velocidad */
+.speed { margin-left: auto; display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.speed__label { font-weight: 700; font-size: 14px; color: var(--ink-muted); margin-right: var(--space-1); }
+.speed__opt {
+  font: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--ink);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.speed__opt.is-on { background: var(--selva); border-color: var(--selva); color: var(--on-selva); }
+.speed__opt:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.btn.speed-cycle { display: none; }
+
+/* Campo de texto */
+.entry { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.entry input {
+  flex: 1 1 320px;
   min-width: 0;
+  height: 52px;
+  padding: 0 20px;
   font: inherit;
   font-size: 18px;
-  line-height: 28px;
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-pill);
   border: 2px solid var(--line-strong);
   background: var(--surface-raised);
   color: var(--ink);
 }
-.input__row input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-.input__normalized { margin: 0; color: var(--ink-muted); letter-spacing: 0.08em; }
-.input__warning {
-  margin: 0;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
-  background: var(--achiote-soft);
-  color: var(--achiote);
-  font-size: 14px;
-}
+.entry input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.entry__note { flex-basis: 100%; margin: 0; font-size: 15px; color: var(--ink-muted); }
+.entry__note strong { color: var(--ink); letter-spacing: 0.08em; }
+.entry__note--warn { padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); background: var(--achiote-soft); color: var(--achiote); font-size: 14px; }
+.speech__note { flex-basis: 100%; margin: 0; font-size: 14px; }
+.speech__note--interim { color: var(--ink-muted); font-style: italic; }
+.speech__note--error { color: var(--achiote); }
+
+/* Controles de reproducción */
+.controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-2); }
+.dock__badge { display: none; }
 
 /* ---------- Botones ---------- */
 .btn {
   font: inherit;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 20px;
-  min-height: 44px;
+  min-height: 48px;
   padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-pill);
   border: 2px solid var(--line-strong);
@@ -1979,115 +2322,115 @@ body { margin: 0; background: var(--surface); }
 }
 .btn:hover:not(:disabled) { border-color: var(--selva); color: var(--selva); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.btn:focus-visible, .chip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-.btn--icon { padding: var(--space-3); min-width: 44px; }
-.btn--play { min-width: 10rem; }
+.btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .btn--primary { background: var(--selva); color: var(--on-selva); border-color: var(--selva); }
 .btn--primary:hover:not(:disabled) { color: var(--on-selva); filter: brightness(1.08); }
-.btn--active { background: var(--bruma); border-color: var(--selva); color: var(--selva); }
+.btn--quiet { background: transparent; border-color: transparent; color: var(--selva); padding-inline: var(--space-3); }
+.btn--quiet:hover:not(:disabled) { background: var(--bruma); border-color: transparent; }
+.btn--round { padding: 0; width: 48px; height: 48px; }
+.btn--big { width: 64px; height: 64px; }
+.btn--big .icon { width: 28px; height: 28px; }
+.btn--active { background: var(--bruma); color: var(--selva); }
 .btn--recording { background: var(--achiote); color: var(--surface-raised); border-color: var(--achiote); }
 .btn--recording:hover:not(:disabled) { color: var(--surface-raised); border-color: var(--achiote); }
 
-/* ---------- Voz ---------- */
-.speech { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
-.speech__interim { color: var(--ink-muted); font-style: italic; }
-.speech__error, .speech__unsupported { color: var(--achiote); margin: 0; font-size: 14px; }
-
 /* ---------- Selector de avatar ---------- */
-.avatar-selector { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: center; }
-.avatar-selector label { font-weight: 700; font-size: 14px; }
+.avatar-selector { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.avatar-selector label { font-weight: 700; font-size: 14px; color: var(--ink-muted); }
 .avatar-selector select {
   font: inherit;
-  min-height: 44px;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
+  font-size: 15px;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
   border: 2px solid var(--line-strong);
   background: var(--surface-raised);
   color: var(--ink);
 }
 .avatar-selector select:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-.avatar-selector__license { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
-.avatar-selector__license--warn { color: var(--achiote); }
-
-/* ---------- Escenario ---------- */
-/* Claro en ambos temas: la piel y la ropa oscura del avatar contrastan mejor sobre claro. */
-.stage {
-  position: relative;
-  height: min(60vh, 520px);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: var(--escenario);
-  box-shadow: var(--shadow-card);
-  color: #0f2a2e;
-}
-/* Fondo del escenario (src/avatar/stage.ts). inset negativo: oculta los bordes borrosos del desenfoque. */
-.stage__bg { position: absolute; inset: 0; pointer-events: none; }
-.stage__bg-image { position: absolute; inset: -16px; background-size: cover; background-repeat: no-repeat; }
-.stage__bg-veil { position: absolute; inset: 0; background: #eef4f0; }
-.stage--loading { display: grid; place-items: center; color: #4a6266; }
-.stage--placeholder { display: grid; place-content: center; justify-items: center; text-align: center; padding: var(--space-4); gap: var(--space-2); }
-.placeholder__letter { font-family: var(--font-display); font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; line-height: 1; }
-.placeholder__desc { max-width: 46ch; margin: 0; }
-.placeholder__move { margin: 0; color: #0b6b4f; font-weight: 700; }
-.placeholder__note { margin: var(--space-2) 0 0; font-size: 13px; line-height: 18px; color: #4a6266; }
-
-/* ---------- Línea de letras ---------- */
-.timeline { display: grid; gap: var(--space-3); }
-.timeline__status { display: flex; justify-content: space-between; gap: var(--space-4); font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 26px; }
-.timeline__chips { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: var(--space-1); align-items: center; }
-.timeline__gap { width: var(--space-4); }
-
-.chip {
-  font: inherit;
-  font-weight: 700;
-  font-size: 14px;
-  min-height: 44px;
-  border: 2px solid var(--line-strong);
-  background: var(--surface-raised);
-  color: var(--ink);
-  border-radius: var(--radius-pill);
-  padding: var(--space-2) var(--space-4);
-  cursor: pointer;
-  transition: transform 160ms ease, background-color 160ms, border-color 160ms;
-}
-.chip--active { background: var(--selva); border-color: var(--selva); color: var(--on-selva); }
-.chip--letter {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 22px;
-  line-height: 1;
-  min-width: 48px;
-  height: 48px;
-  padding: 0 var(--space-2);
-  border-radius: var(--radius-sm);
-}
-.chip--done { background: var(--bruma); color: var(--selva); border-color: var(--bruma); }
-.chip--current { background: var(--mango); border-color: var(--mango-ink); color: var(--on-mango); transform: scale(1.12); }
-.chip--missing { border-style: dashed; color: var(--ink-muted); }
-
-/* ---------- Controles ---------- */
-.controls { display: grid; gap: var(--space-3); }
-.controls__main, .controls__speed { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; justify-content: center; }
-.controls__speed span { color: var(--ink-muted); font-size: 14px; font-weight: 700; }
+.avatar-selector__warn { font-size: 13px; line-height: 18px; color: var(--achiote); }
 
 /* ---------- Estado de validación ---------- */
 .status-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
   border-radius: var(--radius-pill);
   padding: 2px var(--space-3);
   font-size: 13px;
   line-height: 18px;
   font-weight: 700;
+  white-space: nowrap;
 }
+.status-badge::before { content: ''; width: 8px; height: 8px; margin-right: var(--space-2); border-radius: 50%; background: currentColor; }
 .status-badge--draft { background: var(--arena); color: var(--mango-ink); }
 .status-badge--approved { background: var(--bruma); color: var(--selva); }
 .status-badge--rejected { background: var(--achiote-soft); color: var(--achiote); }
 
-@media (max-width: 480px) {
-  .input { padding: var(--space-4); }
-  .btn { padding: var(--space-3) var(--space-4); }
+/* ---------- Pantallas medianas: la tarjeta de la letra se hace más estrecha ---------- */
+@media (max-width: 1100px) {
+  .letter-card { width: 190px; padding: var(--space-4); }
+  .letter-card__letter { font-size: 72px; line-height: 72px; }
+  .letter-card__desc { display: none; }
+}
+
+/* ---------- Celular: el escenario arriba y la barra como panel inferior ---------- */
+@media (max-width: 720px) {
+  .scene { height: auto; min-height: 100dvh; display: flex; flex-direction: column; }
+  /* Alto fijo: el lienzo 3D necesita un contenedor con altura definida. */
+  .stage { position: relative; inset: auto; flex: 1 0 auto; height: max(360px, 56dvh); }
+  .stage--placeholder { padding: 96px var(--space-4) var(--space-8); }
+
+  .scene__top { top: var(--space-4); left: var(--space-4); right: var(--space-4); gap: var(--space-2); flex-wrap: nowrap; }
+  .plate--logo { padding: 6px 12px 6px var(--space-2); }
+  .plate--logo .logo { zoom: 0.78; }
+  .plate--group { padding: 6px; gap: var(--space-2); min-width: 0; }
+  .plate--group .status-badge, .avatar-selector label { display: none; }
+  .avatar-selector select { max-width: 150px; font-size: 14px; }
+
+  /* La letra actual pasa a ser una píldora bajo la cabecera. */
+  .letter-card {
+    top: 84px;
+    left: var(--space-4);
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 6px var(--space-4) 6px 6px;
+    border-radius: var(--radius-pill);
+  }
+  .letter-card__label, .letter-card__desc { display: none; }
+  .letter-card__letter {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--mango);
+    color: var(--on-mango);
+    border: 2px solid var(--mango-ink);
+    font-size: 28px;
+    line-height: 1;
+  }
+  .letter-card--empty .letter-card__letter { background: var(--surface); color: var(--line-strong); border-color: var(--line-strong); }
+  .letter-card__count { font-weight: 700; color: var(--ink); }
+
+  /* La vista de la cámara, abajo a la derecha del escenario. */
+  .views { top: calc(max(360px, 56dvh) - 88px); right: var(--space-4); flex-direction: row; gap: var(--space-1); padding: var(--space-1); border-radius: var(--radius-pill); }
+  .views__btn { min-height: 40px; padding: 0 var(--space-3); }
+
+  .dock-wrap { position: relative; left: auto; right: auto; bottom: auto; margin-top: -24px; }
+  .dock { max-width: none; padding: var(--space-4) var(--space-4) 20px; gap: 14px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .dock__row { flex-wrap: nowrap; }
+  .timeline { flex-wrap: nowrap; overflow-x: auto; min-width: 0; }
+  .speed { display: none; }
+  .btn.speed-cycle { display: inline-flex; margin-left: auto; flex: none; }
+  .controls { order: 1; gap: var(--space-1); }
+  .entry { order: 2; }
+  .entry input { flex-basis: 0; flex-grow: 1; height: 48px; font-size: 17px; padding: 0 var(--space-4); }
+  .dock__badge { display: flex; order: 3; justify-content: center; }
+  .btn__label { display: none; }
+  .btn--quiet { width: 44px; padding: 0; }
+  .entry__submit { width: 48px; padding: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2829,82 +3172,6 @@ CONFIG = {
         ('hair', 'short02/short02.mhclo'),
     ],
     'clothes': ['male_casualsuit01/male_casualsuit01.mhclo', 'shoes01/shoes01.mhclo'],
-}
-
-if __name__ == '__main__':
-    build_candidate(CONFIG, HERE)
-```
-
-## `assets-src/avatars/mpfb2-caricatura/build_avatar.py`
-
-```python
-"""
-Candidato "mpfb2-caricatura": versión caricaturesca inspirada en los rasgos del autor
-del proyecto (MPFB 2 + Rigify, recursos CC0).
-
-Rasgos buscados (de sus fotos): hombre de unos 20 años, piel trigueña clara, cara
-redonda y llena, cejas negras gruesas y rectas, ojos cafés, nariz ancha, labios
-llenos, pelo negro peinado hacia arriba y atrás con los lados cortos, camiseta
-negra. Rasgo caricaturesco: cabeza, ojos y manos algo más grandes (las manos
-grandes además ayudan a leer las señas).
-
-  blender -b --python assets-src/avatars/mpfb2-caricatura/build_avatar.py
-  blender -b assets-src/avatars/mpfb2-caricatura/avatar.blend --python tools/blender/bake_letters.py
-  blender -b assets-src/avatars/mpfb2-caricatura/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2-caricatura.glb
-"""
-import os
-import sys
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'tools', 'blender'))
-from mpfb_builder import build_candidate  # noqa: E402
-
-
-def t(name, value):
-    return {'target': name, 'value': value}
-
-
-CONFIG = {
-    'name': 'nexolsc_caricatura',
-    'macro': {
-        'gender': 1.0,
-        'age': 0.44,          # principios de los 20
-        'muscle': 0.45,
-        'weight': 0.68,       # complexión llena
-        'proportions': 0.35,  # menos "ideal", más caricatura
-        'height': 0.63,       # ≈ 1,65 m
-        'cupsize': 0.5,
-        'firmness': 0.5,
-        'race': {'caucasian': 0.55, 'asian': 0.25, 'african': 0.20},
-    },
-    'targets': [
-        # Cabeza más grande y redonda (rasgo caricaturesco + cara llena)
-        t('head-round', 0.7), t('head-fat-incr', 0.5),
-        t('head-scale-horiz-incr', 0.6), t('head-scale-vert-incr', 0.55), t('head-scale-depth-incr', 0.5),
-        t('l-cheek-volume-incr', 0.5), t('r-cheek-volume-incr', 0.5),
-        t('chin-width-incr', 0.3), t('neck-double-incr', 0.15),
-        # Ojos más grandes
-        t('l-eye-scale-incr', 0.8), t('r-eye-scale-incr', 0.8),
-        # Nariz ancha y labios llenos
-        t('nose-scale-horiz-incr', 0.4), t('nose-volume-incr', 0.35), t('nose-point-width-incr', 0.35),
-        t('mouth-upperlip-volume-incr', 0.25), t('mouth-lowerlip-volume-incr', 0.35),
-        # Cejas un poco más bajas y rectas (mirada seria)
-        t('eyebrows-angle-down', 0.2),
-        # Manos más grandes y dedos algo más gruesos: se leen mejor las configuraciones
-        t('l-hand-scale-incr', 0.5), t('r-hand-scale-incr', 0.5),
-        t('l-hand-fingers-diameter-incr', 0.2), t('r-hand-fingers-diameter-incr', 0.2),
-    ],
-    'skin_mix': [('young_caucasian_male', 0.55), ('young_asian_male', 0.25), ('young_african_male', 0.20)],
-    'eyes_material': 'brown',
-    'bodyparts': [
-        ('eyebrows', 'eyebrow009/eyebrow009.mhclo'),   # gruesas y rectas
-        ('eyelashes', 'eyelashes01/eyelashes01.mhclo'),
-        ('teeth', 'teeth_base/teeth_base.mhclo'),
-        ('hair', 'short04/short04.mhclo'),             # negro, peinado hacia arriba/atrás
-    ],
-    'clothes': ['male_casualsuit06/male_casualsuit06.mhclo', 'shoes02/shoes02.mhclo'],
-    # La camiseta de casualsuit06 es blanca: se pasa a negro sin tocar los jeans.
-    'recolor': {'male_casualsuit06_diffuse': 'casualsuit06_black_tee', 'brown_eye': 'iris_dark_brown'},
 }
 
 if __name__ == '__main__':
