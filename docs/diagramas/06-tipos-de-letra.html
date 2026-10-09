@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dos tipos de letra · NexoLSC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&amp;family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --color-paper: #f5f9f6; --color-ink: #0f2a2e; --color-muted: #4a6266; --color-accent: #0b6b4f; }
+    body { font-family: 'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif; background: var(--color-paper); color: var(--color-ink); min-height: 100vh;
+           display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', Consolas, 'Courier New', monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em;
+               text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.5rem; }
+    h1 { font-family: 'Baloo 2', 'Atkinson Hyperlegible', sans-serif; font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+         font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; color: var(--color-ink); margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Línea de tiempo · NexoLSC</p>
+    <h1>Dos tipos de letra</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 960 264" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="06-tipos-de-letra-title 06-tipos-de-letra-desc"><title id="06-tipos-de-letra-title">Dos tipos de letra</title><desc id="06-tipos-de-letra-desc">Una letra quieta tarda 250 ms en llegar y se mantiene 600 ms; una letra con movimiento tarda 250 ms en llegar y hace su recorrido en 950 ms.</desc><defs><marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4a6266"/></marker><marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b6b4f"/></marker><marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#7a4f00"/></marker></defs><rect width="100%" height="100%" fill="#f5f9f6"/><text x="40" y="70" fill="#0f2a2e" font-size="11" font-weight="700" font-family="'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif">Letra quieta</text><text x="40" y="84" fill="#4a6266" font-size="9" font-family="'Geist Mono', Consolas, 'Courier New', monospace">21 letras</text><text x="686" y="76" fill="#4a6266" font-size="9" font-family="'Geist Mono', Consolas, 'Courier New', monospace">850 ms</text><rect x="232" y="56" width="130" height="32" rx="4" fill="#f5f9f6"/><rect x="232" y="56" width="130" height="32" rx="4" fill="rgba(15,42,46,0.05)" stroke="#4a6266" stroke-width="1"/><text x="297" y="76" fill="#0f2a2e" font-size="11" font-weight="700" font-family="'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif" text-anchor="middle">Llegar · 250 ms</text><rect x="362" y="56" width="312" height="32" rx="4" fill="#f5f9f6"/><rect x="362" y="56" width="312" height="32" rx="4" fill="#ffffff" stroke="#0f2a2e" stroke-width="1"/><text x="518" y="76" fill="#0f2a2e" font-size="11" font-weight="700" font-family="'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif" text-anchor="middle">Mantener la pose · 600 ms</text><text x="40" y="134" fill="#0f2a2e" font-size="11" font-weight="700" font-family="'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif">Letra con movimiento</text><text x="40" y="148" fill="#4a6266" font-size="9" font-family="'Geist Mono', Consolas, 'Courier New', monospace">G H J Ñ S Z</text><text x="868" y="140" fill="#4a6266" font-size="9" font-family="'Geist Mono', Consolas, 'Courier New', monospace">1.200 ms</text><rect x="232" y="120" width="130" height="32" rx="4" fill="#f5f9f6"/><rect x="232" y="120" width="130" height="32" rx="4" fill="rgba(15,42,46,0.05)" stroke="#4a6266" stroke-width="1"/><text x="297" y="140" fill="#0f2a2e" font-size="11" font-weight="700" font-family="'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif" text-anchor="middle">Llegar · 250 ms</text><rect x="362" y="120" width="494" height="32" rx="4" fill="#f5f9f6"/><rect x="362" y="120" width="494" height="32" rx="4" fill="rgba(11,107,79,0.08)" stroke="#0b6b4f" stroke-width="1"/><text x="609" y="140" fill="#0f2a2e" font-size="11" font-weight="700" font-family="'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif" text-anchor="middle">Hacer el recorrido · 950 ms</text><line x1="232" y1="184" x2="856" y2="184" stroke="#d3e2da" stroke-width="1"/><line x1="232" y1="184" x2="232" y2="188" stroke="#71898a" stroke-width="1"/><text x="232" y="200" fill="#4a6266" font-size="8" font-family="'Geist Mono', Consolas, 'Courier New', monospace" text-anchor="middle">0 ms</text><line x1="388" y1="184" x2="388" y2="188" stroke="#71898a" stroke-width="1"/><text x="388" y="200" fill="#4a6266" font-size="8" font-family="'Geist Mono', Consolas, 'Courier New', monospace" text-anchor="middle">300 ms</text><line x1="544" y1="184" x2="544" y2="188" stroke="#71898a" stroke-width="1"/><text x="544" y="200" fill="#4a6266" font-size="8" font-family="'Geist Mono', Consolas, 'Courier New', monospace" text-anchor="middle">600 ms</text><line x1="700" y1="184" x2="700" y2="188" stroke="#71898a" stroke-width="1"/><text x="700" y="200" fill="#4a6266" font-size="8" font-family="'Geist Mono', Consolas, 'Courier New', monospace" text-anchor="middle">900 ms</text><line x1="856" y1="184" x2="856" y2="188" stroke="#71898a" stroke-width="1"/><text x="856" y="200" fill="#4a6266" font-size="8" font-family="'Geist Mono', Consolas, 'Courier New', monospace" text-anchor="middle">1200 ms</text><text x="40" y="236" fill="#4a6266" font-size="14" font-style="italic" font-family="'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif" text-anchor="start">A velocidad normal (1x). Los tiempos se ajustarán con personas sordas.</text></svg>
+    </div>
+  </div>
+</body>
+</html>

@@ -12,7 +12,8 @@ NexoLSC/
 ├── CHANGELOG.md                   ← qué cambió en cada versión
 ├── .gitattributes                 ← le dice a git qué archivos son binarios (.blend, .glb, imágenes)
 ├── docs/                          ← esta documentación (01 a 17)
-│   └── img/                       ← capturas de la pantalla para los documentos
+│   ├── img/                       ← capturas de la pantalla para los documentos
+│   └── diagramas/                 ← los diagramas: .html (fuente) y .svg (la imagen de los documentos)
 ├── assets-src/                    ← archivos de trabajo de los avatares (la página no los usa)
 │   ├── README.md                  ← cómo crear un avatar, aplicarle las letras y exportarlo
 │   └── avatars/                   ← una carpeta por avatar
@@ -28,7 +29,8 @@ NexoLSC/
 │   │   ├── export_avatar.py       ← limpia el avatar y lo exporta como .glb
 │   │   └── run.mjs                ← atajos: npm run avatar:abrir / npm run avatar:exportar
 │   └── docs/
-│       └── gen_doc15.mjs          ← genera el doc 15 desde el código (npm run docs:codigo)
+│       ├── gen_doc15.mjs          ← genera el doc 15 desde el código (npm run docs:codigo)
+│       └── gen_diagramas.py       ← genera los diagramas de los documentos (npm run docs:diagramas)
 ├── public/                        ← lo que la página descarga tal cual
 │   ├── favicon.svg                ← ícono de la pestaña del navegador
 │   ├── brand/                     ← versiones del logo (color, oscuro, blanco…)

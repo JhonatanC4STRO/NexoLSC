@@ -7,6 +7,18 @@ Todos los cambios relevantes del proyecto. Formato basado en
 Mientras la versión sea `0.x`, el MVP no se considera estable: una versión menor (`0.2.0`, `0.3.0`)
 puede cambiar formatos de datos o la estructura del proyecto.
 
+## [0.5.1] - 2026-10-09
+
+### Cambiado
+- **Diagramas de la documentación rehechos con la skill «diagram-design»** y la marca NexoLSC (verde selva
+  como acento, Atkinson Hyperlegible y Geist Mono). Los 10 diagramas Mermaid de los docs 01, 05, 06, 07, 09,
+  10 y 16 pasan a imágenes SVG en `docs/diagramas/`, con su fuente HTML al lado. Se generan con
+  `npm run docs:diagramas` (`tools/docs/gen_diagramas.py`).
+- `avatar.blend` y su `.glb` se suben tal como quedaron guardados en Blender después de la v0.5.0.
+
+### Corregido
+- `export_avatar.py` fallaba si el `.blend` se había guardado en *Pose Mode*; ahora cambia a *Object Mode* solo.
+
 ## [0.5.0] - 2026-10-09
 
 ### Cambiado
@@ -151,6 +163,7 @@ puede cambiar formatos de datos o la estructura del proyecto.
 - Scripts de Blender para limpiar y exportar avatares a GLB.
 - 15 pruebas con Vitest.
 
+[0.5.1]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.3.0...v0.4.0

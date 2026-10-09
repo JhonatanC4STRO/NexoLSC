@@ -40,25 +40,7 @@ Por ejemplo, para «Hola, Ana» la lista queda así:
 
 El reproductor siempre está en uno de estos cuatro estados:
 
-```mermaid
-stateDiagram-v2
-  direction LR
-  state "En espera" as espera
-  state "Reproduciendo" as reproduciendo
-  state "En pausa" as pausa
-  state "Terminado" as terminado
-  [*] --> espera: cargar la lista
-  espera --> reproduciendo: reproducir
-  reproduciendo --> pausa: pausar
-  pausa --> reproduciendo: continuar
-  reproduciendo --> terminado: acaba la última letra
-  terminado --> reproduciendo: reproducir otra vez
-  espera --> pausa: saltar a una letra
-  terminado --> pausa: saltar a una letra
-  reproduciendo --> espera: detener
-  pausa --> espera: detener
-  terminado --> espera: detener
-```
+![El reproductor pasa de En espera a Reproduciendo; desde ahí puede pausar y continuar o terminar, y saltar a una letra lleva a En pausa; detener vuelve siempre a En espera.](diagramas/07-estados-reproductor.svg)
 
 | Estado | En el código | Qué significa |
 |---|---|---|

@@ -4,13 +4,7 @@
 > navegador la convierte en texto y ese texto sigue exactamente el mismo camino que si lo hubieras escrito
 > (ver [09](09-flujo-texto-letras-avatar.md)).
 
-```mermaid
-flowchart TB
-  B["Pulsas el botón <b>Hablar</b>"] --> S["<b>El navegador escucha</b><br/>en español de Colombia"]
-  S -- "mientras hablas: «ho…»" --> I["Se muestra el texto provisional<br/>en gris"]
-  S -- "cuando terminas: «Hola»" --> T["<b>El texto aparece en el campo</b><br/>y se reproduce solo,<br/>como si hubieras pulsado Reproducir"]
-  T --> L["H → O → L → A"] --> AV["El avatar seña"]
-```
+![Al pulsar Hablar el navegador escucha; mientras hablas muestra un texto provisional y al terminar el texto entra al campo, se convierte en letras y el avatar las seña.](diagramas/10-voz-avatar.svg)
 
 ## Se puede cambiar el motor de voz
 

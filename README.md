@@ -44,6 +44,7 @@ solo.
 | `npm run avatar:abrir` | Abre el avatar en Blender para perfeccionar las letras |
 | `npm run avatar:exportar` | Exporta el avatar para la página después de editarlo en Blender |
 | `npm run docs:codigo` | Vuelve a generar el doc 15 con el código actual |
+| `npm run docs:diagramas` | Vuelve a generar los diagramas de los documentos (necesita Python y la skill «diagram-design») |
 
 ### Si algo no funciona
 

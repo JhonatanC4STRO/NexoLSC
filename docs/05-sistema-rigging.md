@@ -9,16 +9,7 @@
 
 ## Dos esqueletos, dos trabajos
 
-```mermaid
-flowchart LR
-  subgraph AUT["PARA CREAR · en Blender"]
-    R["<b>Esqueleto de control</b><br/>• controles para mover los brazos<br/>• controles para doblar los dedos<br/>• huesos de ayuda internos<br/>930 huesos en total"]
-  end
-  subgraph EJE["PARA MOSTRAR · en el navegador"]
-    D["<b>Esqueleto que mueve el cuerpo</b><br/>• solo los huesos «DEF» (181)<br/>• cada letra ya guardada como movimiento<br/>• lo mueve three.js"]
-  end
-  R -- "exportar<br/>(se copia el resultado,<br/>no los controles)" --> D
-```
+![En Blender el avatar tiene un esqueleto de control de 930 huesos para posarlo; al exportar solo se guardan los 181 huesos que mueven el cuerpo, que son los que usa el navegador.](diagramas/05-dos-esqueletos.svg)
 
 - **En Blender**, las letras se posan a mano moviendo los controles (ver [06](06-animation-clips.md)).
   Cada letra tiene fotogramas clave solo en 50 controles.

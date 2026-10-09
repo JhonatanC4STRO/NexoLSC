@@ -14,7 +14,7 @@ uno o pocos días. Cada épica termina con algo que se puede probar.
 - Si aparece trabajo nuevo, añádelo como tarea dentro de su épica (o crea una épica nueva, NX-10…).
 - Al publicar una versión, anota en el `CHANGELOG.md` qué tareas se terminaron.
 
-## Cómo va (v0.5.0, 2026-10-09)
+## Cómo va (v0.5.1, 2026-10-09)
 
 | # | Épica | Estado |
 |---|---|---|
@@ -106,7 +106,7 @@ uno o pocos días. Cada épica termina con algo que se puede probar.
 ### NX-9 · Documentación — ✅
 
 - [x] Documentos 01 a 13 y README en lenguaje sencillo, con glosario.
-- [x] Diagramas en Mermaid y en español.
+- [x] Diagramas en español, rehechos con la skill «diagram-design» y la marca NexoLSC (`npm run docs:diagramas`).
 - [x] Doc 15 generado automáticamente desde el código (`npm run docs:codigo`).
 - [x] Este plan de trabajo, organizado en épicas.
 - [x] Doc 16 (palabras y frases) en lenguaje sencillo.

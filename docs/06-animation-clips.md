@@ -41,17 +41,7 @@ El nombre de la animación de cada seña está escrito en sus datos, no en el c�
 
 ## 3. Dos tipos de letra
 
-```mermaid
-flowchart LR
-  subgraph EST["Letra quieta · su animación es una sola pose"]
-    direction LR
-    E0["Pose anterior"] -- "pasar a la letra<br/>250 ms" --> E1["<b>Pose de la letra</b><br/>A B C D E F I K L M N<br/>O P Q R T U V W X Y"] -- "mantenerla<br/>600 ms" --> E2["Siguiente letra"]
-  end
-  subgraph DIN["Letra con movimiento · su animación dibuja un recorrido"]
-    direction LR
-    D0["Pose anterior"] -- "pasar a la letra<br/>250 ms" --> D1["<b>Pose inicial</b><br/>G H J Ñ S Z"] -- "hacer el movimiento<br/>950 ms" --> D2["Pose final"]
-  end
-```
+![Una letra quieta tarda 250 ms en llegar y se mantiene 600 ms; una letra con movimiento tarda 250 ms en llegar y hace su recorrido en 950 ms.](diagramas/06-tipos-de-letra.svg)
 
 **El paso de una letra a otra no se anima a mano.** La página mezcla suavemente la pose anterior con la
 nueva. Así no hay que hacer 27 × 27 = 729 transiciones.

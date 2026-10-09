@@ -1,7 +1,7 @@
 {
   "name": "nexolsc",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "test": "vitest run",
     "docs:codigo": "node tools/docs/gen_doc15.mjs",
     "avatar:abrir": "node tools/blender/run.mjs abrir",
-    "avatar:exportar": "node tools/blender/run.mjs exportar"
+    "avatar:exportar": "node tools/blender/run.mjs exportar",
+    "docs:diagramas": "python tools/docs/gen_diagramas.py"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

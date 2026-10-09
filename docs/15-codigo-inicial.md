@@ -4,7 +4,7 @@
 > documento se **genera solo** a partir de los archivos reales (`npm run docs:codigo`); si alguna vez no
 > coincide con el código, manda el código.
 
-Generado el 2026-10-09 desde la versión 0.5.0.
+Generado el 2026-10-09 desde la versión 0.5.1.
 
 ## Cómo ejecutarlo
 
@@ -69,7 +69,7 @@ Luego abre http://localhost:5173. Para crear o cambiar avatares, mira `assets-sr
 {
   "name": "nexolsc",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -78,7 +78,8 @@ Luego abre http://localhost:5173. Para crear o cambiar avatares, mira `assets-sr
     "test": "vitest run",
     "docs:codigo": "node tools/docs/gen_doc15.mjs",
     "avatar:abrir": "node tools/blender/run.mjs abrir",
-    "avatar:exportar": "node tools/blender/run.mjs exportar"
+    "avatar:exportar": "node tools/blender/run.mjs exportar",
+    "docs:diagramas": "python tools/docs/gen_diagramas.py"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",
@@ -2803,7 +2804,12 @@ argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 out_path = argv[0] if argv else '//avatar.glb'
 
 rig = bpy.data.objects[RIG_NAME]
-meshes = [o for o in bpy.data.objects if o.type == 'MESH' and o.parent == rig]
+
+# Al editar letras el .blend suele guardarse en Pose Mode; la exportación necesita Object Mode.
+if bpy.context.object and bpy.context.object.mode != 'OBJECT':
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+meshes =[o for o in bpy.data.objects if o.type == 'MESH' and o.parent == rig]
 
 # 1. Una sola armadura por malla (glTF admite un solo skin por malla).
 for o in meshes:

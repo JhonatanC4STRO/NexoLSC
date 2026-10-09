@@ -32,20 +32,7 @@
 
 ## Fase 2 · Palabras completas
 
-```mermaid
-flowchart TB
-  T["Escribes: «Mi casa es grande»"]
-  W["<b>Palabras limpias</b><br/>MI · CASA · ES · GRANDE"]
-  L["<b>Forma base de cada palabra</b><br/>casas → CASA · quiero → QUERER"]
-  D{"¿Hay seña para esa<br/>palabra?"}
-  S["Usar la seña<br/>de la palabra (CASA)"]
-  F["Deletrear letra por letra<br/>(lo que hace hoy la app)"]
-  P["Reproductor"]
-  T -- "limpiar el texto<br/>(sin perder dónde empieza<br/>cada palabra)" --> W
-  W -- "buscar la forma base" --> L --> D
-  D -- sí --> S --> P
-  D -- no --> F --> P
-```
+![El texto se limpia por palabras y cada palabra se lleva a su forma base; si existe su seña se usa, y si no, se deletrea letra por letra; las dos salidas llegan al reproductor.](diagramas/16-fase2-palabras.svg)
 
 Qué hay que hacer:
 
@@ -94,13 +81,7 @@ espacio alrededor del cuerpo y comunica también con la cara. El diccionario DBL
 
 Cómo se haría:
 
-```mermaid
-flowchart LR
-  ES["Frase en español"] --> TR["<b>Traductor</b><br/>reglas + inteligencia artificial,<br/>revisado por personas sordas"]
-  TR --> RI["<b>Frase en orden de la LSC</b><br/>glosas + gestos de la cara"]
-  RI --> BQ["Armar la lista de señas"] --> SP["Reproductor"]
-  RI -.- EX["Ejemplo:<br/>PRO1POS · ABUELO · …<br/>cejas arriba durante las señas 3 a 5"]
-```
+![Un traductor revisado por personas sordas pasa la frase en español a glosas en el orden de la LSC con gestos de la cara; de ahí se arma la lista de señas para el reproductor.](diagramas/16-fase3-frases.svg)
 
 - **Las glosas son el punto de encuentro** entre el traductor y el reproductor. Así, un intérprete puede
   escribir las glosas a mano (útil para revisar) y el avatar se puede probar aunque todavía no exista el

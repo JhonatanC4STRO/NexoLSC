@@ -23,7 +23,12 @@ argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 out_path = argv[0] if argv else '//avatar.glb'
 
 rig = bpy.data.objects[RIG_NAME]
-meshes = [o for o in bpy.data.objects if o.type == 'MESH' and o.parent == rig]
+
+# Al editar letras el .blend suele guardarse en Pose Mode; la exportación necesita Object Mode.
+if bpy.context.object and bpy.context.object.mode != 'OBJECT':
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+meshes =[o for o in bpy.data.objects if o.type == 'MESH' and o.parent == rig]
 
 # 1. Una sola armadura por malla (glTF admite un solo skin por malla).
 for o in meshes:

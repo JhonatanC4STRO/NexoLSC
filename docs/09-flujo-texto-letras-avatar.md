@@ -6,32 +6,9 @@
 
 ## El recorrido completo
 
-```mermaid
-sequenceDiagram
-  actor U as Persona
-  participant App as Pantalla
-  participant N as Limpiar el texto
-  participant Q as Armar la lista
-  participant R as Diccionario de señas
-  participant P as Reproductor
-  participant A as Avatar
-  U->>App: escribe «Casa» y pulsa Reproducir
-  App->>N: limpia «Casa»
-  N-->>App: letras C, A, S, A
-  App->>Q: arma la lista con estas letras
-  Q->>R: busca la seña de cada letra
-  R-->>Q: ficha de la seña (con su animación)
-  Q-->>App: lista de 4 señas
-  App->>P: carga la lista y reproduce
-  loop en cada cuadro de la pantalla (60 por segundo)
-    App->>P: avanza el reloj
-    A->>P: ¿qué pose muestro?
-    P-->>A: de qué letra vengo, a cuál voy y cuánto avancé
-    A->>A: mezcla las animaciones
-  end
-  P-->>App: aviso solo cuando cambia la letra
-  App-->>U: «Letra actual: A · 2 / 4»
-```
+![La persona escribe una palabra; la pantalla pide al núcleo la lista de señas y la carga en el reproductor; en cada cuadro el avatar pregunta qué pose mostrar y la pantalla avisa la letra actual.](diagramas/09-recorrido-texto.svg)
+
+En el dibujo, **Núcleo** agrupa tres piezas: limpiar el texto, el diccionario de señas y armar la lista.
 
 ## Paso a paso
 

@@ -22,34 +22,7 @@ animar.
 
 ## Las piezas de la página web
 
-```mermaid
-flowchart TB
-  UI["<b>Pantalla</b><br/>campo de texto · botón de voz · selector de avatar<br/>controles · línea de letras"]
-  IN["<b>Reconocimiento de voz</b><br/>lo hace el navegador"]
-  subgraph NUCLEO["Núcleo · funciona sin pantalla y sin 3D"]
-    direction TB
-    NT["<b>Limpiar el texto</b><br/>mayúsculas, sin tildes, pausas"]
-    SR["<b>Diccionario de señas</b><br/>las 27 letras"]
-    BQ["<b>Armar la lista de señas</b><br/>una seña por letra"]
-    SP["<b>Reproductor</b><br/>orden, reloj, velocidad<br/>reproducir · pausar · detener · saltar · repetir"]
-    NT --> BQ
-    SR --> BQ
-    BQ -- "lista de señas" --> SP
-  end
-  subgraph A3D["Avatar 3D"]
-    direction TB
-    CD["<b>Mezclador de animaciones</b><br/>pasa suavemente de una letra a otra"]
-    GLB["<b>Archivo del avatar (.glb)</b><br/>cuerpo + esqueleto + animaciones"]
-    BG["<b>Fondo del escenario</b><br/>foto de la sede"]
-    GLB --> CD
-  end
-  UI -- "texto escrito" --> NT
-  UI -- "voz" --> IN
-  IN -- "texto reconocido" --> NT
-  UI -- "órdenes: reproducir, pausar, saltar, velocidad" --> SP
-  SP -- "letra actual y estado" --> UI
-  SP -- "qué pose mostrar<br/>(60 veces por segundo)" --> CD
-```
+![La pantalla envía el texto o la voz al núcleo, que limpia el texto, arma la lista de señas y la reproduce; el reproductor le dice al avatar 3D qué pose mostrar y avisa a la pantalla la letra actual.](diagramas/01-piezas-pagina.svg)
 
 | Pieza | Nombre en el código | Qué hace |
 |---|---|---|
@@ -66,20 +39,7 @@ pasar de estar en el código a estar en internet sin tocar lo demás.
 
 ## Cómo se crean los avatares y sus letras (taller de contenido)
 
-```mermaid
-flowchart TB
-  CFG["<b>Ficha del personaje</b><br/>altura, cara, piel, ropa<br/>(build_avatar.py)"]
-  MPFB["<b>Crear el avatar en Blender</b><br/>con MPFB 2 y su esqueleto<br/>(mpfb_builder.py)"]
-  BLEND["<b>Avatar en Blender</b><br/>(avatar.blend)"]
-  COPY["<b>Letras de otro avatar</b><br/>se copian con Append<br/>(solo para un avatar nuevo)"]
-  EDIT["<b>Perfeccionar cada letra a mano</b><br/>en Blender<br/>(npm run avatar:abrir)"]
-  EXP["<b>Exportar para la web</b><br/>deja solo lo que el navegador necesita<br/>(npm run avatar:exportar)"]
-  GLB["<b>Archivo del avatar (.glb)</b><br/>en public/models/avatars/"]
-  REG["<b>Registrar el avatar en la app</b><br/>aparece en el selector<br/>(avatars.ts)"]
-  CFG --> MPFB --> BLEND --> EDIT
-  COPY -.-> EDIT
-  EDIT --> EXP --> GLB --> REG
-```
+![La ficha del personaje crea el avatar en Blender; sus letras se perfeccionan a mano (o se copian de otro avatar) y luego se exporta el archivo .glb que la app registra.](diagramas/01-taller-contenido.svg)
 
 El original de cada letra es su animación en Blender: se abre, se retoca a mano y se exporta. El generador
 de avatares no sobrescribe un avatar que ya existe, así que las letras no se pierden. Más detalle en
@@ -87,20 +47,7 @@ de avatares no sobrescribe un avatar que ya existe, así que las letras no se pi
 
 ## Del texto al avatar, paso a paso
 
-```mermaid
-flowchart TB
-  T["Escribes: «¿Cómo estás?»"]
-  TOK["<b>Letras limpias</b><br/>C O M O · pausa · E S T A S"]
-  Q["<b>Lista de señas</b><br/>cada una con su duración"]
-  P["<b>El reproductor avanza el reloj</b><br/>en cada cuadro de la pantalla"]
-  F["<b>Pose del momento</b><br/>de qué letra viene, a cuál va<br/>y cuánto ha avanzado"]
-  AV["El avatar se mueve"]
-  T -- "limpiar el texto" --> TOK
-  TOK -- "buscar cada letra en el diccionario" --> Q
-  Q -- "cargar y reproducir" --> P
-  P -- "preguntar qué mostrar" --> F
-  F -- "mezclar las animaciones" --> AV
-```
+![El texto escrito se limpia, se convierte en una lista de señas, el reproductor avanza su reloj en cada cuadro y el avatar mezcla las animaciones de la pose del momento.](diagramas/01-texto-avatar.svg)
 
 ## Reglas que sigue el diseño
 
