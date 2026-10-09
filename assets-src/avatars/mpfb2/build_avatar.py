@@ -1,9 +1,9 @@
 """
 Candidato "mpfb2": hombre joven adulto, realista (MPFB 2 + Rigify, recursos CC0).
 
-  blender -b --python assets-src/avatars/mpfb2/build_avatar.py
-  blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/bake_letters.py
-  blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
+  blender -b --python assets-src/avatars/mpfb2/build_avatar.py              (solo si avatar.blend no existe)
+  blender -b --python assets-src/avatars/mpfb2/build_avatar.py -- --sobrescribir   (¡borra las letras animadas!)
+  npm run avatar:exportar                                                     (exporta el .glb para la página)
 
 Ver tools/blender/mpfb_builder.py y LICENSE.md.
 """

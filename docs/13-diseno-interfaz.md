@@ -7,57 +7,19 @@
 
 ## Los mockups
 
-Los diseños están en un lienzo que se puede abrir en el navegador:
-**<https://claude.ai/artifact/4baJA1Goh6NToKhGvrnGKD>**
-
-Allí hay tres opciones, cada una para escritorio y celular. Se eligió la **opción A · Escenario**, que es la
-que tiene hoy la app. Las opciones B (Estudio) y C (App) quedan como referencia; de la B se podría tomar más
+Antes de programar la pantalla se hicieron mockups con tres opciones, cada una para escritorio y celular.
+Se eligió la **opción A · Escenario**, que es la que tiene hoy la app. Las opciones B (Estudio) y C (App) quedan como referencia; de la B se podría tomar más
 adelante la «ficha de la letra» (cómo se pone la mano, de qué libro sale y si ya está validada).
-
-> El lienzo es privado: para que otras personas lo vean hay que compartirlo desde su menú *Share*.
 
 ## Cómo se organiza la pantalla
 
 ### En el computador
 
-```text
-┌─────────────────────────────────────────────────────────────────────────┐
-│ (logo nexo LSC)                    (Borrador · 0 de 27)  (Avatar ▾)     │
-│ ┌──────────────┐                                         ┌────────┐    │
-│ │ Letra actual │                                         │ Frente │    │
-│ │      L       │            AVATAR 3D                    │ Perfil │    │
-│ │ 3 de 4 · HOLA│   (ocupa toda la pantalla, con la       │ Mano   │    │
-│ │ cómo se pone │    foto del SENA desenfocada detrás)    └────────┘    │
-│ │ la mano      │                                                       │
-│ └──────────────┘                                                       │
-│        ┌───────────────────────────────────────────────────────┐       │
-│        │ [H][O][L][A]                  Velocidad 0,5x … [1x] … 2x│       │
-│        │ ( Escribe una palabra…        ) (🎙) ( ▷ Reproducir )    │       │
-│        │ Se deletreará: HOLA                                     │       │
-│        │   ↻ Reiniciar  (‹)  ( ⏸ )  (›)  ⇄ Repetir  □ Detener     │       │
-│        └───────────────────────────────────────────────────────┘       │
-└─────────────────────────────────────────────────────────────────────────┘
-  Pie de página: fuente de las letras y licencia del avatar
-```
+![Pantalla Escenario en el computador, tema oscuro: logo arriba a la izquierda, estado y selector de avatar arriba a la derecha, tarjeta de la letra actual a la izquierda, botones Frente, Perfil y Mano a la derecha, el avatar en el centro sobre la foto del SENA y la barra de letras, velocidad, texto y controles abajo](img/pantalla-escritorio.png)
 
 ### En el celular
 
-```text
-┌──────────────────────────┐
-│ (logo)        (Avatar ▾) │
-│ (L  3 de 4 · HOLA)       │
-│                          │
-│        AVATAR 3D         │
-│                          │
-│     (Frente|Perfil|Mano) │
-├──────────────────────────┤  ← panel inferior con esquinas redondas
-│ [H][O][L][A]        1x   │
-│ ↻  (‹) ( ⏸ ) (›)  ⇄  □   │
-│ ( Escribe…   ) (🎙) (▷)  │
-│ Se deletreará: HOLA      │
-│ (Borrador · 0 de 27…)    │
-└──────────────────────────┘
-```
+![Pantalla Escenario en el celular, tema oscuro: logo y selector arriba, el avatar sobre la foto del SENA, botones Frente, Perfil y Mano, y el panel inferior con velocidad, controles, campo de texto y estado de validación](img/pantalla-celular.png)
 
 En el celular, la velocidad es un solo botón («1x») que pasa a la siguiente velocidad en cada toque, y los
 botones de abajo muestran solo el ícono (con su nombre para lectores de pantalla).

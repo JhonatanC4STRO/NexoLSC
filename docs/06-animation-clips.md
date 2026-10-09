@@ -1,9 +1,9 @@
 # 06 · Las animaciones de las letras
 
 > **En pocas palabras:** cada letra es una **animación** (en inglés, *clip*) guardada dentro del
-> archivo del avatar. Las letras no se animan a mano: están escritas como números (ángulos de los dedos y
-> de la mano) en un archivo de datos, y un programa de Blender las convierte en animaciones para cualquier
-> avatar. El paso de una letra a la siguiente lo calcula la página sola.
+> avatar. Las animaciones **se editan a mano en Blender**: abres el avatar, eliges la letra, mueves los
+> dedos y guardas. Luego exportas el avatar y la página usa la versión nueva. El paso de una letra a la
+> siguiente lo calcula la página sola.
 
 ## 1. ¿Un archivo por letra o uno con todas?
 
@@ -23,8 +23,7 @@
   incluidos la cara y las piernas, que no se mueven. Quitar eso queda pendiente.
 - **Fase 2: opción C.** Cuando haya cientos de palabras, se crearán **paquetes de animaciones sin cuerpo**
   (por ejemplo, «saludos» o «familia») que se descargan solo cuando se necesitan. three.js los conecta al
-  avatar por el **nombre de cada hueso**. El formato de datos ya está preparado para esto (campo
-  `animation.pack`).
+  avatar por el **nombre de cada hueso**. La ficha de cada seña ya está preparada para esto (campo `animation.pack`).
 - La opción A se descarta.
 
 ## 2. Cómo se llaman las animaciones
@@ -61,76 +60,81 @@ Tiempos de partida (a velocidad normal): pasar a la letra 250 ms, mantenerla 600
 movimiento 950 ms. Son valores para ajustar con personas sordas; están en los datos, no en el código.
 (1000 ms = 1 segundo.)
 
-## 4. Las letras como datos
+## 4. Cómo perfeccionar una letra en Blender
 
-Las 27 letras **no** se animan a mano en cada avatar. Se describen una sola vez en
-`assets-src/letters/alfabeto_lsc.json`, y el programa `tools/blender/bake_letters.py` las aplica al
-esqueleto de cualquier avatar Rigify. A este paso se le llama **hornear** (*bake*): convertir los datos en
-animaciones guardadas dentro del avatar.
+El **original de cada letra es su animación dentro del archivo de Blender**
+(`assets-src/avatars/mpfb2/avatar.blend`). Ahí están `rest` (reposo), `sign_A` … `sign_Z` y `sign_ENYE`.
+Cada animación tiene fotogramas clave solo en los **50 controles** que se mueven a mano (brazos, mano,
+dedos, pulgar, palma y hombro), así que el editor de animación se ve ordenado.
 
-Así se ven dos letras en el archivo de datos:
+### Los pasos
 
-```json
-"L": {
-  "status": "draft",
-  "note": "Índice arriba y pulgar horizontal formando una L; demás cerrados.",
-  "fingers": { "index": [0, 0, 0, 0], "middle": [85, 100, 60, 0], "ring": [85, 100, 60, 0], "pinky": [85, 100, 60, 0] },
-  "thumb": [-30, -20, 0, 0, 0]
-},
-"J": {
-  "fingers": { "...": "configuración de la I" },
-  "motion": [ { "t": 0, "lift": 4 }, { "t": 0.5, "lift": -5 }, { "t": 1, "lift": -5, "swing": -6, "twist": 45 } ]
-}
-```
-
-Qué significa cada campo (todos los ángulos en grados, mano derecha):
-
-| Campo | Qué describe |
-|---|---|
-| `status` | Estado de revisión: `draft` = borrador, `approved` = aprobada por personas sordas |
-| `fingers.<dedo>` | Cuatro números por dedo: cuánto se dobla cada una de sus tres partes (positivo = cerrar) y cuánto se separa (positivo = hacia el pulgar). `0` = dedo estirado |
-| `thumb` | Cinco números para el pulgar: hacia el índice, hacia la palma o afuera, su giro, y cuánto se doblan sus dos partes |
-| `arm.twist` | Hacia dónde mira la palma (giro del antebrazo). Con −60 la palma mira al frente; es el valor por defecto |
-| `arm.hand_dir` / `arm.forearm_dir` | Hacia dónde apuntan los dedos o el antebrazo. Por ejemplo, en la P apuntan hacia abajo |
-| `arm.swing` / `arm.lift` / `arm.tilt` | Mover la mano a un lado, subirla o bajarla, o inclinar el antebrazo |
-| `motion` | El recorrido de las letras con movimiento (G, H, J, Ñ, S, Z): una lista de momentos, de `t: 0` (inicio) a `t: 1` (fin), con lo que cambia en cada uno |
-
-**Comprobado:** los mismos datos produjeron las 27 letras en dos avatares distintos (el realista y uno
-caricaturesco que luego se eliminó), sin cambiar nada (ver [04-diseno-avatar.md](04-diseno-avatar.md)). Lo único que puede necesitar ajustes en
-un avatar con manos muy distintas son los **contactos**: el pulgar tocando otro dedo en O, D, F y T.
-
-### Cómo corregir una letra
-
-1. Cambia sus números en el archivo `alfabeto_lsc.json` (por ejemplo, el pulgar de la L).
-2. Hornea las letras en cada avatar y expórtalo:
+1. **Abre el avatar en Blender** (desde la carpeta del proyecto):
 
    ```bash
-   blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/bake_letters.py
+   npm run avatar:abrir
    ```
+
+2. **Entra a posar:** haz clic en el esqueleto (`rig`) y pulsa `Ctrl + Tab` (*Pose Mode*).
+3. **Elige la letra:** abre el *Dope Sheet*, cambia a *Action Editor* y en el menú de acciones elige la letra
+   (por ejemplo `sign_L`). Ponte en el **cuadro 1**.
+   - Las letras quietas tienen un solo fotograma clave (el cuadro 1).
+   - Las letras con movimiento (G, H, J, Ñ, S, Z) tienen varios (por ejemplo, la J en los cuadros 1, 13, 19
+     y 24). Revísalos todos.
+4. **Mueve los controles** (las figuras de colores, no los huesos `DEF-` de adentro):
+
+   | Para mover | Control |
+   |---|---|
+   | Un dedo completo de una vez | `f_index.01_master.R`, `f_middle.01_master.R`, `f_ring.01_master.R`, `f_pinky.01_master.R` |
+   | Cada parte del dedo | `f_index.01.R`, `.02.R`, `.03.R` (igual con los demás dedos) |
+   | Pulgar | `thumb.01.R`, `thumb.02.R`, `thumb.03.R` (y `thumb.01_master.R`) |
+   | Palma (ahuecarla) | `palm.R` |
+   | Mano y muñeca | `hand_fk.R` |
+   | Giro de la palma | `forearm_fk.R` |
+   | Posición del brazo | `upper_arm_fk.R` y `shoulder.R` |
+
+   Para girar: selecciona el control, pulsa `R`, luego `X` dos veces (eje propio del hueso), escribe los
+   grados y pulsa Enter. Doblar un dedo = eje X; separarlo = eje Z.
+5. **Guarda la pose en la letra:** con los controles que moviste seleccionados, pulsa `I` (insertar
+   fotograma clave) en el cuadro que estás editando.
+6. **Revisa desde varios lados:** teclado numérico `1` (frente), `3` (lado), `7` (arriba). Para comparar,
+   puedes poner una imagen de referencia detrás (*Add → Image → Reference*), por ejemplo una captura del
+   video de esa letra.
+7. **Guarda el archivo** con `Ctrl + S`.
+8. **Exporta el avatar para la página:**
 
    ```bash
-   blender -b assets-src/avatars/mpfb2/avatar.blend --python tools/blender/export_avatar.py -- public/models/avatars/mpfb2.glb
+   npm run avatar:exportar
    ```
 
-3. Revisa la letra de frente y de lado. Cambia `status` a `approved` **solo** después de que la validen
-   personas sordas.
+   Si todo sale bien, verás `[ok] public/models/avatars/mpfb2.glb` y la lista de las 28 animaciones.
+   Recarga la página y revisa la letra con los botones Frente, Perfil y Mano.
 
-Si todo sale bien, verás algo así:
+Cambia el estado de la letra a «aprobada» (en `src/core/signs/alphabet.lsc.ts`) **solo** después de que la
+validen personas sordas.
 
-```text
-[ok] Actions: ['rest', 'sign_A', 'sign_B', …, 'sign_ENYE', …, 'sign_Z']
-[ok] public/models/avatars/mpfb2.glb
-[clips] ['rest', 'sign_A', …, 'sign_Z']
-```
+### De dónde salieron las animaciones
 
-Para retoques muy finos también se puede posar la mano a mano en Blender, usando la ilustración del
-diccionario como referencia, y luego copiar los ángulos al archivo de datos para que la corrección sirva en
-todos los avatares.
+La primera versión de las 27 letras se generó con un programa a partir de ángulos escritos a mano (leídos
+del dibujo del diccionario DBLSC). Desde la v0.5.0 ese archivo de ángulos y su programa ya no existen: **las
+letras solo viven en Blender** y se mejoran a mano. Si alguna vez se necesitan, siguen en el historial de
+git (versión v0.4.1).
+
+### ¿Y si cambio de avatar?
+
+Las animaciones guardan los giros de los **controles de Rigify**, que se llaman igual en cualquier avatar
+hecho con Rigify. Para pasarlas a otro avatar:
+
+1. Abre el `avatar.blend` del avatar nuevo en Blender.
+2. *File → Append →* elige `assets-src/avatars/mpfb2/avatar.blend` *→ Action →* selecciona `rest` y todas
+   las `sign_…`.
+3. Revisa las letras: si las manos tienen proporciones parecidas funcionan casi igual; los contactos del
+   pulgar (O, D, F, T) pueden necesitar un retoque.
+4. Guarda y exporta (`AVATAR=otro`, ver [assets-src/README.md](../assets-src/README.md)).
 
 ### Cómo se revisó la primera versión
 
-Se sacaron imágenes de las 27 letras, de frente y de lado, en los dos avatares, y se corrigieron las que se
-veían mal:
+Se sacaron imágenes de las 27 letras, de frente y de lado, y se corrigieron las que se veían mal:
 
 - **C, O, Q, A y X:** la mano quedaba «acostada» al girar el antebrazo. Ahora se endereza después del giro.
 - **P:** la muñeca quedaba en una posición imposible. Ahora el antebrazo apunta hacia adelante.
@@ -139,44 +143,7 @@ veían mal:
 
 Todas siguen en **borrador** hasta que las validen personas sordas.
 
-El código completo de los programas está en [15-codigo-inicial.md](15-codigo-inicial.md).
-
-## 5. Funciones para posar con código (`pose_helpers.py`)
-
-`bake_letters.py` usa las funciones de `tools/blender/pose_helpers.py`. También sirven para probar poses
-a mano:
-
-| Función | Qué hace |
-|---|---|
-| `reset()` | Vuelve a la pose de reposo y quita la animación activa |
-| `rot_world(hueso, eje, grados)` | Gira un hueso alrededor de un eje |
-| `aim(hueso, dirección)` | Hace que un hueso apunte hacia una dirección |
-| `curl(dedo, grados)` | Dobla las tres partes de un dedo |
-| `arm_signing_space()` | Pone la mano derecha a la altura del hombro, con la palma al frente |
-| `key_action(nombre)` | Guarda la pose actual como una animación con ese nombre |
-
-```python
-import pose_helpers as P   # con tools/blender en la ruta de Python
-
-# Ejemplo: tres dedos cerrados (solo una prueba, NO es una letra validada)
-P.reset()
-P.arm_signing_space()
-for f in ['f_middle', 'f_ring', 'f_pinky']:
-    P.curl(f, 70)
-P.key_action('sign_L')
-```
-
-Dos trampas que ya están resueltas en el archivo:
-
-- **Los dedos y los brazos giran con sistemas distintos.** Si a un dedo se le da el giro con el sistema de
-  los brazos, no se mueve.
-- **Las poses se sumaban.** Si queda una animación activa, Blender la vuelve a aplicar y se suma a la nueva
-  pose. Por eso `reset()` la quita.
-
-> Estas funciones ahorran trabajo, pero **no** reemplazan la revisión contra la fuente ni la validación con
-> personas que usan la LSC.
-
-## 6. Cómo se reproducen en el navegador
+## 5. Cómo se reproducen en el navegador
 
 - Al cargar el avatar, todas sus animaciones se preparan en pausa y apagadas.
 - En cada cuadro de la pantalla, el mezclador (`ClipDriver`):
@@ -187,7 +154,7 @@ Dos trampas que ya están resueltas en el archivo:
 - La suma de lo «encendido» siempre es 100 %. Así el avatar nunca cae en la pose de fábrica con los brazos
   abiertos.
 
-## 7. Cómo comprobar un archivo exportado
+## 6. Cómo comprobar un archivo exportado
 
 Este comando muestra cuántos huesos y qué animaciones tiene un `.glb`:
 

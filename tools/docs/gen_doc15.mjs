@@ -36,9 +36,8 @@ const FILES = [
   ['src/main.tsx', 'Punto de arranque'],
   ['src/styles.css', 'Colores, letras y estilos (tema claro y oscuro, escritorio y celular)'],
   ['tools/blender/mpfb_builder.py', 'Crea un avatar MPFB a partir de su ficha'],
-  ['tools/blender/bake_letters.py', 'Aplica las 27 letras a cualquier avatar'],
   ['tools/blender/export_avatar.py', 'Limpia el avatar y lo exporta como .glb'],
-  ['tools/blender/pose_helpers.py', 'Funciones para posar brazos y dedos'],
+  ['tools/blender/run.mjs', 'Atajos npm run avatar:abrir / avatar:exportar'],
   ['assets-src/avatars/mpfb2/build_avatar.py', 'Ficha del avatar MPFB2 · hombre joven'],
 ];
 

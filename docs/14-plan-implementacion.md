@@ -14,7 +14,7 @@ uno o pocos días. Cada épica termina con algo que se puede probar.
 - Si aparece trabajo nuevo, añádelo como tarea dentro de su épica (o crea una épica nueva, NX-10…).
 - Al publicar una versión, anota en el `CHANGELOG.md` qué tareas se terminaron.
 
-## Cómo va (v0.4.1, 2026-10-08)
+## Cómo va (v0.5.0, 2026-10-09)
 
 | # | Épica | Estado |
 |---|---|---|
@@ -61,9 +61,12 @@ uno o pocos días. Cada épica termina con algo que se puede probar.
 
 ### NX-5 · Las 27 letras — 🟡
 
-- [x] Las 27 letras escritas como datos a partir del dibujo del diccionario DBLSC (pág. 573).
+- [x] Primera versión de las 27 letras a partir del dibujo del diccionario DBLSC (pág. 573).
 - [x] Aplicadas al avatar; 6 con movimiento (G, H, J, Ñ, S, Z).
 - [x] Primera revisión de frente y de lado; corregidas C, O, Q, A, X, H, P, L e Y.
+- [x] Las letras pasan a vivir solo en Blender: animaciones limpias (50 controles por letra), comandos
+  `npm run avatar:abrir` / `avatar:exportar` y se elimina el archivo de ángulos (v0.5.0).
+- [ ] Perfeccionar cada letra a mano en Blender, comparándola con video.
 - [ ] Compararlas con los videos de INSOR Educativo, sobre todo F, G, P, Q, S, T y U (ver [12](12-fuentes-alfabeto-lsc.md)).
 - [ ] Afinar el pulgar cuando toca otro dedo (O, D, F, T).
 - [ ] Probar todas a velocidad 0,5x y 1x en la app.

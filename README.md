@@ -41,11 +41,18 @@ solo.
 | `npm test` | Corre las pruebas automáticas (deben salir 15 en verde) |
 | `npm run build` | Prepara la versión para publicar, en la carpeta `dist/` |
 | `npm run preview` | Abre esa versión de publicación para revisarla antes de subirla |
+| `npm run avatar:abrir` | Abre el avatar en Blender para perfeccionar las letras |
+| `npm run avatar:exportar` | Exporta el avatar para la página después de editarlo en Blender |
+| `npm run docs:codigo` | Vuelve a generar el doc 15 con el código actual |
 
 ### Si algo no funciona
 
 - **«npm no se reconoce como un comando»:** falta instalar Node.js, o hay que cerrar y abrir la terminal
   después de instalarlo.
+- **«No se puede cargar el archivo …\npm.ps1 porque la ejecución de scripts está deshabilitada»** (en
+  PowerShell de Windows): escribe `npm.cmd` en lugar de `npm` (por ejemplo, `npm.cmd run dev`), o usa la
+  terminal *Command Prompt* o *Git Bash*. Si prefieres arreglarlo para siempre, ejecuta en PowerShell
+  `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned` y vuelve a abrir la terminal.
 - **El puerto 5173 está ocupado:** Vite usará otro (5174, 5175…). Mira en la terminal qué dirección muestra.
 - **El avatar no aparece:** revisa que exista `public/models/avatars/mpfb2.glb`. Si no hay ningún avatar, la
   página muestra la letra en grande con su descripción.
@@ -64,7 +71,7 @@ Todo está escrito en lenguaje sencillo. Si una palabra técnica no te queda cla
 | 03 | [Carpetas](docs/03-estructura-carpetas.md) | Qué hay en cada carpeta |
 | 04 | [El avatar](docs/04-diseno-avatar.md) | El avatar actual y qué debe tener un buen avatar para LSC |
 | 05 | [El esqueleto](docs/05-sistema-rigging.md) | Cómo se mueve el avatar por dentro |
-| 06 | [Las animaciones de las letras](docs/06-animation-clips.md) | Las letras como datos y cómo se aplican a cualquier avatar |
+| 06 | [Las animaciones de las letras](docs/06-animation-clips.md) | Cómo perfeccionar cada letra a mano en Blender y exportarla |
 | 07 | [La lista de señas y el reproductor](docs/07-animation-queue.md) | Cómo se reproduce, pausa, salta y cambia de velocidad |
 | 08 | [Cómo se describe una seña](docs/08-modelo-datos-letras.md) | La ficha de cada letra |
 | 09 | [Del texto al avatar](docs/09-flujo-texto-letras-avatar.md) | Paso a paso, con ejemplos |
@@ -85,9 +92,9 @@ Todo está escrito en lenguaje sencillo. Si una palabra técnica no te queda cla
 4. **Las letras salen del Diccionario Básico de la LSC** (INSOR – Instituto Caro y Cuervo, 2006), página
    573: 27 letras; G, H, J, Ñ, S y Z tienen movimiento. Todas están en **borrador** hasta que las validen
    personas sordas que usan la LSC.
-5. **Las letras son datos, no animaciones hechas a mano.** El archivo
-   `assets-src/letters/alfabeto_lsc.json` se aplica a cualquier avatar con un programa de Blender. Cambiar
-   de avatar no obliga a animar otra vez.
+5. **Las letras se perfeccionan a mano en Blender.** Cada letra es una animación dentro de
+   `assets-src/avatars/mpfb2/avatar.blend`, que es el original. Se abre con `npm run avatar:abrir` y se
+   exporta con `npm run avatar:exportar`.
 6. **Avatar actual: MPFB2 · hombre joven** (licencia libre CC0). El avatar caricaturesco se eliminó el
    2026-10-08. El modelo de Miles Morales solo existe en el equipo local para pruebas: tiene derechos de
    autor de otros.

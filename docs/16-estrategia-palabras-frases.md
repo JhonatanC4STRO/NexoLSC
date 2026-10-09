@@ -27,7 +27,7 @@
 | Armar la lista de señas (`buildQueue`) | 🔄 busca la palabra antes de deletrear | 🔄 recibe glosas en vez de texto | 🔄 | — |
 | El reproductor (`SignPlayer`) | ✅ sin cambios | ✅ + pistas en paralelo (cara, cabeza) | ✅ | — |
 | El avatar y el mezclador (`ClipDriver`) | ✅ + paquetes de animaciones que se descargan al usarlos | ✅ + gestos de la cara | ✅ | — |
-| Las poses como datos (`bake_letters.py`) | 🔄 se amplía a palabras (dos manos, lugar del cuerpo) | ✅ + cara y cabeza | ✅ | — |
+| Las animaciones en Blender | 🔄 se añaden las palabras (dos manos, lugar del cuerpo) | ✅ + cara y cabeza | ✅ | — |
 | El reconocimiento de voz | ✅ | ✅ | ✅ | — |
 
 ## Fase 2 · Palabras completas
@@ -69,7 +69,7 @@ Qué hay que hacer:
 
 | Forma | Calidad | Costo | Comentario |
 |---|---|---|---|
-| **Poses como datos + `bake_letters.py`** (lo que se usa hoy) | Media-alta; se corrige cambiando números | Bajo-medio por seña | Ya funciona con el alfabeto. Para palabras hay que añadir la mano izquierda, lugares del cuerpo y recorridos más ricos |
+| **Animar a mano en Blender** (lo que se usa hoy) | Alta, con buena referencia | Medio por seña | Así se perfecciona el alfabeto. Para palabras hay que animar también la mano izquierda y los lugares del cuerpo |
 | Animar a mano en Blender | Alta, si hay un buen animador | Alto por seña | Para señas difíciles. Conviene pasar el resultado a datos para usarlo en todos los avatares |
 | Grabar video y pasar el movimiento al avatar (MediaPipe) | Media; los dedos salen con ruido | Bajo | Grabar a personas sordas y limpiar el resultado en Blender |
 | Trajes o guantes de captura de movimiento | Alta | Alto (equipos caros) | Para un grupo central de señas de muy buena calidad |
@@ -77,8 +77,8 @@ Qué hay que hacer:
 
 **Recomendación:**
 
-- Ampliar el formato de datos de las letras (`assets-src/letters/`) para las palabras: mano izquierda, lugar
-  del cuerpo y recorrido. Empezar con las 100 a 200 palabras más usadas, ya validadas.
+- Animar en Blender las 100 a 200 palabras más usadas, ya validadas, con referencia en video de personas
+  sordas: mano izquierda, lugar del cuerpo y recorrido.
 - Probar la grabación con video, **con personas sordas que den su permiso y reciban pago** por su tiempo.
 
 **Por dónde empezar:** por los temas más útiles del diccionario DBLSC (saludos, familia, números, tiempo,

@@ -106,7 +106,7 @@ Sirven para justificar el proyecto; no describen letras.
 
 > Esto **no** es una definición nueva: es lo que muestra el dibujo, puesto en palabras para guiar la
 > animación. Las 27 letras ya están animadas a partir de esta descripción
-> (`assets-src/letters/alfabeto_lsc.json`) y todas están en **borrador**. Las marcadas con ⚠️ tienen
+> (hoy son animaciones en Blender) y todas están en **borrador**. Las marcadas con ⚠️ tienen
 > detalles que el dibujo no deja claros: hay que revisarlas con los videos de INSOR Educativo y con
 > personas sordas.
 

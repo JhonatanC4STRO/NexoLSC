@@ -7,6 +7,27 @@ Todos los cambios relevantes del proyecto. Formato basado en
 Mientras la versión sea `0.x`, el MVP no se considera estable: una versión menor (`0.2.0`, `0.3.0`)
 puede cambiar formatos de datos o la estructura del proyecto.
 
+## [0.5.0] - 2026-10-09
+
+### Cambiado
+- **Las letras viven solo en Blender y se perfeccionan a mano.** El original de cada letra es su animación en
+  `assets-src/avatars/mpfb2/avatar.blend`. Las 28 animaciones (reposo + 27 letras) se recrearon limpias:
+  fotogramas clave solo en los 50 controles que se mueven a mano (antes, en los 930 huesos del rig).
+- `mpfb_builder.py` ya no sobrescribe un `avatar.blend` existente (guarda las letras); hay que pedirlo con
+  `--sobrescribir`.
+- Para un avatar nuevo, las letras se copian de `mpfb2` en Blender (*File → Append → Action*).
+- Doc 13 usa capturas reales de la pantalla en escritorio y celular (`docs/img/`).
+- Documentación actualizada al nuevo flujo (01 a 06, 08, 12 a 14, 16, 17, README y `assets-src/README.md`).
+
+### Añadido
+- Comandos `npm run avatar:abrir` y `npm run avatar:exportar` (`tools/blender/run.mjs`), que encuentran
+  Blender solos.
+- En el README, solución al error de PowerShell «la ejecución de scripts está deshabilitada».
+
+### Eliminado
+- `assets-src/letters/alfabeto_lsc.json` (los ángulos de la primera versión de las letras),
+  `tools/blender/bake_letters.py` y `tools/blender/pose_helpers.py`. Siguen en el historial de git (v0.4.1).
+
 ## [0.4.1] - 2026-10-08
 
 ### Cambiado
@@ -130,6 +151,7 @@ puede cambiar formatos de datos o la estructura del proyecto.
 - Scripts de Blender para limpiar y exportar avatares a GLB.
 - 15 pruebas con Vitest.
 
+[0.5.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/JhonatanC4STRO/NexoLSC/compare/v0.2.2...v0.3.0

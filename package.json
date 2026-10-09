@@ -1,14 +1,16 @@
 {
   "name": "nexolsc",
   "private": true,
-  "version": "0.4.1",
+  "version": "0.5.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "docs:codigo": "node tools/docs/gen_doc15.mjs"
+    "docs:codigo": "node tools/docs/gen_doc15.mjs",
+    "avatar:abrir": "node tools/blender/run.mjs abrir",
+    "avatar:exportar": "node tools/blender/run.mjs exportar"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

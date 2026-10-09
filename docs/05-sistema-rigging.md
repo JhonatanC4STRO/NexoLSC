@@ -20,8 +20,8 @@ flowchart LR
   R -- "exportar<br/>(se copia el resultado,<br/>no los controles)" --> D
 ```
 
-- **En Blender**, las letras se posan moviendo los controles. No se hace a mano: lo hace el programa
-  `tools/blender/bake_letters.py` leyendo los datos de `assets-src/letters/alfabeto_lsc.json`.
+- **En Blender**, las letras se posan a mano moviendo los controles (ver [06](06-animation-clips.md)).
+  Cada letra tiene fotogramas clave solo en 50 controles.
 - **Al exportar** (`tools/blender/export_avatar.py`), Blender calcula dónde queda cada hueso que mueve el
   cuerpo y guarda solo eso. El navegador recibe 181 huesos en vez de 930.
 
@@ -77,7 +77,6 @@ Cada punto de la piel del avatar se mueve según uno o varios huesos cercanos. A
 | Programa | Qué hace |
 |---|---|
 | `mpfb_builder.py` | Le pone el esqueleto Rigify al avatar, fija su forma y deja los brazos en modo «hueso por hueso» |
-| `bake_letters.py` | Pone la mano en la pose de cada letra y guarda una animación por letra (reposo, A, B, …) |
 | `export_avatar.py` | Limpia lo que sobra y exporta solo los huesos que mueven el cuerpo |
 
 ## Listo para crecer

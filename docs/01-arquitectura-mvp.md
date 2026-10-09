@@ -12,9 +12,8 @@ Si una palabra técnica no te queda clara, búscala en el [glosario](17-glosario
 1. **La página web** (hecha con React y three.js). Recibe el texto o la voz, lo convierte en una
    lista de letras y hace que el avatar 3D las señe una por una. No usa servidor: las letras están
    escritas en el código, los avatares son archivos `.glb` y el navegador se encarga de reconocer la voz.
-2. **El taller de contenido** (Blender con programas en Python). Crea los avatares y les aplica las 27
-   letras. Las letras están guardadas como **datos** (ángulos de los dedos y de la mano), separadas del
-   avatar. Por eso se pueden aplicar a cualquier avatar.
+2. **El taller de contenido** (Blender). Ahí se crean los avatares y sus 27 letras. Cada letra es una
+   **animación dentro del archivo de Blender** que se perfecciona a mano y se exporta para la página.
 
 La idea principal es separar lo que **va a cambiar** (cómo se pasa de texto a señas, qué avatar se
 usa) de lo que **se queda igual** (el reproductor). Así, cuando el proyecto pase de deletrear letras a
@@ -69,21 +68,21 @@ pasar de estar en el código a estar en internet sin tocar lo demás.
 
 ```mermaid
 flowchart TB
-  JSON["<b>Las 27 letras como datos</b><br/>ángulos de dedos, pulgar y mano<br/>(alfabeto_lsc.json)"]
   CFG["<b>Ficha del personaje</b><br/>altura, cara, piel, ropa<br/>(build_avatar.py)"]
   MPFB["<b>Crear el avatar en Blender</b><br/>con MPFB 2 y su esqueleto<br/>(mpfb_builder.py)"]
   BLEND["<b>Avatar en Blender</b><br/>(avatar.blend)"]
-  BAKE["<b>Aplicar las letras al avatar</b><br/>una animación por letra<br/>(bake_letters.py)"]
-  EXP["<b>Exportar para la web</b><br/>deja solo lo que el navegador necesita<br/>(export_avatar.py)"]
+  COPY["<b>Letras de otro avatar</b><br/>se copian con Append<br/>(solo para un avatar nuevo)"]
+  EDIT["<b>Perfeccionar cada letra a mano</b><br/>en Blender<br/>(npm run avatar:abrir)"]
+  EXP["<b>Exportar para la web</b><br/>deja solo lo que el navegador necesita<br/>(npm run avatar:exportar)"]
   GLB["<b>Archivo del avatar (.glb)</b><br/>en public/models/avatars/"]
   REG["<b>Registrar el avatar en la app</b><br/>aparece en el selector<br/>(avatars.ts)"]
-  CFG --> MPFB --> BLEND --> BAKE
-  JSON --> BAKE
-  BAKE --> EXP --> GLB --> REG
+  CFG --> MPFB --> BLEND --> EDIT
+  COPY -.-> EDIT
+  EDIT --> EXP --> GLB --> REG
 ```
 
-Las mismas letras sirven para todos los avatares. Cambiar de avatar es volver a correr dos programas
-(aplicar las letras y exportar), no animar todo otra vez. Más detalle en
+El original de cada letra es su animación en Blender: se abre, se retoca a mano y se exporta. El generador
+de avatares no sobrescribe un avatar que ya existe, así que las letras no se pierden. Más detalle en
 [06-animation-clips.md](06-animation-clips.md).
 
 ## Del texto al avatar, paso a paso
@@ -116,8 +115,9 @@ flowchart TB
    segundo sin pasar por los botones.
 4. **Todo es una «seña».** Una letra es una seña de tipo «letra». Las palabras, los números y los gestos
    de la cara usarán el mismo formato en el futuro (ver [08-modelo-datos-letras.md](08-modelo-datos-letras.md)).
-5. **Las letras son datos y los avatares se pueden cambiar.** Todos los avatares cumplen las mismas
-   reglas (el mismo tipo de esqueleto y las mismas animaciones con los mismos nombres). Se registran en
+5. **Las letras se perfeccionan en Blender y los avatares se pueden cambiar.** Todos los avatares cumplen
+   las mismas reglas (el mismo tipo de esqueleto y las mismas animaciones con los mismos nombres), así que
+   las animaciones se pueden copiar de un avatar a otro. Se registran en
    `src/avatar/avatars.ts` y se comparan con el selector.
 6. **Si algo falta, la app sigue funcionando.**
    - Sin ningún avatar: muestra la letra en grande con la descripción de la mano.
@@ -150,5 +150,6 @@ usar **HTTPS** (el candado del navegador); si no, el micrófono no funciona.
 | A4 | Las transiciones entre letras se calculan solas | Animar a mano el paso de cada letra a cada otra | Serían 27 × 27 = 729 transiciones |
 | A5 | El estado vive dentro del reproductor | Usar librerías extra de estado (Redux, Zustand) | El estado es pequeño; no hace falta otra librería |
 | A6 | Voz con el reconocimiento del navegador | Un servicio de voz pagado en la nube | Gratis y sin claves; se puede cambiar después |
-| A7 | Letras como datos que un programa aplica al avatar | Animar cada letra a mano en cada avatar | Cambiar de avatar o corregir una letra no obliga a reanimar; ya se probó con dos avatares |
+| A7 | Primera versión de las letras generada desde datos | Animar las 27 letras a mano desde cero | Se tuvo una base completa en poco tiempo; ya se probó con dos avatares |
+| A9 | Desde la v0.5.0, las letras solo viven en Blender y se perfeccionan a mano (el `.blend` es el original) | Seguir corrigiendo con números en un archivo de datos | Es más rápido e intuitivo ver y mover la mano; un solo original evita que una copia borre la otra |
 | A8 | Avatares creados por programa con MPFB 2 (licencia libre CC0) | Modelos de internet o creados con IA | Licencia libre, se pueden volver a crear y tienen dedos y cara. Las mallas hechas con IA suelen pegar los dedos |

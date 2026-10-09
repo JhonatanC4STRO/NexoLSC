@@ -22,7 +22,7 @@
 | **git** | Programa que guarda el historial de cambios del proyecto. GitHub es la página donde se sube ese historial |
 | **GLB** (`.glb`) | Formato de archivo 3D para la web. Guarda en un solo archivo el cuerpo del avatar, su esqueleto y sus animaciones |
 | **Glosa** | La palabra en MAYÚSCULAS con la que se escribe una seña (por ejemplo, CASA). Así lo hace el diccionario DBLSC |
-| **Hornear** (*bake*) | Convertir los datos de las letras (los ángulos) en animaciones guardadas dentro del avatar. Lo hace `bake_letters.py` |
+| **Hornear** (*bake*) | Calcular y guardar un movimiento ya resuelto. Al exportar, Blender «hornea» las animaciones: guarda cómo queda cada hueso que mueve el cuerpo, sin los controles |
 | **HTTPS** | Conexión segura de una página (el candado del navegador). Sin ella, el micrófono no funciona |
 | **Interfaz** (en código) | Un «enchufe» común: define qué funciones debe tener una pieza, para poder cambiarla por otra sin tocar el resto |
 | **LSC** | Lengua de Señas Colombiana. Es la lengua propia de la comunidad sorda de Colombia (Ley 324 de 1996) |

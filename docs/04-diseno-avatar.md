@@ -8,8 +8,8 @@
 ## 1. Los avatares disponibles
 
 La app tiene un **selector de avatar** para comparar los avatares con las mismas palabras. Todos tienen
-el mismo tipo de esqueleto y las mismas animaciones con los mismos nombres, y reciben las mismas 27 letras
-desde `assets-src/letters/alfabeto_lsc.json` (ver [06](06-animation-clips.md)).
+el mismo tipo de esqueleto y las mismas animaciones con los mismos nombres. Las letras se perfeccionan a
+mano en Blender (ver [06](06-animation-clips.md)).
 
 | Avatar | Uso | Licencia | Altura | Archivo |
 |---|---|---|---|---|
@@ -49,7 +49,7 @@ Todo esto ya está corregido en `mpfb_builder.py`:
   demás texturas se guardan en JPEG.
 - **Los dedos y los brazos se mueven de forma distinta.** En Blender, los dedos usan un tipo de rotación y
   los brazos otro. Además, los brazos venían en modo «sigue a la mano» (IK) y hay que pasarlos a modo
-  «hueso por hueso» (FK). `tools/blender/pose_helpers.py` maneja los dos casos.
+  «hueso por hueso» (FK). `mpfb_builder.py` deja los brazos en FK, que es como se posan a mano.
 - **La altura no era la esperada.** El ajuste de altura de MakeHuman no va en metros: 0,5 → 1,59 m,
   0,6 → 1,71 m, 0,8 → 1,97 m.
 - **Algunas pieles no cargaban.** No todas nombran igual su imagen; ahora se lee el nombre desde el

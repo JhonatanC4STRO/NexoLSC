@@ -17,7 +17,7 @@ navegador.
 | Crear y animar los avatares | **Blender** | 5.2 | Programa gratuito de 3D. Aquí se crean los avatares, se les aplican las letras y se exportan, todo con programas automáticos |
 | Generar los personajes | **MPFB** (MakeHuman para Blender) | 2.0.17 + paquete de recursos (licencia CC0) | Crea personas en 3D con dedos y cara, y permite ajustar los rasgos. Su licencia es libre |
 | Esqueleto para posar | **Rigify** (viene con Blender) | — | Añade controles cómodos para mover brazos y dedos |
-| Las letras | **Archivo de datos (JSON) + programa de Blender** | — | Las 27 letras guardadas como números, que se pueden aplicar a cualquier avatar |
+| Las letras | **Animaciones en Blender** | — | Cada letra es una animación que se perfecciona a mano y se exporta con el avatar |
 | Formato del avatar | **.glb** (glTF 2.0) | — | Formato estándar de 3D para la web: cuerpo, esqueleto y animaciones en un solo archivo |
 | Arrancar y compilar la página | **Vite** | 8.3 | Arranca la página al instante mientras se trabaja y la prepara para publicarla |
 | La pantalla | **React** | 19.3 | Construye la interfaz por piezas (botones, campo de texto, línea de letras) |

@@ -12,23 +12,21 @@ NexoLSC/
 ├── CHANGELOG.md                   ← qué cambió en cada versión
 ├── .gitattributes                 ← le dice a git qué archivos son binarios (.blend, .glb, imágenes)
 ├── docs/                          ← esta documentación (01 a 17)
+│   └── img/                       ← capturas de la pantalla para los documentos
 ├── assets-src/                    ← archivos de trabajo de los avatares (la página no los usa)
 │   ├── README.md                  ← cómo crear un avatar, aplicarle las letras y exportarlo
-│   ├── letters/
-│   │   └── alfabeto_lsc.json      ← las 27 letras como DATOS (sirven para cualquier avatar)
 │   └── avatars/                   ← una carpeta por avatar
 │       ├── mpfb2/                 ← licencia libre · el que usa la app · se guarda en git
 │       │   ├── build_avatar.py    ← ficha del personaje (altura, cara, piel, ropa)
-│       │   ├── avatar.blend       ← el avatar en Blender, con una animación por letra
+│       │   ├── avatar.blend       ← el avatar en Blender con sus 28 animaciones: EL ORIGINAL de cada letra
 │       │   ├── textures/          ← imágenes de piel, ojos y ropa
 │       │   └── LICENSE.md         ← licencia del avatar
 │       └── miles-prueba/          ← tiene derechos de autor de otros · SOLO en tu equipo
 ├── tools/
 │   ├── blender/
-│   │   ├── mpfb_builder.py        ← crea un avatar a partir de su ficha
-│   │   ├── bake_letters.py        ← aplica las 27 letras a cualquier avatar
+│   │   ├── mpfb_builder.py        ← crea un avatar a partir de su ficha (no sobrescribe uno existente)
 │   │   ├── export_avatar.py       ← limpia el avatar y lo exporta como .glb
-│   │   └── pose_helpers.py        ← funciones para mover brazos y dedos con código
+│   │   └── run.mjs                ← atajos: npm run avatar:abrir / npm run avatar:exportar
 │   └── docs/
 │       └── gen_doc15.mjs          ← genera el doc 15 desde el código (npm run docs:codigo)
 ├── public/                        ← lo que la página descarga tal cual

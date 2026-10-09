@@ -10,10 +10,14 @@ Salida en la carpeta del candidato:
   textures/      texturas copiadas y optimizadas para web
   skin.mhmat     material de piel (mezcla de pieles CC0)
 
-Las poses (rest + letras) NO se crean aquí: las aplica tools/blender/bake_letters.py
-a cualquier avatar, para que las letras no dependan del avatar.
+Las letras (rest + sign_*) NO se crean aquí. Se copian desde un avatar que ya las tenga
+(en Blender: File → Append → avatar.blend → Action) y se perfeccionan a mano.
+
+¡Cuidado! avatar.blend es el ORIGINAL de las letras animadas. Si ya existe, este generador
+no lo sobrescribe salvo que se pida con --sobrescribir (y entonces se pierden las letras).
 """
 import os
+import sys
 
 import bpy
 import numpy as np
@@ -29,6 +33,11 @@ ALPHA_CUTOFF = 0.35
 
 def build_candidate(cfg, out_dir):
     """cfg: dict con name, macro, targets, skin_mix, eyes_material, bodyparts, clothes, recolor."""
+    if os.path.exists(os.path.join(out_dir, 'avatar.blend')) and '--sobrescribir' not in sys.argv:
+        raise SystemExit(
+            f'[detenido] Ya existe {out_dir}/avatar.blend y guarda las letras animadas. '
+            'Si de verdad quieres crearlo de nuevo (y perder las letras), agrega: -- --sobrescribir'
+        )
     tex_dir = os.path.join(out_dir, 'textures')
     os.makedirs(tex_dir, exist_ok=True)
 
@@ -180,7 +189,7 @@ def _finalize_for_web(basemesh, rig):
         bpy.ops.object.modifier_move_to_index(modifier=m.name, index=0)
         bpy.ops.object.modifier_apply(modifier=m.name)
 
-    # Brazos en FK: así se posan con los controles *_fk (ver tools/blender/pose_helpers.py).
+    # Brazos en FK: así se posan a mano con los controles *_fk (upper_arm_fk, forearm_fk, hand_fk).
     for side in ('L', 'R'):
         rig.pose.bones[f'upper_arm_parent.{side}']['IK_FK'] = 1.0
 

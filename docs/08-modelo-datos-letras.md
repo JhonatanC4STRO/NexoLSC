@@ -147,18 +147,15 @@ create table sign_sources (sign_id text references signs(id), source_id text, lo
 create table sign_reviews (sign_id text references signs(id), reviewer text, status text, notes text, reviewed_at timestamptz);
 ```
 
-## Cada letra está en dos archivos
+## Dónde está cada parte de una letra
 
-Cada archivo responde una pregunta distinta:
-
-| Archivo | Responde | Quién lo usa |
+| Dónde | Responde | Quién lo usa |
 |---|---|---|
 | `src/core/signs/alphabet.lsc.ts` (la ficha `SignEntry`) | **¿Qué** es la seña? Nombre, animación, duración, descripción, fuente y revisión | La página web |
-| `assets-src/letters/alfabeto_lsc.json` | **¿Cómo** la hace el avatar? Ángulos de los dedos y del pulgar, hacia dónde mira la mano, recorrido | El programa de Blender que crea las animaciones (`bake_letters.py`) |
+| La animación en `assets-src/avatars/mpfb2/avatar.blend` | **¿Cómo** la hace el avatar? Es **el original**: se perfecciona a mano en Blender | Se exporta al `.glb` que usa la página |
 
-Los une el nombre de la animación: la letra `"L"` del archivo de datos crea la animación `sign_L`, que es la
-que pide la ficha `lsc.letter.L`. La Ñ usa `sign_ENYE`. El formato del archivo de datos está explicado en
-[06-animation-clips.md](06-animation-clips.md).
+Los une el nombre de la animación: la ficha `lsc.letter.L` pide la animación `sign_L`. La Ñ usa `sign_ENYE`.
+Cómo editar las animaciones: [06-animation-clips.md](06-animation-clips.md).
 
 ## Cómo están hoy los datos
 
