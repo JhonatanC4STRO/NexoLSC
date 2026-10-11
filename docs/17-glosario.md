@@ -13,6 +13,7 @@
 | **Build** (*compilar*) | Preparar la página para publicarla. Se hace con `npm run build` y queda en la carpeta `dist/` |
 | **Commit** | Un punto guardado en el historial de git, con un mensaje que dice qué cambió |
 | **Componente** | Una pieza de la pantalla hecha con React (un botón, la línea de letras, el selector…) |
+| **Criterio de aceptación** | Cómo se comprueba que una historia de usuario está lista. Se escribe *Dado… cuando… entonces…*. Ver [18](18-requisitos-e-historias.md) |
 | **DBLSC** | *Diccionario Básico de la Lengua de Señas Colombiana* (INSOR e Instituto Caro y Cuervo, 2006). Es la fuente del alfabeto |
 | **Deletrear** | Hacer una palabra letra por letra con el alfabeto manual |
 | **Esqueleto** (*rig*) | Los huesos invisibles dentro del avatar que permiten moverlo. Ver [05](05-sistema-rigging.md) |
@@ -23,6 +24,7 @@
 | **GLB** (`.glb`) | Formato de archivo 3D para la web. Guarda en un solo archivo el cuerpo del avatar, su esqueleto y sus animaciones |
 | **Glosa** | La palabra en MAYÚSCULAS con la que se escribe una seña (por ejemplo, CASA). Así lo hace el diccionario DBLSC |
 | **Hornear** (*bake*) | Calcular y guardar un movimiento ya resuelto. Al exportar, Blender «hornea» las animaciones: guarda cómo queda cada hueso que mueve el cuerpo, sin los controles |
+| **Historia de usuario** (HU) | Lo que una persona quiere lograr con la app, contado desde su lado: *Como… quiero… para…*. Ver [18](18-requisitos-e-historias.md) |
 | **HTTPS** | Conexión segura de una página (el candado del navegador). Sin ella, el micrófono no funciona |
 | **Interfaz** (en código) | Un «enchufe» común: define qué funciones debe tener una pieza, para poder cambiarla por otra sin tocar el resto |
 | **LSC** | Lengua de Señas Colombiana. Es la lengua propia de la comunidad sorda de Colombia (Ley 324 de 1996) |
@@ -36,6 +38,7 @@
 | **Prueba automática** | Un pequeño programa que revisa que otra parte del código funcione. Se corren con `npm test` |
 | **React** | Librería para construir la pantalla por piezas (componentes) |
 | **Reproductor** (`SignPlayer`) | La pieza que recorre la lista de señas con su propio reloj: reproduce, pausa, salta y cambia la velocidad |
+| **Requisito funcional / no funcional** (RF / RNF) | Funcional: algo que la app hace. No funcional: cómo debe hacerlo (rapidez, accesibilidad, privacidad…). Ver [18](18-requisitos-e-historias.md) |
 | **Rigify** | El sistema de esqueletos que viene con Blender. Los avatares lo usan |
 | **Seña** | Una unidad de la lengua de señas: una letra, un número, una palabra o una frase |
 | **Sistema de diseño** | El conjunto de colores, letras, íconos y piezas de la marca, con sus reglas de uso |

@@ -110,6 +110,9 @@ uno o pocos días. Cada épica termina con algo que se puede probar.
 - [x] Doc 15 generado automáticamente desde el código (`npm run docs:codigo`).
 - [x] Este plan de trabajo, organizado en épicas.
 - [x] Doc 16 (palabras y frases) en lenguaje sencillo.
+- [x] Doc 18: requisitos funcionales y no funcionales, historias de usuario y trazabilidad.
+- [ ] Cuando el MVP esté completo: pasar el doc 18 al formato IEEE 830 y adaptar la matriz del SENA
+  (`Matris.xlsx`) a NexoLSC.
 
 ## Riesgos
 

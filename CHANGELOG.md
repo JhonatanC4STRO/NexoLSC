@@ -7,6 +7,14 @@ Todos los cambios relevantes del proyecto. Formato basado en
 Mientras la versión sea `0.x`, el MVP no se considera estable: una versión menor (`0.2.0`, `0.3.0`)
 puede cambiar formatos de datos o la estructura del proyecto.
 
+## [Unreleased]
+
+### Añadido
+- **Doc 18 · Requisitos e historias de usuario:** 28 requisitos funcionales, 15 no funcionales y 18 historias
+  de usuario con criterios de aceptación (*Dado… cuando… entonces…*), enlazados a las épicas NX-1 a NX-9, y
+  una tabla de trazabilidad. Es la base para el futuro documento IEEE 830 y la matriz del SENA.
+- Glosario: requisito funcional / no funcional, historia de usuario y criterio de aceptación.
+
 ## [0.5.1] - 2026-10-09
 
 ### Cambiado

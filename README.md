@@ -84,6 +84,7 @@ Todo está escrito en lenguaje sencillo. Si una palabra técnica no te queda cla
 | 15 | [Código](docs/15-codigo-inicial.md) | El código del proyecto para leerlo con calma |
 | 16 | [Palabras y frases completas](docs/16-estrategia-palabras-frases.md) | Cómo pasar de deletrear a señar palabras |
 | 17 | [Glosario](docs/17-glosario.md) | Las palabras técnicas, explicadas |
+| 18 | [Requisitos e historias de usuario](docs/18-requisitos-e-historias.md) | Qué debe hacer la app, para quién y cómo se comprueba |
 
 ## Decisiones principales
 
