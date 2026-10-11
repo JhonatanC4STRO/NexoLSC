@@ -44,6 +44,7 @@ Si una palabra técnica no te queda clara, búscala en el [glosario](17-glosario
 | RF-01 | Recibir una palabra o frase escrita (hasta 200 caracteres) y deletrearla al pulsar **Reproducir** o Enter | Imprescindible | ✅ | NX-2 | [09](09-flujo-texto-letras-avatar.md) |
 | RF-02 | Recibir el texto por voz en español de Colombia: mostrar lo que va entendiendo, ponerlo en el campo y reproducirlo solo | Importante | ✅ | NX-2 | [10](10-flujo-voz-texto-avatar.md) |
 | RF-03 | Explicar en español qué pasó cuando la voz falla (sin permiso, no se oyó nada, sin internet, navegador sin voz) e invitar a escribir | Importante | ✅ | NX-2 | [10](10-flujo-voz-texto-avatar.md) |
+| RF-29 | Ofrecer **voz local** (Whisper dentro del navegador) donde el navegador no trae voz o su voz falla (Firefox, Brave): **avisar el tamaño y pedir permiso antes de descargar**, mostrar el avance y detener la grabación sola al hacer una pausa | Importante | ✅ | NX-8 | [10](10-flujo-voz-texto-avatar.md) |
 
 ### Limpiar el texto
 
@@ -116,7 +117,7 @@ Si una palabra técnica no te queda clara, búscala en el [glosario](17-glosario
 |---|---|---|---|---|---|
 | RNF-01 | Arquitectura | Funcionar **sin servidor**, toda en el navegador, y poder publicarse en un servicio de páginas estáticas | `npm run build` crea `dist/` y la página funciona sola | ✅ | NX-1 |
 | RNF-02 | Seguridad | Publicarse con **HTTPS** (sin él, el micrófono no funciona) | La dirección publicada tiene el candado | ⏳ | NX-8 |
-| RNF-03 | Compatibilidad | Funcionar en Chrome, Edge, Safari y Firefox. En Firefox, sin voz pero con un aviso claro | Prueba manual en cada navegador | ✅ | NX-2 |
+| RNF-03 | Compatibilidad | Funcionar en Chrome, Edge, Safari y Firefox, **con voz en todos** (en Firefox y Brave, con la voz local) | Prueba manual en cada navegador | 🟡 falta probar con micrófono real en Firefox | NX-8 |
 | RNF-04 | Rendimiento | Mover el avatar con fluidez en un computador y en un celular de gama media | Meta propuesta: 30 cuadros por segundo o más en un celular de gama media (por medir) | ⏳ | NX-4 |
 | RNF-05 | Rendimiento | Descargar el avatar en un tiempo razonable | Archivo del avatar más liviano que los ~5 MB de hoy (meta por definir al medir) | ⏳ | NX-8 |
 | RNF-06 | Accesibilidad | Usarse con teclado y lector de pantalla, con contraste 4,5:1 en textos y 3:1 en bordes, botones de 44 px o más, letra *Atkinson Hyperlegible* y respeto por «menos movimiento» | Revisión con teclado y lector de pantalla (NVDA o VoiceOver) | 🟡 hecho, falta la revisión | NX-7 |
@@ -125,7 +126,8 @@ Si una palabra técnica no te queda clara, búscala en el [glosario](17-glosario
 | RNF-09 | Fidelidad a la LSC | Basar las letras en una fuente reconocida (DBLSC, pág. 573) y **no presentar ninguna letra como validada** sin la aprobación de personas sordas | Cada ficha tiene `sources` y `validation`; la pantalla muestra «Borrador» | ✅ | NX-5 |
 | RNF-10 | Fidelidad a la LSC | Que personas sordas entiendan lo que el avatar deletrea | Prueba de comprensión: 9 de cada 10 palabras reconocidas o más | ⏳ | NX-6 |
 | RNF-11 | Honestidad | Decir siempre qué no se pudo señar y que las letras están en borrador; el color nunca va solo, cada estado lleva su palabra | Revisión de la pantalla | ✅ | NX-7 |
-| RNF-12 | Privacidad | No guardar datos personales. Solo se guarda en el navegador qué avatar eligió la persona | Revisión del código: no hay cuentas ni envío de datos propios | ✅ | NX-8 |
+| RNF-12 | Privacidad | No guardar datos personales. Solo se guarda en el navegador qué avatar eligió la persona y, si aceptó, el modelo de voz local. Con la voz local, el audio no sale del equipo | Revisión del código: no hay cuentas ni envío de datos propios | ✅ | NX-8 |
+| RNF-16 | Rendimiento | Con la voz local, tener el texto pocos segundos después de terminar de hablar, sin congelar el avatar | Medido: ~2 s por frase corta (12 núcleos, con aislamiento entre orígenes). Falta medir en un equipo sencillo | 🟡 | NX-8 |
 | RNF-13 | Licencias | Usar solo recursos con licencia libre o propia: cada avatar con su `LICENSE.md`; no poner dibujos ni fotos del DBLSC sin permiso escrito | Revisión de `assets-src/` y `public/` antes de publicar | ✅ | NX-4 |
 | RNF-14 | Mantenibilidad | Mantener el núcleo (`src/core`) separado de la pantalla y del 3D, con pruebas automáticas | `npm test`: 15 pruebas en verde | ✅ | NX-2 |
 | RNF-15 | Escalabilidad | Poder pasar a palabras, frases y voz a LSC sin rehacer el reproductor ni el avatar; poder cambiar el motor de voz | Las reglas del [doc 16](16-estrategia-palabras-frases.md) se cumplen | ✅ | NX-2 |
@@ -160,7 +162,7 @@ sobre todo en el celular.
 
 | Prioridad | Estado | Épica | Requisitos |
 |---|---|---|---|
-| Importante | ✅ | NX-2 | RF-02, RF-03, RNF-03 |
+| Importante | 🟡 | NX-2, NX-8 | RF-02, RF-03, RF-29, RNF-03, RNF-16 |
 
 Criterios de aceptación:
 
@@ -170,8 +172,14 @@ Criterios de aceptación:
    para detener)».
 3. **Dado** que negué el permiso del micrófono, **cuando** pulso «Hablar», **entonces** veo un mensaje en
    español que lo explica.
-4. **Dado** que uso Firefox, **cuando** abro la página, **entonces** en lugar del micrófono aparece un aviso
-   que me invita a usar Chrome o Edge, o a escribir.
+4. **Dado** que uso Firefox o Brave por primera vez, **cuando** pulso «Hablar», **entonces** veo un aviso con el
+   tamaño de la descarga (unos 85 MB) y los botones «Descargar y hablar» y «Ahora no», y **no se descarga
+   nada hasta que acepto**.
+5. **Dado** que acepté, **cuando** se descarga el modelo, **entonces** veo el avance («34 de 85 MB») y puedo
+   cancelar tocando el micrófono.
+6. **Dado** que el modelo ya está guardado, **cuando** digo «hola» y hago una pausa, **entonces** la grabación
+   se detiene sola y en pocos segundos «hola» aparece en el campo y el avatar lo seña. *(Probado con audio
+   grabado; falta probar con micrófono real en Firefox.)*
 
 ### HU-03 · Saber qué no se puede señar
 
@@ -455,7 +463,7 @@ de prueba → evidencia).
 | Historia | Requisitos | Épica | Cómo se prueba | Estado |
 |---|---|---|---|---|
 | HU-01 Deletrear una palabra | RF-01, 04, 05, 07, 08, 09, 10 | NX-2, NX-5 | Pruebas automáticas (`normalizeText`, `buildQueue`) + prueba en el navegador | ✅ |
-| HU-02 Decir la palabra | RF-02, 03 · RNF-03 | NX-2 | Prueba manual en Chrome, Edge, Safari y Firefox | ✅ |
+| HU-02 Decir la palabra | RF-02, 03, 29 · RNF-03, 16 | NX-2, NX-8 | Prueba manual en Chrome, Edge, Safari, Firefox y Brave; voz local probada con `?voz=local` | 🟡 |
 | HU-03 Qué no se seña | RF-06, 17 · RNF-11 | NX-2 | Prueba automática («reporta números y símbolos», «limita la longitud») + navegador | ✅ |
 | HU-04 Controlar la reproducción | RF-11, 12, 15 | NX-2 | Pruebas automáticas de `SignPlayer` (pausa, seek, stop, restart) + navegador | ✅ |
 | HU-05 Velocidad y repetir | RF-13, 14 | NX-2 | Pruebas automáticas («la velocidad acorta la duración», loop) | ✅ |
@@ -485,13 +493,12 @@ Estas cosas **no** son requisitos todavía. Están planeadas en el [doc 16](16-e
 - Señas propias para **CH, LL y RR**, si la validación confirma que existen.
 - Reconocer señas con la **cámara** (fase 5).
 - Cuentas de usuario, servidor o base de datos.
-- Reconocimiento de voz dentro del navegador (Whisper) para Firefox.
 
 ## Cómo mantener este documento
 
 - Cuando se termine una tarea del [plan](14-plan-implementacion.md), cambia también el estado del requisito y
   de la historia aquí.
-- Un requisito nuevo lleva el siguiente número libre (RF-29, RNF-16…). Los números no se reutilizan: si un
+- Un requisito nuevo lleva el siguiente número libre (RF-30, RNF-17…). Los números no se reutilizan: si un
   requisito se descarta, se tacha y se dice por qué.
 - Cada historia nueva debe tener al menos un criterio de aceptación y decir a qué épica pertenece.
 - **Siguiente paso:** cuando el MVP esté completo, pasar este documento al formato **IEEE 830** y adaptar la

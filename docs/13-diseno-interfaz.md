@@ -38,7 +38,7 @@ botones de abajo muestran solo el ícono (con su nombre para lectores de pantall
 | Letras de la palabra | `src/ui/LetterTimeline.tsx` | H O L A; tocar una salta a ella |
 | Velocidad | `SpeedControl` en `src/ui/PlayerControls.tsx` | 0,5x a 2x |
 | Controles | `PlayerControls` en `src/ui/PlayerControls.tsx` | Reiniciar, anterior, reproducir/pausar, siguiente, repetir, detener |
-| Botón de voz | `src/ui/SpeechButton.tsx` | Micrófono; muestra lo que va entendiendo y los errores |
+| Botón de voz | `src/ui/SpeechButton.tsx` | Micrófono; muestra lo que va entendiendo, el aviso y el avance de la descarga de la voz local, y los errores |
 
 ## La vista de la cámara
 
@@ -62,7 +62,9 @@ sistema). Después se puede seguir girando con el mouse o con el dedo.
 | Una letra sin animación | — | En reposo | Esa letra con borde punteado |
 | No hay ningún avatar | — | La letra en grande con la descripción de la mano | Igual |
 | No hay foto de fondo | — | Fondo gris claro liso | — |
-| Navegador sin voz | En lugar del micrófono aparece un aviso | — | — |
+| Navegador sin voz propia (Firefox, Brave) | El micrófono usa la voz local; la primera vez aparece el aviso de descarga (~85 MB) con «Descargar y hablar» y «Ahora no» | — | — |
+| Descargando el modelo de voz | Barra de avance «34 de 85 MB» | — | — |
+| Navegador sin micrófono ni voz | En lugar del micrófono aparece un aviso | — | — |
 
 ## Accesibilidad
 

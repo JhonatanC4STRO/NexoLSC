@@ -288,6 +288,18 @@ body { margin: 0; background: var(--surface); }
 .speech__note { flex-basis: 100%; margin: 0; font-size: 14px; }
 .speech__note--interim { color: var(--ink-muted); font-style: italic; }
 .speech__note--error { color: var(--achiote); }
+.speech__consent {
+  flex-basis: 100%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--bruma);
+  color: var(--ink);
+  font-size: 15px;
+}
+.speech__consent p { margin: 0 0 var(--space-2); }
+.speech__consent-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.speech__progress { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); color: var(--ink-muted); }
+.speech__progress progress { flex: 1 1 160px; height: 8px; accent-color: var(--selva); }
 
 /* Controles de reproducción */
 .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-2); }

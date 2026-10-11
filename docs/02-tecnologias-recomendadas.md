@@ -27,6 +27,7 @@ navegador.
 | Ayudas para el 3D | **drei** | 10.7 | Funciones listas: cargar el avatar, girar la cámara, sombra en el piso |
 | Pruebas automáticas | **Vitest** | 5.0 | Revisa que el núcleo funcione bien (limpiar texto, lista de señas, reproductor) |
 | Voz a texto | **Reconocimiento de voz del navegador** (Web Speech API) | — | Convierte lo que dices en texto, en español de Colombia, sin servidor propio |
+| Voz a texto donde el navegador no la tiene | **Whisper** con **transformers.js** (`@huggingface/transformers`) | 4.3 | Convierte la voz en texto dentro del propio equipo (Firefox, Brave…). Ver [10](10-flujo-voz-texto-avatar.md) |
 | Publicar | Cualquier servicio de páginas estáticas con HTTPS | — | Vercel, Netlify o GitHub Pages |
 
 ## ¿Por qué React Three Fiber y no three.js solo?
@@ -54,7 +55,6 @@ navegador.
 | Herramienta | Para qué |
 |---|---|
 | `@gltf-transform/cli` | Hacer más livianos los archivos del avatar (hoy pesan unos 5 MB) comprimiendo el cuerpo, las texturas y quitando animaciones de partes que no se mueven |
-| Whisper en el navegador (`@huggingface/transformers`) | Reconocer la voz en **Firefox** y sin enviar el audio a otras empresas. Ver [10](10-flujo-voz-texto-avatar.md) |
 | Playwright | Probar la pantalla automáticamente, como si fuera una persona |
 | MediaPipe | Más adelante: reconocer señas con la cámara, o grabar movimientos de personas reales desde un video |
 
@@ -63,7 +63,7 @@ navegador.
 | Función | Chrome / Edge | Safari | Firefox |
 |---|---|---|---|
 | Avatar 3D | ✅ | ✅ | ✅ |
-| Voz | ✅ (el audio se envía a servidores de Google para reconocerlo) | ✅ en parte | ❌ **no disponible** |
+| Voz | ✅ (el audio se envía a servidores de Google para reconocerlo) | ✅ en parte | ✅ con **Whisper local** (descarga de ~85 MB la primera vez, con aviso) |
 
-> En **Firefox**, el botón «Hablar» muestra «voz no disponible» y te invita a escribir. Se podrá
-> resolver añadiendo Whisper en el navegador.
+> En **Firefox** (y en Brave), el botón «Hablar» usa Whisper dentro del navegador. La primera vez avisa
+> del tamaño de la descarga y pide permiso.

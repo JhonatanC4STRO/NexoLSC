@@ -57,8 +57,9 @@ solo.
 - **El puerto 5173 está ocupado:** Vite usará otro (5174, 5175…). Mira en la terminal qué dirección muestra.
 - **El avatar no aparece:** revisa que exista `public/models/avatars/mpfb2.glb`. Si no hay ningún avatar, la
   página muestra la letra en grande con su descripción.
-- **El botón de voz no funciona:** el reconocimiento de voz solo existe en Chrome, Edge y Safari, no en
-  Firefox.
+- **El botón de voz no funciona:** en Chrome, Edge y Safari se usa la voz del navegador. En Firefox y
+  Brave se usa la voz local (Whisper): la primera vez pide permiso para descargar unos 85 MB. En todos los
+  casos, la página debe abrirse con `https://` (o en `localhost`) y hay que permitir el micrófono.
 
 ## Documentación
 
@@ -112,7 +113,8 @@ Todo está escrito en lenguaje sencillo. Si una palabra técnica no te queda cla
 - Pantalla «Escenario» en escritorio y celular, con tema claro y oscuro automático.
 - Botones de vista de la cámara: Frente, Perfil y Mano.
 - Fondo con la foto de la sede del SENA, desenfocada (`public/backgrounds/sena.jpg`).
-- Voz: funciona en Chrome, Edge y Safari; **no en Firefox**.
+- Voz: en Chrome, Edge y Safari con la voz del navegador; en Firefox y Brave con **Whisper dentro del
+  navegador** (descarga de ~85 MB la primera vez, con aviso).
 
 Cómo crear o añadir avatares: [assets-src/README.md](assets-src/README.md).
 

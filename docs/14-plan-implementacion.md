@@ -100,7 +100,11 @@ uno o pocos días. Cada épica termina con algo que se puede probar.
 
 - [ ] Hacer más livianos los archivos del avatar (quitar animaciones de huesos que no se mueven y comprimir).
 - [ ] Pantalla de carga mientras baja el avatar.
-- [ ] Política de privacidad (en Chrome, la voz pasa por servidores de Google).
+- [ ] Política de privacidad (en Chrome, la voz pasa por servidores de Google; la voz local descarga el
+  modelo de Hugging Face y jsDelivr, pero el audio no sale del equipo).
+- [x] Despliegue con Docker para Dokploy (`Dockerfile` + `nginx.conf`).
+- [x] Voz en Firefox y Brave: Whisper dentro del navegador, con aviso y avance de la descarga.
+- [ ] Probar la voz local con micrófono real en Firefox (computador y Android) y en un equipo sencillo.
 - [ ] Publicar en un servicio de páginas estáticas con HTTPS.
 
 ### NX-9 · Documentación — ✅
@@ -121,7 +125,7 @@ uno o pocos días. Cada épica termina con algo que se puede probar.
 | Que una letra esté mal interpretada | Media | Todas empiezan en borrador y pasan por la validación (NX-6) |
 | Que los dedos se deformen en poses difíciles | Media | Revisarlas de frente y de lado; corregir los datos |
 | Que el avatar vaya lento en celulares | Media | Medirlo y, si hace falta, quitar huesos de la cara y animaciones que sobran |
-| Que la voz no funcione en Firefox | Segura | Mensaje claro; después, reconocimiento de voz dentro del navegador |
+| Que la voz no funcione en Firefox | Resuelta | Whisper dentro del navegador, con aviso antes de descargar |
 | Querer traducir frases antes de tiempo | Media | Mantener el alcance: solo deletrear en el MVP |
 | No conseguir personas sordas para validar | Media | Contactar pronto a FENASCOL, INSOR y el SENA; tener presupuesto para pagar su tiempo |
 | Publicar algo con derechos de autor de otros | Baja | El avatar de prueba no se sube a git; cada avatar tiene su `LICENSE.md` |

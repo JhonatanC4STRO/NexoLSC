@@ -24,6 +24,8 @@ const FILES = [
   ['src/avatar/Avatar3D.tsx', 'Muestra el avatar 3D, la foto de fondo y mueve la cámara'],
   ['src/avatar/AvatarPlaceholder.tsx', 'Vista sin 3D (letra grande) si no hay avatar'],
   ['src/speech/speechToText.ts', 'Reconocimiento de voz'],
+  ['src/speech/whisperProvider.ts', 'Voz local con Whisper: aviso, grabación y detección de silencio'],
+  ['src/speech/whisper.worker.ts', 'Worker que carga Whisper y convierte el audio en texto'],
   ['src/ui/SpeechButton.tsx', 'Botón del micrófono'],
   ['src/ui/PlayerControls.tsx', 'Controles de reproducción y velocidad'],
   ['src/ui/LetterTimeline.tsx', 'Las letras de la palabra'],

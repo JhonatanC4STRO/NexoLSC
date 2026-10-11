@@ -10,10 +10,20 @@ puede cambiar formatos de datos o la estructura del proyecto.
 ## [Unreleased]
 
 ### Añadido
+- **Voz en Firefox y Brave con Whisper dentro del navegador** (`@huggingface/transformers`, modelo
+  `whisper-base` q8). Antes de descargar nada, el botón «Hablar» avisa del tamaño (~85 MB, una sola vez) y
+  pide permiso; muestra el avance de la descarga; graba hasta que la persona hace una pausa y convierte el
+  audio en texto en un worker, sin que salga del equipo. Si la voz del navegador falla (por ejemplo, en
+  Brave), se ofrece la voz local. Para probarla en Chrome: `?voz=local`.
+- Encabezados de aislamiento entre orígenes (COOP `same-origin` + COEP `credentialless`) en `nginx.conf` y
+  en el servidor de Vite: la voz local usa varios núcleos y pasa de ~9 s a ~2 s por frase.
+- Doc 18: RF-29 (voz local con aviso) y RNF-16 (rapidez de la voz local).
+- `Dockerfile`, `nginx.conf` y `.dockerignore` para publicar con Dokploy.
 - **Doc 18 · Requisitos e historias de usuario:** 28 requisitos funcionales, 15 no funcionales y 18 historias
   de usuario con criterios de aceptación (*Dado… cuando… entonces…*), enlazados a las épicas NX-1 a NX-9, y
   una tabla de trazabilidad. Es la base para el futuro documento IEEE 830 y la matriz del SENA.
-- Glosario: requisito funcional / no funcional, historia de usuario y criterio de aceptación.
+- Glosario: requisito funcional / no funcional, historia de usuario, criterio de aceptación, Whisper,
+  worker y aislamiento entre orígenes.
 
 ## [0.5.1] - 2026-10-09
 

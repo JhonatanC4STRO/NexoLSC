@@ -5,6 +5,7 @@
 
 | Palabra | Qué significa |
 |---|---|
+| **Aislamiento entre orígenes** | Dos encabezados que envía el servidor (`Cross-Origin-Opener-Policy` y `Cross-Origin-Embedder-Policy`) para que la página pueda usar varios núcleos del procesador. Hacen que la voz local sea unas 4 veces más rápida |
 | **Alfabeto manual** | Las formas de la mano que representan cada letra. Sirve para deletrear nombres o palabras que no tienen seña propia. En la LSC tiene 27 letras |
 | **Animación** (*clip*) | Un movimiento guardado dentro del archivo del avatar. Cada letra es una animación: `sign_A`, `sign_B`… y `rest` es la pose de reposo |
 | **Avatar** | El personaje 3D que hace las señas |
@@ -50,3 +51,5 @@
 | **Versión** (`v0.3.0`) | Un número que identifica cada entrega del proyecto. Ver la sección «Versiones» del [README](../README.md) |
 | **Vite** | Herramienta que arranca la página mientras trabajas (`npm run dev`) y la prepara para publicarla |
 | **Web Speech API** | El reconocimiento de voz que traen algunos navegadores (Chrome, Edge, Safari) |
+| **Whisper** | Modelo de inteligencia artificial que convierte voz en texto. Aquí corre dentro del navegador cuando el navegador no trae voz propia (Firefox, Brave) |
+| **Worker** | Un proceso aparte dentro del navegador. La voz local trabaja ahí para que el avatar y los botones no se congelen |

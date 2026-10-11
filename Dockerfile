@@ -2,7 +2,8 @@
 FROM node:22-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+# --ignore-scripts: onnxruntime-node (dependencia de transformers.js) no hace falta en el navegador
+RUN npm ci --ignore-scripts
 COPY . .
 RUN npm run build
 
