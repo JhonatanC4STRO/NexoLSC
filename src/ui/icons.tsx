@@ -77,3 +77,15 @@ export const NextIcon = () => (
     <path d="M8.5 6l6 6-6 6" />
   </Icon>
 );
+
+export const ChevronDownIcon = () => (
+  <Icon>
+    <path d="M6 9.5l6 6 6-6" />
+  </Icon>
+);
+
+export const ChevronUpIcon = () => (
+  <Icon>
+    <path d="M6 14.5l6-6 6 6" />
+  </Icon>
+);

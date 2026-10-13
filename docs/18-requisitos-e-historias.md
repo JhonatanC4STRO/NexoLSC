@@ -89,6 +89,7 @@ Si una palabra técnica no te queda clara, búscala en el [glosario](17-glosario
 | RF-20 | Ofrecer las vistas **Frente**, **Perfil** y **Mano**, y dejar girar la cámara con el mouse o el dedo | Importante | ✅ | NX-7 | [13](13-diseno-interfaz.md) |
 | RF-21 | Dejar elegir el avatar, recordar la elección y mostrar su licencia | Deseable | ✅ | NX-4 | [04](04-diseno-avatar.md) |
 | RF-22 | Ofrecer un **modo espejo** para practicar | Deseable | ⏳ | NX-7 | [13](13-diseno-interfaz.md) |
+| RF-30 | En el celular, **plegar el panel** de abajo para ver el avatar en pantalla completa: a mano («Ocultar panel» / «Escribir») y solo al reproducir | Importante | ✅ | NX-7 | [13](13-diseno-interfaz.md) |
 
 ### Seguir funcionando aunque falte algo
 
@@ -316,15 +317,21 @@ persona sorda.
 
 | Prioridad | Estado | Épica | Requisitos |
 |---|---|---|---|
-| Imprescindible | 🟡 | NX-7, NX-4 | RNF-04, RNF-07 |
+| Imprescindible | 🟡 | NX-7, NX-4 | RF-30, RNF-04, RNF-07 |
 
 Criterios de aceptación:
 
 1. **Dado** que abro la página en un celular, **entonces** veo el avatar, los botones de vista y el panel de
    abajo sin que nada se salga de la pantalla.
-2. **Dado** que mi celular usa tema oscuro, **entonces** la página también lo usa, y el escenario se mantiene
+2. **Dado** que escribí una palabra, **cuando** pulso Reproducir, **entonces** se cierra el teclado, el panel se
+   pliega a una barra delgada y el avatar ocupa toda la pantalla.
+3. **Dado** que el panel está plegado, **cuando** toco «Escribir», **entonces** el panel se abre con el cursor en
+   el campo; y **cuando** toco «Ocultar panel», se vuelve a plegar.
+4. **Dado** que la palabra es larga, **cuando** el avatar avanza, **entonces** la letra actual siempre se ve en
+   la barra de letras.
+5. **Dado** que mi celular usa tema oscuro, **entonces** la página también lo usa, y el escenario se mantiene
    claro.
-3. **Dado** que uso un celular de gama media, **cuando** el avatar deletrea, **entonces** se mueve con fluidez.
+6. **Dado** que uso un celular de gama media, **cuando** el avatar deletrea, **entonces** se mueve con fluidez.
    *(Falta medirlo.)*
 
 ### HU-11 · Elegir el avatar
@@ -471,7 +478,7 @@ de prueba → evidencia).
 | HU-07 En qué letra va | RF-16, 17 | NX-2 | Prueba en el navegador | ✅ |
 | HU-08 Letras confiables | RF-18, 25 · RNF-09, 11 | NX-7 | Revisión de las fichas + navegador | ✅ |
 | HU-09 Teclado y lector de pantalla | RF-15 · RNF-06 | NX-7 | Revisión con teclado, NVDA o VoiceOver | 🟡 |
-| HU-10 En el celular | RNF-04, 07 | NX-7, NX-4 | Prueba en un celular de gama media | 🟡 |
+| HU-10 En el celular | RF-30 · RNF-04, 07 | NX-7, NX-4 | Prueba en el navegador a 375 × 812 (panel plegable) y en un celular de gama media | 🟡 |
 | HU-11 Elegir avatar | RF-21 · RNF-13 | NX-4 | Prueba en el navegador | ✅ |
 | HU-12 Si falta algo | RF-23 | NX-2 | Quitar el `.glb` o la foto y probar en el navegador | ✅ |
 | HU-13 Perfeccionar en Blender | RF-24 | NX-3, NX-5 | Corregir una letra, exportar y verla en la página | ✅ |
@@ -498,7 +505,7 @@ Estas cosas **no** son requisitos todavía. Están planeadas en el [doc 16](16-e
 
 - Cuando se termine una tarea del [plan](14-plan-implementacion.md), cambia también el estado del requisito y
   de la historia aquí.
-- Un requisito nuevo lleva el siguiente número libre (RF-30, RNF-17…). Los números no se reutilizan: si un
+- Un requisito nuevo lleva el siguiente número libre (RF-31, RNF-17…). Los números no se reutilizan: si un
   requisito se descarta, se tacha y se dice por qué.
 - Cada historia nueva debe tener al menos un criterio de aceptación y decir a qué épica pertenece.
 - **Siguiente paso:** cuando el MVP esté completo, pasar este documento al formato **IEEE 830** y adaptar la

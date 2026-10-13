@@ -10,6 +10,9 @@ puede cambiar formatos de datos o la estructura del proyecto.
 ## [Unreleased]
 
 ### Añadido
+- **Panel plegable en el celular:** la pestaña «Ocultar panel» deja el avatar en pantalla completa con una
+  barra delgada (letras, velocidad, reproducir/pausar y «Escribir»). Se pliega sola al pulsar Reproducir o al
+  terminar de hablar, cerrando el teclado. La línea de letras sigue a la letra actual. Doc 13 y RF-30.
 - **Voz en Firefox y Brave con Whisper dentro del navegador** (`@huggingface/transformers`, modelo
   `whisper-base` q8). Antes de descargar nada, el botón «Hablar» avisa del tamaño (~85 MB, una sola vez) y
   pide permiso; muestra el avance de la descarga; graba hasta que la persona hace una pausa y convierte el
@@ -18,6 +21,10 @@ puede cambiar formatos de datos o la estructura del proyecto.
 - Encabezados de aislamiento entre orígenes (COOP `same-origin` + COEP `credentialless`) en `nginx.conf` y
   en el servidor de Vite: la voz local usa varios núcleos y pasa de ~9 s a ~2 s por frase.
 - Doc 18: RF-29 (voz local con aviso) y RNF-16 (rapidez de la voz local).
+
+### Corregido
+- En el celular, al tocar el campo de texto el escenario se corría 16 px de lado (el borde de la foto de
+  fondo desenfocada se salía del escenario).
 - `Dockerfile`, `nginx.conf` y `.dockerignore` para publicar con Dokploy.
 - **Doc 18 · Requisitos e historias de usuario:** 28 requisitos funcionales, 15 no funcionales y 18 historias
   de usuario con criterios de aceptación (*Dado… cuando… entonces…*), enlazados a las épicas NX-1 a NX-9, y

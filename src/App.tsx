@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { SignPlayer } from './core/player/SignPlayer';
 import { buildQueue } from './core/player/queue';
 import { signRepository } from './core/signs/SignRepository';
@@ -13,7 +13,11 @@ import { PlayerControls, SpeedControl } from './ui/PlayerControls';
 import { LetterTimeline } from './ui/LetterTimeline';
 import { SpeechButton } from './ui/SpeechButton';
 import { Logo } from './ui/Logo';
-import { PlayIcon } from './ui/icons';
+import { ChevronDownIcon, ChevronUpIcon, PlayIcon } from './ui/icons';
+
+/** En el celular el panel se puede plegar para que el avatar ocupe toda la pantalla. */
+const PHONE = '(max-width: 720px)';
+const isPhone = () => typeof window !== 'undefined' && window.matchMedia(PHONE).matches;
 
 /**
  * Pantalla «Escenario»: el avatar ocupa toda la pantalla y lo demás flota encima.
@@ -27,6 +31,20 @@ export default function App() {
   const [skipped, setSkipped] = useState<string[]>([]);
   const [missing, setMissing] = useState<string[]>([]);
   const [view, setView] = useState<CameraView>('frente');
+  const [compact, setCompact] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Al plegar el panel, la página vuelve arriba (el teclado del celular la había desplazado).
+  useEffect(() => {
+    if (compact) window.scrollTo({ top: 0 });
+  }, [compact]);
+
+  const toggleDock = () => {
+    if (!compact) return setCompact(true);
+    // «Escribir»: abre el panel y pone el cursor en el campo para que salga el teclado.
+    setCompact(false);
+    requestAnimationFrame(() => inputRef.current?.focus());
+  };
   const avatarChoice = useAvatarChoice();
   usePlayerClock(player);
 
@@ -38,6 +56,11 @@ export default function App() {
       setSkipped([...new Set(queue.skipped)]);
       player.load(queue.items);
       player.play();
+      // En el celular: se cierra el teclado y se pliega el panel para ver al avatar.
+      if (isPhone()) {
+        (document.activeElement as HTMLElement | null)?.blur();
+        setCompact(true);
+      }
     },
     [player],
   );
@@ -56,7 +79,7 @@ export default function App() {
 
   return (
     <main className="app">
-      <section className="scene" aria-label="Escenario del avatar">
+      <section className={`scene ${compact ? 'scene--compact' : ''}`} aria-label="Escenario del avatar">
         <Avatar3D
           player={player}
           avatar={avatarChoice.available ? avatarChoice.selected : undefined}
@@ -79,6 +102,16 @@ export default function App() {
 
         <div className="dock-wrap">
           <section className="dock" aria-label="Deletrear">
+            <button
+              type="button"
+              className="dock__toggle"
+              onClick={toggleDock}
+              aria-expanded={!compact}
+              aria-label={compact ? 'Mostrar el panel para escribir' : 'Ocultar el panel para ver mejor el avatar'}
+            >
+              {compact ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              <span className="dock__toggle-label">{compact ? 'Escribir' : 'Ocultar panel'}</span>
+            </button>
             <div className="dock__row">
               <LetterTimeline player={player} missing={missing} />
               <SpeedControl player={player} />
@@ -89,6 +122,7 @@ export default function App() {
                 Escribe una palabra o frase
               </label>
               <input
+                ref={inputRef}
                 id="text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}

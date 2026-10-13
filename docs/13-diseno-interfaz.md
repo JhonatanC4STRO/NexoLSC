@@ -24,11 +24,26 @@ adelante la «ficha de la letra» (cómo se pone la mano, de qué libro sale y s
 En el celular, la velocidad es un solo botón («1x») que pasa a la siguiente velocidad en cada toque, y los
 botones de abajo muestran solo el ícono (con su nombre para lectores de pantalla).
 
+### Panel plegable en el celular
+
+En el celular, el panel de abajo ocupa casi media pantalla. Para que el avatar se vea completo, el panel se
+puede **plegar**:
+
+| Estado | Qué se ve | Cómo se llega |
+|---|---|---|
+| **Abierto** | Las letras, la velocidad, los controles, el campo para escribir y el estado de validación. Arriba, la pestaña «⌄ Ocultar panel» | Al abrir la página, o tocando «Escribir» |
+| **Plegado** | El avatar en **pantalla completa** y abajo una barra delgada (72 px) con las letras, la velocidad, reproducir/pausar y el botón «⌃ Escribir» | Tocando «Ocultar panel», o **solo**, al pulsar Reproducir o al terminar de hablar |
+
+- Al plegarse, se cierra el teclado y la página vuelve arriba.
+- «Escribir» abre el panel y pone el cursor en el campo, así el teclado sale enseguida.
+- La línea de letras se desplaza sola para que la letra actual siempre quede a la vista.
+- En pantallas anchas (computador, tablet en horizontal) no hay panel plegable: todo cabe.
+
 ## Las piezas y dónde están en el código
 
 | Pieza | Archivo | Qué hace |
 |---|---|---|
-| Pantalla completa | `src/App.tsx` | Une todo; guarda el texto; atajos de teclado |
+| Pantalla completa | `src/App.tsx` | Une todo; guarda el texto; atajos de teclado; pliega el panel en el celular |
 | Logo | `src/ui/Logo.tsx` | El símbolo y el logotipo «nexo LSC» |
 | Estado de validación | `ValidationBadge` en `App.tsx` | «Borrador · 0 de 27 letras validadas»; se calcula solo |
 | Selector de avatar | `src/ui/AvatarSelector.tsx` | Elegir avatar; la licencia aparece al pasar el mouse y en el pie |

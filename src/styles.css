@@ -79,6 +79,7 @@ body { margin: 0; background: var(--surface); }
   height: 100dvh;
   min-height: 640px;
   overflow: hidden;
+  overflow: clip; /* «clip» impide que el foco del campo desplace el escenario de lado */
   background: var(--escenario);
   color: #0f2a2e; /* el escenario es claro en ambos temas */
 }
@@ -136,7 +137,7 @@ body { margin: 0; background: var(--surface); }
 /* ---------- Avatar 3D ---------- */
 .stage { position: absolute; inset: 0; }
 /* Fondo del escenario (src/avatar/stage.ts). inset negativo: oculta los bordes borrosos del desenfoque. */
-.stage__bg { position: absolute; inset: 0; pointer-events: none; }
+.stage__bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .stage__bg-image { position: absolute; inset: -16px; background-size: cover; background-repeat: no-repeat; }
 .stage__bg-veil { position: absolute; inset: 0; background: #eef4f0; }
 .stage--loading { display: grid; place-items: center; color: #4a6266; }
@@ -223,6 +224,8 @@ body { margin: 0; background: var(--surface); }
   box-shadow: var(--shadow-card);
 }
 .dock__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); }
+/* Plegar el panel: solo existe en el celular. */
+.dock__toggle { display: none; }
 
 /* Letras de la palabra */
 .timeline { list-style: none; margin: 0; padding: var(--space-1); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
@@ -435,6 +438,46 @@ body { margin: 0; background: var(--surface); }
   .btn__label { display: none; }
   .btn--quiet { width: 44px; padding: 0; }
   .entry__submit { width: 48px; padding: 0; }
+
+  /* Botón para plegar el panel: una pestaña centrada arriba del panel. */
+  .dock__toggle {
+    display: inline-flex;
+    align-self: center;
+    align-items: center;
+    gap: var(--space-1);
+    min-height: 32px;
+    margin: -6px 0 -4px;
+    padding: 0 var(--space-4);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    color: var(--ink-muted);
+    cursor: pointer;
+  }
+  .dock__toggle:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  /* Panel plegado: el avatar ocupa toda la pantalla y abajo queda una barra delgada
+     con las letras, la velocidad, reproducir/pausar y el botón para volver a escribir. */
+  .scene--compact { height: 100dvh; }
+  .scene--compact .stage { position: absolute; inset: 0; height: auto; }
+  .scene--compact .dock-wrap { position: absolute; left: 0; right: 0; bottom: 0; margin-top: 0; }
+  .scene--compact .dock {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+  }
+  .scene--compact .dock__row { flex: 1 1 auto; min-width: 0; order: 1; }
+  .scene--compact .controls { order: 2; flex: none; }
+  .scene--compact .controls > .btn:not(.btn--big) { display: none; }
+  .scene--compact .controls .btn--big { width: 48px; height: 48px; }
+  .scene--compact .dock__toggle { order: 3; flex: none; flex-direction: column; gap: 0; min-height: 48px; margin: 0; padding: 0 var(--space-2); font-size: 12px; }
+  .scene--compact .entry,
+  .scene--compact .dock__badge { display: none; }
+  .scene--compact .views { top: auto; bottom: 88px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
