@@ -2,6 +2,7 @@
 //
 //   npm run avatar:abrir                 abre el avatar en Blender para retocar las letras
 //   npm run avatar:exportar              exporta el avatar a public/models/avatars/<id>.glb
+//   npm run avatar:sin-curvas            quita los huesos curvos (B-Bones) para que Blender se vea como la web
 //
 // El avatar es «mpfb2» salvo que se indique otro con la variable AVATAR (p. ej. AVATAR=otro).
 // Blender se busca en la variable BLENDER, luego en «C:\Program Files\Blender Foundation\» y por
@@ -53,10 +54,13 @@ switch (command) {
     console.log(`Abriendo ${blend} en Blender…`);
     break;
   }
+  case 'sin-curvas':
+    runBlender(['-b', blend, '--python', join('tools', 'blender', 'sin_bbones.py')]);
+    break;
   case 'exportar':
     runBlender(['-b', blend, '--python', join('tools', 'blender', 'export_avatar.py'), '--', glb]);
     break;
   default:
-    console.log('Uso: npm run avatar:abrir | npm run avatar:exportar');
+    console.log('Uso: npm run avatar:abrir | npm run avatar:exportar | npm run avatar:sin-curvas');
     process.exit(command ? 1 : 0);
 }

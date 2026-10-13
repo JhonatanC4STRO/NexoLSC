@@ -11,7 +11,8 @@
     "docs:codigo": "node tools/docs/gen_doc15.mjs",
     "avatar:abrir": "node tools/blender/run.mjs abrir",
     "avatar:exportar": "node tools/blender/run.mjs exportar",
-    "docs:diagramas": "python tools/docs/gen_diagramas.py"
+    "docs:diagramas": "python tools/docs/gen_diagramas.py",
+    "avatar:sin-curvas": "node tools/blender/run.mjs sin-curvas"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.1",

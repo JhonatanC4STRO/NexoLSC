@@ -193,6 +193,12 @@ def _finalize_for_web(basemesh, rig):
     for side in ('L', 'R'):
         rig.pose.bones[f'upper_arm_parent.{side}']['IK_FK'] = 1.0
 
+    # Sin huesos curvos (B-Bones): glTF y three.js no los soportan. Con 1 segmento, lo que se ve
+    # en Blender es igual a lo que se ve en la web (sobre todo en dedos y pulgar).
+    for b in rig.data.bones:
+        if b.use_deform:
+            b.bbone_segments = 1
+
 
 def _alpha_keys(cfg):
     """Materiales/texturas con transparencia real: pelo, cejas y pestañas."""

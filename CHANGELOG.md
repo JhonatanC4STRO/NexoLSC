@@ -22,6 +22,12 @@ puede cambiar formatos de datos o la estructura del proyecto.
   en el servidor de Vite: la voz local usa varios núcleos y pasa de ~9 s a ~2 s por frase.
 - Doc 18: RF-29 (voz local con aviso) y RNF-16 (rapidez de la voz local).
 
+### Cambiado
+- Letras retocadas a mano en Blender: `avatar.blend` y `mpfb2.glb` actualizados.
+- Sin huesos curvos (B-Bones) en el avatar: glTF y three.js no los soportan, así que ahora los dedos se ven
+  igual en Blender y en la web. Nuevo comando `npm run avatar:sin-curvas` (`tools/blender/sin_bbones.py`);
+  `mpfb_builder.py` ya crea los avatares nuevos así.
+
 ### Corregido
 - En el celular, al tocar el campo de texto el escenario se corría 16 px de lado (el borde de la foto de
   fondo desenfocada se salía del escenario).
